@@ -66,13 +66,12 @@ public final class MappingsOptimizer {
     private static final String OUTPUT_FILE_FORMAT = "mappings-%sto%s.nbt";
     private static final String OUTPUT_IDENTIFIERS_FILE_FORMAT = "identifiers-%s.nbt";
     private static final Set<String> SAVED_IDENTIFIER_FILES = new HashSet<>();
-    private static final boolean RUN_ALL = true;
 
     public static void main(final String[] args) throws IOException {
         MAPPINGS_DIR.mkdirs();
         OUTPUT_DIR.mkdirs();
 
-        if (RUN_ALL) {
+        if (false) {
             runAll();
             return;
         }

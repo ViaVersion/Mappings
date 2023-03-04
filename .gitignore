@@ -1,3 +1,6 @@
+libraries/
+generated/
+
 ### Java files ###
 *.class
 

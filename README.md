@@ -35,7 +35,7 @@ If you want to generate the compact mapping files with already present json file
 its own by starting the `MappingsOptimizer` class with the two arguments flipped:
 
 ```
-java -DbundlerMainClass=com.viaversion.mappinggenerator.MappingsOptimizer -jar <from version> <to version>
+java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimizer <from version> <to version>
 ```
 
 ## Json format
@@ -92,7 +92,8 @@ mapped ids in a simple int→int mapping over the two arrays.
 ### Shifted value storage
 
 The shifted value storage stores two int arrays: One containing the unmapped ids that end a sequence of mapped ids. For
-an index `i`, all unmapped ids between `at[i] + sequence` (inclusive) and `at[i + 1]` (exclusive) are mapped to `to[i] + sequence`.
+an index `i`, all unmapped ids between `at[i] + sequence` (inclusive) and `at[i + 1]` (exclusive) are mapped
+to `to[i] + sequence`.
 
 * `id` (byte tag) is `2`
 * `at` (int array tag) contains the unmapped ids, where their mapped is is *not* simply the last mapped id + 1
@@ -107,5 +108,5 @@ simply leaving out the entry to make sure ids stay in bounds.
 
 ## License
 
-The Java code is licensed under the GNU GPL v3 license. The files under `mappings/` are free to copy, use, and expand
-upon in whatever way you like.
+The Java and Python code is licensed under the GNU GPL v3 license. The files under `mappings/` are free to copy, use,
+and expand upon in whatever way you like.
