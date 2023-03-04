@@ -45,6 +45,10 @@ public final class Version implements Comparable<Version> {
         tag = matcher.group("tag") == null ? "" : matcher.group("tag");
     }
 
+    public static boolean isBackwards(final String from, final String to) {
+        return new Version(from).compareTo(new Version(to)) > 0;
+    }
+
     /**
      * Compare two versions
      *
@@ -67,10 +71,12 @@ public final class Version implements Comparable<Version> {
         }
 
         // Simple tag check
-        if (verA.tag.isEmpty() && !verB.tag.isEmpty())
+        if (verA.tag.isEmpty() && !verB.tag.isEmpty()) {
             return 1;
-        if (!verA.tag.isEmpty() && verB.tag.isEmpty())
+        }
+        if (!verA.tag.isEmpty() && verB.tag.isEmpty()) {
             return -1;
+        }
 
         return 0;
     }
@@ -101,14 +107,5 @@ public final class Version implements Comparable<Version> {
         int result = Objects.hash(tag);
         result = 31 * result + Arrays.hashCode(parts);
         return result;
-    }
-
-    /**
-     * Get the tag, eg. -ALPHA
-     *
-     * @return The version tag
-     */
-    public String getTag() {
-        return tag;
     }
 }

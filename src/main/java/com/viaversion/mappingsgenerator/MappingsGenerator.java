@@ -24,19 +24,65 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.viaversion.mappingsgenerator.util.ServerJarUtil;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.Map;
 import java.util.TreeMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * Mappings generator to collect certain json mappings from the server jar.
+ *
+ * @see MappingsOptimizer for the compacting process
+ */
 public final class MappingsGenerator {
 
-    /**
-     * For in-IDE execution.
-     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(MappingsGenerator.class.getSimpleName());
+
     public static void main(final String[] args) throws Exception {
+        if (args.length != 2 && args.length != 3) {
+            throw new IllegalArgumentException("Required args: path to server jar, version");
+        }
+
+        MappingsGenerator.cleanup();
+
+        final String serverPath = args[0];
+        final String version = args[1];
+        final String versionToCompareFrom = args.length == 3 ? args[2] : null;
+
+        final File serverFile = new File(serverPath);
+        if (!serverFile.exists()) {
+            LOGGER.error("Server file does not exist at {}", serverFile);
+            System.exit(1);
+        }
+
+        LOGGER.info("Loading net.minecraft.data.Main class...");
+        final ClassLoader loader = URLClassLoader.newInstance(
+                new URL[]{serverFile.toURI().toURL()},
+                MappingsGenerator.class.getClassLoader()
+        );
+
+        final String[] serverArgs = {"--reports"};
+        final Object serverMainConstructor = ServerJarUtil.loadMain(loader).getConstructor().newInstance();
+        serverMainConstructor.getClass().getDeclaredMethod("main", String[].class).invoke(null, (Object) serverArgs);
+
+        ServerJarUtil.waitForServerMain();
+
+        MappingsGenerator.collectMappings(version);
+
+        if (versionToCompareFrom != null) {
+            LOGGER.info("Running mappings optimizer for versions {} -> {}...", versionToCompareFrom, version);
+            MappingsOptimizer.optimizeAndSaveAsNBT(versionToCompareFrom, version);
+        }
+    }
+
+    /*public static void main(final String[] args) throws Exception {
         cleanup();
 
         try {
@@ -51,15 +97,25 @@ public final class MappingsGenerator {
         }
 
         collectMappings("23w08a");
-    }
+    }*/
 
+    /**
+     * Deletes the previous generated and logs directories.
+     */
     public static void cleanup() {
         delete(new File("generated"));
         delete(new File("logs"));
     }
 
+    /**
+     * Recursively deletes a directory or file.
+     *
+     * @param file file or directory to delete
+     */
     public static void delete(final File file) {
-        if (!file.exists()) return;
+        if (!file.exists()) {
+            return;
+        }
         if (file.isDirectory()) {
             for (final File f : file.listFiles()) {
                 delete(f);
@@ -69,18 +125,20 @@ public final class MappingsGenerator {
         file.delete();
     }
 
+    /**
+     * Collects registry mappings for the given Minecraft version and saves them to a json file.
+     *
+     * @param version Minecraft version
+     */
     public static void collectMappings(final String version) throws IOException {
-        System.out.println("Beginning mapping collection...");
-        String content = new String(Files.readAllBytes(new File("generated/reports/blocks.json").toPath()));
-
+        LOGGER.info("Beginning mapping collection...");
         final Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-        JsonObject object = gson.fromJson(content, JsonObject.class);
-
-        final JsonObject viaMappings = new JsonObject();
+        final String blocksContent = new String(Files.readAllBytes(new File("generated/reports/blocks.json").toPath()));
+        final JsonObject blocksObject = gson.fromJson(blocksContent, JsonObject.class);
 
         // Blocks and blockstates
         final Map<Integer, String> blockstatesById = new TreeMap<>();
-        for (final Map.Entry<String, JsonElement> blocksEntry : object.entrySet()) {
+        for (final Map.Entry<String, JsonElement> blocksEntry : blocksObject.entrySet()) {
             final JsonObject block = blocksEntry.getValue().getAsJsonObject();
             final JsonArray states = block.getAsJsonArray("states");
             for (final JsonElement state : states) {
@@ -90,27 +148,13 @@ public final class MappingsGenerator {
                     throw new IllegalArgumentException("Duplicate blockstate id: " + id);
                 }
 
-                final StringBuilder value = new StringBuilder(removeNamespace(blocksEntry.getKey()));
-                if (stateObject.has("properties")) {
-                    value.append('[');
-                    final JsonObject properties = stateObject.getAsJsonObject("properties");
-                    boolean first = true;
-                    for (final Map.Entry<String, JsonElement> propertyEntry : properties.entrySet()) {
-                        if (first) {
-                            first = false;
-                        } else {
-                            value.append(',');
-                        }
-                        value.append(propertyEntry.getKey()).append('=').append(propertyEntry.getValue().getAsJsonPrimitive().getAsString());
-                    }
-                    value.append(']');
-                }
-                blockstatesById.put(id, value.toString());
+                blockstatesById.put(id, serializeBlockState(blocksEntry.getKey(), stateObject));
             }
         }
 
         final JsonArray blockstates = new JsonArray();
         final JsonArray blocks = new JsonArray();
+        final JsonObject viaMappings = new JsonObject();
         viaMappings.add("blockstates", blockstates);
         viaMappings.add("blocks", blocks);
 
@@ -126,18 +170,17 @@ public final class MappingsGenerator {
             }
         }
 
-        content = new String(Files.readAllBytes(new File("generated/reports/registries.json").toPath()));
-        object = gson.fromJson(content, JsonObject.class);
-
-        addArray(viaMappings, object, "minecraft:item", "items");
-        addArray(viaMappings, object, "minecraft:sound_event", "sounds");
-        addArray(viaMappings, object, "minecraft:particle_type", "particles");
-        addArray(viaMappings, object, "minecraft:block_entity_type", "blockentities");
-        addArray(viaMappings, object, "minecraft:command_argument_type", "argumenttypes");
-        addArray(viaMappings, object, "minecraft:enchantment", "enchantments");
-        addArray(viaMappings, object, "minecraft:entity_type", "entities");
-        addArray(viaMappings, object, "minecraft:motive", "paintings");
-        addArray(viaMappings, object, "minecraft:painting_variant", "paintings");
+        final String registriesContent = new String(Files.readAllBytes(new File("generated/reports/registries.json").toPath()));
+        final JsonObject registries = gson.fromJson(registriesContent, JsonObject.class);
+        addArray(viaMappings, registries, "minecraft:item", "items");
+        addArray(viaMappings, registries, "minecraft:sound_event", "sounds");
+        addArray(viaMappings, registries, "minecraft:particle_type", "particles");
+        addArray(viaMappings, registries, "minecraft:block_entity_type", "blockentities");
+        addArray(viaMappings, registries, "minecraft:command_argument_type", "argumenttypes");
+        addArray(viaMappings, registries, "minecraft:enchantment", "enchantments");
+        addArray(viaMappings, registries, "minecraft:entity_type", "entities");
+        addArray(viaMappings, registries, "minecraft:motive", "paintings");
+        addArray(viaMappings, registries, "minecraft:painting_variant", "paintings");
 
         // Save
         new File("mappings").mkdir();
@@ -146,16 +189,53 @@ public final class MappingsGenerator {
         }
 
         new File("logs").deleteOnExit();
-        System.out.println("Done!");
+        LOGGER.info("Mapping file has been written to mappings/mapping-{}.json", version);
     }
 
+    /**
+     * Returns a blockstate string for the given block and properties.
+     *
+     * @param block       block identifier
+     * @param blockObject json object holding properties
+     * @return blockstate identifier
+     */
+    private static String serializeBlockState(String block, final JsonObject blockObject) {
+        block = removeNamespace(block);
+        if (!blockObject.has("properties")) {
+            return block;
+        }
+
+        final StringBuilder value = new StringBuilder(block);
+        value.append('[');
+        final JsonObject properties = blockObject.getAsJsonObject("properties");
+        boolean first = true;
+        for (final Map.Entry<String, JsonElement> propertyEntry : properties.entrySet()) {
+            if (first) {
+                first = false;
+            } else {
+                value.append(',');
+            }
+            value.append(propertyEntry.getKey()).append('=').append(propertyEntry.getValue().getAsJsonPrimitive().getAsString());
+        }
+        value.append(']');
+        return value.toString();
+    }
+
+    /**
+     * Adds array mappings from a registry to the mappings object.
+     *
+     * @param mappings    mappings to add to
+     * @param registry    registry to read from
+     * @param registryKey registry key to read from
+     * @param mappingsKey mappings key to write to
+     */
     private static void addArray(final JsonObject mappings, final JsonObject registry, final String registryKey, final String mappingsKey) {
         if (!registry.has(registryKey)) {
-            System.out.println("Ignoring missing registry: " + registryKey);
+            LOGGER.debug("Ignoring missing registry: {}", registryKey);
             return;
         }
 
-        System.out.println("Collecting " + registryKey + "...");
+        LOGGER.debug("Collecting {}...", registryKey);
         final JsonObject entries = registry.getAsJsonObject(registryKey).getAsJsonObject("entries");
         final String[] keys = new String[entries.size()];
         for (final Map.Entry<String, JsonElement> entry : entries.entrySet()) {
@@ -177,6 +257,12 @@ public final class MappingsGenerator {
         }
     }
 
+    /**
+     * Removes the Minecraft namespace from a potentially namespaced key.
+     *
+     * @param key key to remove the namespace from
+     * @return key without the Minecraft namespace
+     */
     private static String removeNamespace(final String key) {
         if (key.startsWith("minecraft:")) {
             return key.substring("minecraft:".length());
