@@ -29,9 +29,9 @@ import com.github.steveice10.opennbt.tag.builtin.Tag;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.viaversion.mappingsgenerator.MappingsLoader.MappingsResult;
 import com.viaversion.mappingsgenerator.util.JsonConverter;
 import com.viaversion.mappingsgenerator.util.Version;
-import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import java.io.File;
 import java.io.IOException;
@@ -45,19 +45,22 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Optimizes mapping files as nbt files with only the necessary data (mostly int to int mappings in form of int arrays).
+ */
 public final class MappingsOptimizer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MappingsOptimizer.class.getSimpleName());
+    public static final int VERSION = 1;
+    public static final byte DIRECT_ID = 0;
+    public static final byte SHIFTS_ID = 1;
+    public static final byte CHANGES_ID = 2;
+    public static final byte IDENTITY_ID = 3;
+    public static final File MAPPINGS_DIR = new File("mappings");
     public static final File OUTPUT_DIR = new File("output");
     public static final File OUTPUT_BACKWARDS_DIR = new File(OUTPUT_DIR, "backwards");
-    public static final File MAPPINGS_DIR = new File("mappings");
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MappingsOptimizer.class.getSimpleName());
     private static final Set<String> STANDARD_FIELDS = Set.of("blockstates", "blocks", "items", "sounds", "blockentities", "enchantments", "paintings", "entities", "particles", "argumenttypes", "statistics", "tags");
-    private static final Set<String> STANDARD_DIFF_FIELDS = Set.of("itemnames", "entitynames");
-    private static final int VERSION = 1;
-    private static final byte DIRECT_ID = 0;
-    private static final byte SHIFTS_ID = 1;
-    private static final byte CHANGES_ID = 2;
-    private static final byte IDENTITY_ID = 3;
     private static final String DIFF_FILE_FORMAT = "mappingdiff-%sto%s.json";
     private static final String MAPPING_FILE_FORMAT = "mapping-%s.json";
     private static final String OUTPUT_FILE_FORMAT = "mappings-%sto%s.nbt";
@@ -76,7 +79,7 @@ public final class MappingsOptimizer {
 
         final String from = args.length == 2 ? args[0] : "1.12";
         final String to = args.length == 2 ? args[1] : "1.11";
-        optimizeAndSaveAsNBT(from, to, OUTPUT_DIR);
+        optimizeAndSaveAsNBT(from, to);
     }
 
     /**
@@ -85,7 +88,8 @@ public final class MappingsOptimizer {
      * @param from version to map from
      * @param to   version to map to
      */
-    private static void optimizeAndSaveAsNBT(final String from, final String to, final File outputDir) throws IOException {
+    public static void optimizeAndSaveAsNBT(final String from, final String to) throws IOException {
+        LOGGER.info("Compacting json mapping files for versions {} -> {}...", to, from);
         final JsonObject unmappedObject = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(from));
         final JsonObject mappedObject = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(to));
         final JsonObject diffObject = MappingsLoader.load(DIFF_FILE_FORMAT.formatted(from, to));
@@ -112,12 +116,15 @@ public final class MappingsOptimizer {
         mappings(tag, unmappedObject, mappedObject, diffObject, true, false, "particles");
         mappings(tag, unmappedObject, mappedObject, diffObject, true, false, "argumenttypes");
         mappings(tag, unmappedObject, mappedObject, diffObject, false, false, "statistics");
+
         if (diffObject != null) {
             names(tag, unmappedObject, diffObject, "items", "itemnames");
             fullNames(tag, diffObject, "entitynames", "entitynames");
-            if (outputDir == OUTPUT_BACKWARDS_DIR) { // EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+            if (Version.isBackwards(from, to)) {
                 fullNames(tag, diffObject, "sounds", "soundnames");
             }
+
             if (diffObject.has("tags")) {
                 final CompoundTag tagsTag = new CompoundTag();
                 tags(tagsTag, mappedObject, diffObject);
@@ -125,6 +132,7 @@ public final class MappingsOptimizer {
             }
         }
 
+        final File outputDir = Version.isBackwards(from, to) ? OUTPUT_BACKWARDS_DIR : OUTPUT_DIR;
         NBTIO.writeFile(tag, new File(outputDir, OUTPUT_FILE_FORMAT.formatted(from, to)), false, false);
 
         // Save full identifiers to a separate file per version
@@ -142,37 +150,13 @@ public final class MappingsOptimizer {
         }
     }
 
-    private static void optimizeAndSaveOhSoSpecial1_12AsNBT() throws IOException {
-        final JsonObject unmappedObject = MappingsLoader.load("mapping-1.12.json");
-        final JsonObject mappedObject = MappingsLoader.load("mapping-1.13.json");
-        final CompoundTag tag = new CompoundTag();
-        tag.put("v", new IntTag(VERSION));
-        handleUnknownFields(tag, unmappedObject);
-        cursedMappings(tag, unmappedObject, mappedObject, null, "blocks", "blockstates", "blockstates", 4084);
-        cursedMappings(tag, unmappedObject, mappedObject, null, "items", "items", "items", unmappedObject.getAsJsonObject("items").size());
-        cursedMappings(tag, unmappedObject, mappedObject, null, "legacy_enchantments", "enchantments", "enchantments", 72);
-        mappings(tag, unmappedObject, mappedObject, null, true, false, "sounds");
-        NBTIO.writeFile(tag, new File(OUTPUT_DIR, "mappings-1.12to1.13.nbt"), false, false);
-    }
-
-    private static void optimizeAndSaveOhSoSpecial1_12AsNBTBackwards() throws IOException {
-        final JsonObject unmappedObject = MappingsLoader.load("mapping-1.13.json");
-        final JsonObject mappedObject = MappingsLoader.load("mapping-1.12.json");
-        final JsonObject diffObject = MappingsLoader.load("mappingdiff-1.13to1.12.json");
-        final CompoundTag tag = new CompoundTag();
-        tag.put("v", new IntTag(VERSION));
-        handleUnknownFields(tag, unmappedObject);
-        cursedMappings(tag, unmappedObject, mappedObject, diffObject, "blockstates", "blocks", "blockstates", 8582);
-        cursedMappings(tag, unmappedObject, mappedObject, diffObject, "items", "items", "items", unmappedObject.getAsJsonArray("items").size());
-        cursedMappings(tag, unmappedObject, mappedObject, diffObject, "enchantments", "legacy_enchantments", "enchantments", unmappedObject.getAsJsonArray("enchantments").size());
-        names(tag, unmappedObject, diffObject, "items", "itemnames");
-        fullNames(tag, diffObject, "entitynames", "entitynames");
-        fullNames(tag, diffObject, "sounds", "soundnames");
-        mappings(tag, unmappedObject, mappedObject, diffObject, true, false, "sounds");
-        NBTIO.writeFile(tag, new File(OUTPUT_BACKWARDS_DIR, "mappings-1.13to1.12.nbt"), false, false);
-    }
-
-    private static void handleUnknownFields(final CompoundTag tag, final JsonObject unmappedObject) {
+    /**
+     * Checks for unknown fields in the unmapped object and writes them to the tag unchanged.
+     *
+     * @param tag            tag to write to
+     * @param unmappedObject unmapped object to check all fields from
+     */
+    public static void handleUnknownFields(final CompoundTag tag, final JsonObject unmappedObject) {
         for (final String key : unmappedObject.keySet()) {
             if (STANDARD_FIELDS.contains(key)) {
                 continue;
@@ -192,28 +176,26 @@ public final class MappingsOptimizer {
         for (final File file : MAPPINGS_DIR.listFiles()) {
             final String name = file.getName();
             if (name.startsWith("mapping-")) {
-                versions.add(name.substring("mapping-".length(), name.length() - ".json".length()));
+                final String version = name.substring("mapping-".length(), name.length() - ".json".length());
+                versions.add(version);
             }
         }
 
         versions.sort(Comparator.comparing(Version::new));
+
         for (int i = 0; i < versions.size() - 1; i++) {
             final String from = versions.get(i);
             final String to = versions.get(i + 1);
             LOGGER.info("=============================");
-            LOGGER.info("Running {} to {}", from, to);
             if (from.equals("1.12") && to.equals("1.13")) {
-                optimizeAndSaveOhSoSpecial1_12AsNBT();
-                LOGGER.info("Running {} to {}", to, from);
-                optimizeAndSaveOhSoSpecial1_12AsNBTBackwards();
+                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBT();
+                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBTBackwards();
                 continue;
             }
 
-            optimizeAndSaveAsNBT(from, to, OUTPUT_DIR);
-
+            optimizeAndSaveAsNBT(from, to);
             LOGGER.info("-----------------------------");
-            LOGGER.info("Running {} to {}", to, from);
-            optimizeAndSaveAsNBT(to, from, OUTPUT_BACKWARDS_DIR);
+            optimizeAndSaveAsNBT(to, from);
             LOGGER.info("");
         }
     }
@@ -229,7 +211,7 @@ public final class MappingsOptimizer {
      * @param alwaysWriteIdentity whether to always write the identity mapping with size and mapped size, even if the two arrays are equal
      * @param key                 to read from and write to
      */
-    private static void mappings(
+    public static void mappings(
             final CompoundTag tag,
             final JsonObject unmappedObject,
             final JsonObject mappedObject,
@@ -250,48 +232,19 @@ public final class MappingsOptimizer {
         }
 
         final JsonObject diffIdentifiers = diffMappings != null ? diffMappings.getAsJsonObject(key) : null;
-        final MappingsLoader.MappingsResult result = MappingsLoader.map(unmappedIdentifiers, mappedIdentifiers, diffIdentifiers, warnOnMissing);
+        final MappingsResult result = MappingsLoader.map(unmappedIdentifiers, mappedIdentifiers, diffIdentifiers, warnOnMissing);
         serialize(result, tag, key, alwaysWriteIdentity);
     }
 
-    private static void cursedMappings(
-            final CompoundTag tag,
-            final JsonObject unmappedObject,
-            final JsonObject mappedObject,
-            @Nullable final JsonObject diffObject,
-            final String unmappedKey,
-            final String mappedKey,
-            final String outputKey,
-            final int size
-    ) {
-        final JsonObject mappedIdentifiers = JsonConverter.toJsonObject(mappedObject.get(mappedKey));
-        final Int2IntMap map = MappingsLoader.map(
-                JsonConverter.toJsonObject(unmappedObject.get(unmappedKey)),
-                mappedIdentifiers,
-                diffObject != null ? diffObject.getAsJsonObject(unmappedKey) : null,
-                true
-        );
-
-        final CompoundTag changedTag = new CompoundTag();
-        final int[] unmapped = new int[map.size()];
-        final int[] mapped = new int[map.size()];
-        int i = 0;
-        for (final Int2IntMap.Entry entry : map.int2IntEntrySet()) {
-            unmapped[i] = entry.getIntKey();
-            mapped[i] = entry.getIntValue();
-            i++;
-        }
-
-        changedTag.put("id", new ByteTag(CHANGES_ID));
-        changedTag.put("nofill", new ByteTag((byte) 1));
-        changedTag.put("size", new IntTag(size));
-        changedTag.put("mappedSize", new IntTag(mappedIdentifiers.size()));
-        changedTag.put("at", new IntArrayTag(unmapped));
-        changedTag.put("val", new IntArrayTag(mapped));
-        tag.put(outputKey, changedTag);
-    }
-
-    private static void names(
+    /**
+     * Writes int->string mappings to the given tag.
+     *
+     * @param data       tag to write to
+     * @param diffObject diff mappings object
+     * @param key        key to read identifiers from
+     * @param namesKey   key to read names from and to write to
+     */
+    public static void names(
             final CompoundTag data,
             final JsonObject object,
             final JsonObject diffObject,
@@ -313,7 +266,15 @@ public final class MappingsOptimizer {
         }
     }
 
-    private static void fullNames(
+    /**
+     * Writes string->string mappings to the given tag.
+     *
+     * @param data       tag to write to
+     * @param diffObject diff mappings object
+     * @param key        key to read from
+     * @param outputKey  key to write to
+     */
+    public static void fullNames(
             final CompoundTag data,
             final JsonObject diffObject,
             final String key,
@@ -409,7 +370,7 @@ public final class MappingsOptimizer {
      * @param key                 key to write to
      * @param alwaysWriteIdentity whether to write identity mappings even if there are no changes
      */
-    private static void serialize(final MappingsLoader.MappingsResult result, final CompoundTag parent, final String key, boolean alwaysWriteIdentity) {
+    private static void serialize(final MappingsResult result, final CompoundTag parent, final String key, final boolean alwaysWriteIdentity) {
         final int[] mappings = result.mappings();
         final int numberOfChanges = mappings.length - result.identityMappings();
         final boolean hasChanges = numberOfChanges != 0 || result.emptyMappings() != 0;
@@ -432,60 +393,9 @@ public final class MappingsOptimizer {
         final int shiftFormatSize = approximateShiftFormatSize(result);
         final int plainFormatSize = mappings.length;
         if (changedFormatSize < plainFormatSize && changedFormatSize < shiftFormatSize) {
-            // Put two intarrays of only changed ids instead of adding an entry for every single identifier
-            LOGGER.debug("{}: Storing as changed and mapped arrays", key);
-            tag.put("id", new ByteTag(CHANGES_ID));
-            tag.put("size", new IntTag(mappings.length));
-
-            final int[] unmapped = new int[numberOfChanges];
-            final int[] mapped = new int[numberOfChanges];
-            int index = 0;
-            for (int i = 0; i < mappings.length; i++) {
-                final int mappedId = mappings[i];
-                if (mappedId != i) {
-                    unmapped[index] = i;
-                    mapped[index] = mappedId;
-                    index++;
-                }
-            }
-
-            if (index != numberOfChanges) {
-                throw new IllegalStateException("Index " + index + " does not equal number of changes " + numberOfChanges);
-            }
-
-            tag.put("at", new IntArrayTag(unmapped));
-            tag.put("val", new IntArrayTag(mapped));
+            writeChangedFormat(tag, result, key, numberOfChanges);
         } else if (shiftFormatSize < changedFormatSize && shiftFormatSize < plainFormatSize) {
-            LOGGER.debug("{}: Storing as shifts", key);
-            tag.put("id", new ByteTag(SHIFTS_ID));
-            tag.put("size", new IntTag(mappings.length));
-
-            final int[] shiftsAt = new int[result.shiftChanges()];
-            final int[] shiftsTo = new int[result.shiftChanges()];
-
-            int index = 0;
-            // Check the first entry
-            if (mappings[0] != 0) {
-                shiftsAt[0] = 0;
-                shiftsTo[0] = mappings[0];
-                index++;
-            }
-
-            for (int id = 1; id < mappings.length; id++) {
-                final int mappedId = mappings[id];
-                if (mappedId != mappings[id - 1] + 1) {
-                    shiftsAt[index] = id;
-                    shiftsTo[index] = mappedId;
-                    index++;
-                }
-            }
-
-            if (index != result.shiftChanges()) {
-                throw new IllegalStateException("Index " + index + " does not equal number of changes " + result.shiftChanges() + " for " + key);
-            }
-
-            tag.put("at", new IntArrayTag(shiftsAt));
-            tag.put("to", new IntArrayTag(shiftsTo));
+            writeShiftFormat(tag, result, key);
         } else {
             LOGGER.debug("{}: Storing as direct values", key);
             tag.put("id", new ByteTag(DIRECT_ID));
@@ -493,12 +403,88 @@ public final class MappingsOptimizer {
         }
     }
 
-    private static int approximateChangedFormatSize(final MappingsLoader.MappingsResult result) {
+    /**
+     * Writes compact int to int mappings as changed values to the given tag.
+     *
+     * @param tag             tag to write to
+     * @param result          result with int to int mappings
+     * @param key             key to write to
+     * @param numberOfChanges number of changed mappings
+     */
+    private static void writeChangedFormat(final CompoundTag tag, final MappingsResult result, final String key, final int numberOfChanges) {
+        // Put two intarrays of only changed ids instead of adding an entry for every single identifier
+        LOGGER.debug("{}: Storing as changed and mapped arrays", key);
+        final int[] mappings = result.mappings();
+        tag.put("id", new ByteTag(CHANGES_ID));
+        tag.put("size", new IntTag(mappings.length));
+
+        final int[] unmapped = new int[numberOfChanges];
+        final int[] mapped = new int[numberOfChanges];
+        int index = 0;
+        for (int i = 0; i < mappings.length; i++) {
+            final int mappedId = mappings[i];
+            if (mappedId != i) {
+                unmapped[index] = i;
+                mapped[index] = mappedId;
+                index++;
+            }
+        }
+
+        if (index != numberOfChanges) {
+            throw new IllegalStateException("Index " + index + " does not equal number of changes " + numberOfChanges);
+        }
+
+        tag.put("at", new IntArrayTag(unmapped));
+        tag.put("val", new IntArrayTag(mapped));
+    }
+
+    /**
+     * Writes compact int to int mappings as shifted values to the given tag.
+     *
+     * @param tag    tag to write to
+     * @param result result with int to int mappings
+     * @param key    key to write to
+     */
+    private static void writeShiftFormat(final CompoundTag tag, final MappingsResult result, final String key) {
+        LOGGER.debug("{}: Storing as shifts", key);
+        final int[] mappings = result.mappings();
+        tag.put("id", new ByteTag(SHIFTS_ID));
+        tag.put("size", new IntTag(mappings.length));
+
+        final int[] shiftsAt = new int[result.shiftChanges()];
+        final int[] shiftsTo = new int[result.shiftChanges()];
+
+        int index = 0;
+        // Check the first entry
+        if (mappings[0] != 0) {
+            shiftsAt[0] = 0;
+            shiftsTo[0] = mappings[0];
+            index++;
+        }
+
+        for (int id = 1; id < mappings.length; id++) {
+            final int mappedId = mappings[id];
+            if (mappedId != mappings[id - 1] + 1) {
+                shiftsAt[index] = id;
+                shiftsTo[index] = mappedId;
+                index++;
+            }
+        }
+
+        if (index != result.shiftChanges()) {
+            throw new IllegalStateException("Index " + index + " does not equal number of changes " + result.shiftChanges() + " for " + key);
+        }
+
+        tag.put("at", new IntArrayTag(shiftsAt));
+        tag.put("to", new IntArrayTag(shiftsTo));
+    }
+
+    private static int approximateChangedFormatSize(final MappingsResult result) {
         // Length of two arrays + more approximate length for extra tags
         return (result.mappings().length - result.identityMappings()) * 2 + 10;
     }
 
-    private static int approximateShiftFormatSize(final MappingsLoader.MappingsResult result) {
+    private static int approximateShiftFormatSize(final MappingsResult result) {
         // One entry in two arrays each time the id is not shifted by 1 from the last id + more approximate length for extra tags
         return result.shiftChanges() * 2 + 10;
     }

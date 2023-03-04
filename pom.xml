@@ -7,7 +7,7 @@
     <groupId>com.viaversion</groupId>
     <artifactId>mappingsgenerator</artifactId>
     <name>MappingsGenerator</name>
-    <version>2.2</version>
+    <version>3.0.0</version>
 
     <url>https://github.com/ViaVersion/Mappings</url>
     <inceptionYear>2020</inceptionYear>
@@ -92,7 +92,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.viaversion.mappingsgenerator.Main</mainClass>
+                            <mainClass>com.viaversion.mappingsgenerator.MappingsGenerator</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -110,7 +110,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
                     <filters>
                         <filter>
                             <artifact>it.unimi.dsi:fastutil</artifact>
@@ -142,6 +141,16 @@
                             </excludes>
                         </filter>
                     </filters>
+                    <relocations>
+                        <relocation>
+                            <pattern>it.unimi.dsi.fastutil</pattern>
+                            <shadedPattern>com.viaversion.libs.fastutil</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.google.gson</pattern>
+                            <shadedPattern>com.viaversion.libs.libs.gson</shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
             </plugin>
             <plugin>
