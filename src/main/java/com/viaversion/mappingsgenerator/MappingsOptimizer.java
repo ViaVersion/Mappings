@@ -89,7 +89,7 @@ public final class MappingsOptimizer {
      * @param to   version to map to
      */
     public static void optimizeAndSaveAsNBT(final String from, final String to) throws IOException {
-        LOGGER.info("Compacting json mapping files for versions {} -> {}...", to, from);
+        LOGGER.info("Compacting json mapping files for versions {} → {}...", to, from);
         final JsonObject unmappedObject = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(from));
         final JsonObject mappedObject = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(to));
         final JsonObject diffObject = MappingsLoader.load(DIFF_FILE_FORMAT.formatted(from, to));

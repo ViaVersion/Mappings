@@ -77,7 +77,7 @@ public final class MappingsGenerator {
         MappingsGenerator.collectMappings(version);
 
         if (versionToCompareFrom != null) {
-            LOGGER.info("Running mappings optimizer for versions {} -> {}...", versionToCompareFrom, version);
+            LOGGER.info("Running mappings optimizer for versions {} → {}...", versionToCompareFrom, version);
             MappingsOptimizer.optimizeAndSaveAsNBT(versionToCompareFrom, version);
         }
     }
