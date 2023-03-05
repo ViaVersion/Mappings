@@ -7,7 +7,7 @@
     <groupId>com.viaversion</groupId>
     <artifactId>mappingsgenerator</artifactId>
     <name>MappingsGenerator</name>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
 
     <url>https://github.com/ViaVersion/Mappings</url>
     <inceptionYear>2020</inceptionYear>

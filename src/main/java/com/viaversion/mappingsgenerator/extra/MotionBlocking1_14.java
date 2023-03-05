@@ -32,10 +32,10 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import java.io.File;
 import java.io.IOException;
 
-public final class MotionBlocking1_13_2 {
+public final class MotionBlocking1_14 {
 
     public static void main(final String[] args) throws IOException {
-        final JsonObject mappedData = MappingsLoader.load("mapping-1.13.2.json");
+        final JsonObject mappedData = MappingsLoader.load("mapping-1.14.json");
         final JsonArray mappedBlockStates = mappedData.getAsJsonArray("blockstates");
         final Object2IntMap<String> blockStateMap = new Object2IntOpenHashMap<>(mappedBlockStates.size());
         blockStateMap.defaultReturnValue(-1);
