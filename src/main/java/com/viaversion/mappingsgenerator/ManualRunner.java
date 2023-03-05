@@ -18,21 +18,83 @@
  */
 package com.viaversion.mappingsgenerator;
 
+import com.viaversion.mappingsgenerator.util.ServerJarUtil;
+import com.viaversion.mappingsgenerator.util.Version;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ManualRunner {
 
-    private static final boolean ALL = false;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ManualRunner.class.getSimpleName());
+    private static final boolean ALL = true;
 
     public static void main(final String[] args) throws IOException {
         if (ALL) {
-            MappingsOptimizer.runAll();
+            runAll();
             return;
         }
 
-        final String from = "1.19.3";
-        final String to = "1.19.4";
-        MappingsOptimizer.optimizeAndSaveAsNBT(from, to);
-        MappingsOptimizer.optimizeAndSaveAsNBT(to, from);
+        final String from = "1.19";
+        final String to = "1.18";
+        MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to);
+        mappingsOptimizer.writeDiffStubs();
+        mappingsOptimizer.optimizeAndWrite();
+
+        mappingsOptimizer = new MappingsOptimizer(to, from);
+        mappingsOptimizer.writeDiffStubs();
+        mappingsOptimizer.optimizeAndWrite();
+    }
+
+    /**
+     * Runs the optimizer for all mapping files present in the mappings/ directory.
+     */
+    public static void runAll() throws IOException {
+        final List<String> versions = new ArrayList<>();
+        for (final File file : MappingsOptimizer.MAPPINGS_DIR.toFile().listFiles()) {
+            final String name = file.getName();
+            if (name.startsWith("mapping-")) {
+                final String version = name.substring("mapping-".length(), name.length() - ".json".length());
+                versions.add(version);
+            }
+        }
+
+        versions.sort(Version::compare);
+
+        for (int i = 0; i < versions.size() - 1; i++) {
+            final String from = versions.get(i);
+            final String to = versions.get(i + 1);
+            LOGGER.info("=============================");
+            if (from.equals("1.12") && to.equals("1.13")) {
+                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBT();
+                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBTBackwards();
+                continue;
+            }
+
+            new MappingsOptimizer(from, to).optimizeAndWrite();
+            LOGGER.info("-----------------------------");
+            new MappingsOptimizer(to, from).optimizeAndWrite();
+            LOGGER.info("");
+        }
+    }
+
+    private static void runMappingsGen() throws Exception {
+        MappingsGenerator.cleanup();
+
+        try {
+            // Server jar bundle since 21w39a
+            // Alternatively, java -DbundlerMainClass=net.minecraft.data.Main -jar server.jar --reports
+            System.setProperty("bundlerMainClass", "net.minecraft.data.Main");
+            Class.forName("net.minecraft.bundler.Main").getDeclaredMethod("main", String[].class).invoke(null, (Object) new String[]{"--reports"});
+            ServerJarUtil.waitForServerMain();
+        } catch (final ClassNotFoundException ignored) {
+            final Class<?> mainClass = Class.forName("net.minecraft.data.Main");
+            mainClass.getDeclaredMethod("main", String[].class).invoke(null, (Object) new String[]{"--reports"});
+        }
+
+        MappingsGenerator.collectMappings("23w08a");
     }
 }

@@ -18,7 +18,6 @@
  */
 package com.viaversion.mappingsgenerator.extra;
 
-import com.github.steveice10.opennbt.NBTIO;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.builtin.ListTag;
 import com.github.steveice10.opennbt.tag.builtin.StringTag;
@@ -26,7 +25,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.viaversion.mappingsgenerator.MappingsLoader;
 import com.viaversion.mappingsgenerator.MappingsOptimizer;
-import java.io.File;
 import java.io.IOException;
 
 public final class BlockStates1_13 {
@@ -39,6 +37,6 @@ public final class BlockStates1_13 {
             list.add(new StringTag(element.getAsString()));
         }
         tag.put("blockstates", list);
-        NBTIO.writeFile(tag, new File(MappingsOptimizer.OUTPUT_DIR, "blockstates-1.13.nbt"), false, false);
+        MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("blockstates-1.13.nbt"));
     }
 }

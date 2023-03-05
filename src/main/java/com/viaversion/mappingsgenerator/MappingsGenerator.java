@@ -43,10 +43,11 @@ import org.slf4j.LoggerFactory;
  */
 public final class MappingsGenerator {
 
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static final Logger LOGGER = LoggerFactory.getLogger(MappingsGenerator.class.getSimpleName());
 
     public static void main(final String[] args) throws Exception {
-        if (args.length != 2 && args.length != 3) {
+        if (args.length != 2) {
             LOGGER.error("Required args: path to server jar, version");
             System.exit(1);
         }
@@ -55,7 +56,6 @@ public final class MappingsGenerator {
 
         final String serverPath = args[0];
         final String version = args[1];
-        final String versionToCompareFrom = args.length == 3 ? args[2] : null;
 
         final File serverFile = new File(serverPath);
         if (!serverFile.exists()) {
@@ -76,29 +76,7 @@ public final class MappingsGenerator {
         ServerJarUtil.waitForServerMain();
 
         MappingsGenerator.collectMappings(version);
-
-        if (versionToCompareFrom != null) {
-            LOGGER.info("Running mappings optimizer for versions {} → {}...", versionToCompareFrom, version);
-            MappingsOptimizer.optimizeAndSaveAsNBT(versionToCompareFrom, version);
-        }
     }
-
-    /*public static void main(final String[] args) throws Exception {
-        cleanup();
-
-        try {
-            // Server jar bundle since 21w39a
-            // Alternatively, java -DbundlerMainClass=net.minecraft.data.Main -jar server.jar --reports
-            System.setProperty("bundlerMainClass", "net.minecraft.data.Main");
-            Class.forName("net.minecraft.bundler.Main").getDeclaredMethod("main", String[].class).invoke(null, (Object) new String[]{"--reports"});
-            Main.waitForServerMain();
-        } catch (final ClassNotFoundException ignored) {
-            final Class<?> mainClass = Class.forName("net.minecraft.data.Main");
-            mainClass.getDeclaredMethod("main", String[].class).invoke(null, (Object) new String[]{"--reports"});
-        }
-
-        collectMappings("23w08a");
-    }*/
 
     /**
      * Deletes the previous generated and logs directories.
@@ -133,9 +111,8 @@ public final class MappingsGenerator {
      */
     public static void collectMappings(final String version) throws IOException {
         LOGGER.info("Beginning mapping collection...");
-        final Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
         final String blocksContent = new String(Files.readAllBytes(new File("generated/reports/blocks.json").toPath()));
-        final JsonObject blocksObject = gson.fromJson(blocksContent, JsonObject.class);
+        final JsonObject blocksObject = GSON.fromJson(blocksContent, JsonObject.class);
 
         // Blocks and blockstates
         final Map<Integer, String> blockstatesById = new TreeMap<>();
@@ -172,7 +149,7 @@ public final class MappingsGenerator {
         }
 
         final String registriesContent = new String(Files.readAllBytes(new File("generated/reports/registries.json").toPath()));
-        final JsonObject registries = gson.fromJson(registriesContent, JsonObject.class);
+        final JsonObject registries = GSON.fromJson(registriesContent, JsonObject.class);
         addArray(viaMappings, registries, "minecraft:item", "items");
         addArray(viaMappings, registries, "minecraft:sound_event", "sounds");
         addArray(viaMappings, registries, "minecraft:particle_type", "particles");
@@ -186,7 +163,7 @@ public final class MappingsGenerator {
         // Save
         new File("mappings").mkdir();
         try (final PrintWriter out = new PrintWriter("mappings/mapping-" + version + ".json")) {
-            out.print(gson.toJson(viaMappings));
+            out.print(GSON.toJson(viaMappings));
         }
 
         new File("logs").deleteOnExit();

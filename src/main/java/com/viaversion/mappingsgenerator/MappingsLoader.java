@@ -27,9 +27,9 @@ import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -47,12 +47,12 @@ public final class MappingsLoader {
      * @return the mappings file as a JsonObject, or null if it does not exist
      */
     public static @Nullable JsonObject load(final String name) throws IOException {
-        final File file = new File(MappingsOptimizer.MAPPINGS_DIR, name);
-        if (!file.exists()) {
+        final Path path = MappingsOptimizer.MAPPINGS_DIR.resolve(name);
+        if (!Files.exists(path)) {
             return null;
         }
 
-        final String content = Files.readString(file.toPath());
+        final String content = Files.readString(path);
         return GSON.fromJson(content, JsonObject.class);
     }
 
@@ -67,23 +67,22 @@ public final class MappingsLoader {
      */
     public static MappingsResult map(final JsonArray unmappedIdentifiers, final JsonArray mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final boolean warnOnMissing) {
         final int[] output = new int[unmappedIdentifiers.size()];
-        final Object2IntMap<String> newIdentifierMap = MappingsLoader.arrayToMap(mappedIdentifiers);
+        final Object2IntMap<String> mappedIdentifierMap = MappingsLoader.arrayToMap(mappedIdentifiers);
         int emptyMappings = 0;
         int identityMappings = 0;
         int shiftChanges = 0;
         for (int id = 0; id < unmappedIdentifiers.size(); id++) {
             final JsonElement unmappedIdentifier = unmappedIdentifiers.get(id);
-            final int mappedId = mapEntry(id, unmappedIdentifier.getAsString(), newIdentifierMap, diffIdentifiers, warnOnMissing);
-            if (mappedId != -1) {
-                output[id] = mappedId;
-                if (mappedId == id) {
-                    identityMappings++;
-                }
-            } else {
+            final int mappedId = mapEntry(id, unmappedIdentifier.getAsString(), mappedIdentifierMap, diffIdentifiers, warnOnMissing);
+            output[id] = mappedId;
+
+            if (mappedId == -1) {
                 emptyMappings++;
+            } else if (mappedId == id) {
+                identityMappings++;
             }
 
-            // Check the first entry/if the shift changed
+            // Check the first entry/if the mapped id is equal to the expected sequential id
             if (id == 0 && mappedId != 0
                     || id != 0 && mappedId != output[id - 1] + 1) {
                 shiftChanges++;
@@ -104,10 +103,10 @@ public final class MappingsLoader {
     public static Int2IntMap map(final JsonObject unmappedIdentifiers, final JsonObject mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final boolean warnOnMissing) {
         final Int2IntMap output = new Int2IntLinkedOpenHashMap();
         output.defaultReturnValue(-1);
-        final Object2IntMap<String> newIdentifierMap = MappingsLoader.indexedObjectToMap(mappedIdentifiers);
+        final Object2IntMap<String> mappedIdentifierMap = MappingsLoader.indexedObjectToMap(mappedIdentifiers);
         for (final Map.Entry<String, JsonElement> entry : unmappedIdentifiers.entrySet()) {
             final int id = Integer.parseInt(entry.getKey());
-            final int mappedId = mapEntry(id, entry.getValue().getAsString(), newIdentifierMap, diffIdentifiers, warnOnMissing);
+            final int mappedId = mapEntry(id, entry.getValue().getAsString(), mappedIdentifierMap, diffIdentifiers, warnOnMissing);
             output.put(id, mappedId);
         }
         return output;
@@ -171,6 +170,69 @@ public final class MappingsLoader {
             LOGGER.warn("No key for {} :( ", value);
         }
         return mappedId;
+    }
+
+    /**
+     * Returns a diff object stub for the given unmapped and mapped objects with empty mappings to be filled.
+     *
+     * @param unmappedObject     unmapped object
+     * @param mappedObject       mapped object
+     * @param existingDiffObject existing diff object
+     * @return diff object stub, or null if no diff is needed
+     */
+    public static @Nullable JsonObject getDiffObjectStub(final JsonObject unmappedObject, final JsonObject mappedObject, @Nullable final JsonObject existingDiffObject) {
+        final JsonObject diffObject = new JsonObject();
+        for (final Map.Entry<String, JsonElement> entry : unmappedObject.entrySet()) {
+            final String key = entry.getKey();
+            if (!entry.getValue().isJsonArray() || !mappedObject.has(key) || key.equals("blocks")) { // Special case!
+                continue;
+            }
+
+            final JsonArray unmappedIdentifiers = entry.getValue().getAsJsonArray();
+            final JsonArray mappedIdentifiers = mappedObject.getAsJsonArray(key);
+            final Object2IntMap<String> mappedIdentifierMap = MappingsLoader.arrayToMap(mappedIdentifiers);
+            final JsonObject diffIdentifiers = new JsonObject();
+            final JsonObject existingDiffIdentifiers = existingDiffObject != null && existingDiffObject.has(key) ? existingDiffObject.getAsJsonObject(key) : null;
+            for (int id = 0; id < unmappedIdentifiers.size(); id++) {
+                final String unmappedIdentifier = unmappedIdentifiers.get(id).getAsString();
+                final int mappedId = mapEntry(id, unmappedIdentifier, mappedIdentifierMap, existingDiffIdentifiers, false);
+                if (mappedId != -1) {
+                    continue;
+                }
+
+                diffIdentifiers.addProperty(unmappedIdentifier, "");
+            }
+
+            if (!diffIdentifiers.isEmpty()) {
+                diffObject.add(key, diffIdentifiers);
+            }
+        }
+
+        if (diffObject.isEmpty()) {
+            return null;
+        }
+
+        if (existingDiffObject == null) {
+            return diffObject;
+        }
+
+        // Merge with existing diff object
+        for (final Map.Entry<String, JsonElement> entry : diffObject.entrySet()) {
+            final String key = entry.getKey();
+            final JsonObject value = entry.getValue().getAsJsonObject();
+            if (!existingDiffObject.has(key)) {
+                existingDiffObject.add(key, value);
+                continue;
+            }
+
+            final JsonObject diffIdentifiers = existingDiffObject.getAsJsonObject(key);
+            for (final Map.Entry<String, JsonElement> diffEntry : value.entrySet()) {
+                if (!diffIdentifiers.has(diffEntry.getKey())) {
+                    diffIdentifiers.add(diffEntry.getKey(), diffEntry.getValue());
+                }
+            }
+        }
+        return existingDiffObject;
     }
 
     /**

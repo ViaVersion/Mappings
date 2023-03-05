@@ -18,7 +18,6 @@
  */
 package com.viaversion.mappingsgenerator.extra;
 
-import com.github.steveice10.opennbt.NBTIO;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.builtin.IntArrayTag;
 import com.google.gson.JsonArray;
@@ -29,7 +28,6 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import java.io.File;
 import java.io.IOException;
 
 public final class MotionBlocking1_14 {
@@ -69,6 +67,6 @@ public final class MotionBlocking1_14 {
         final CompoundTag tag = new CompoundTag();
         tag.put("motionBlocking", new IntArrayTag(motionBlockingIds));
         tag.put("nonFullBlocks", new IntArrayTag(nonFullBlocks.toArray(new int[0])));
-        NBTIO.writeFile(tag, new File(MappingsOptimizer.OUTPUT_DIR, "extra/heightmap-1.14.nbt"), false, false);
+        MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("extra/heightmap-1.14.nbt"));
     }
 }

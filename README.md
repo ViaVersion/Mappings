@@ -14,21 +14,6 @@ java -jar MappingsGenerator.jar <path to server jar> <version>
 
 The mapping file will then be generated in the `mappings/` directory.
 
-### Directly compiling them to compact files
-
-Optionally, you can pass a third argument to have it generate the compact nbt mappings file as
-well:
-
-```
-java -jar MappingsGenerator.jar server.jar <version> <from version>
-```
-
-e.g. to generate the compact nbt mappings for 1.19.3->1.19.4:
-
-```
-java -jar MappingsGenerator.jar server.jar 1.19.4 1.19.3
-```
-
 ## Compiling json mapping files into compact nbt files
 
 If you want to generate the compact mapping files with already present json files, you can also trigger the optimizer on
@@ -37,6 +22,9 @@ its own by starting the `MappingsOptimizer` class with the two arguments flipped
 ```
 java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimizer <from version> <to version>
 ```
+
+Optionally, the `--generateDiffStubs` argument can be passed as a third argument to generate empty diff files for
+missing mappings.
 
 ## Json format
 
@@ -47,10 +35,15 @@ Diff files for either ViaVersion or ViaBackwards then contain additional entries
 of string→string or int→string mappings. These files need to be manually filled. If any such entries are required, the
 optimizer will give a warning with the missing keys.
 
+Json mapping files are found in the `mapping/` directory and are named `mapping-<version>.json`. Files containing
+diff-mappings for added or removed identifiers between versions must be named `mapping-<from>to<to>.json` and put into
+the `mapping/diff/` directory.
+
 ## Compact format
 
 Compact files are always saved as [NBT](https://minecraft.fandom.com/wiki/NBT_format). ViaVersion uses its
-own [OpenNBT](https://github.com/ViaVersion/OpenNBT) as its NBT reader/writer.
+own [OpenNBT](https://github.com/ViaVersion/OpenNBT) as the NBT reader/writer. Compact files are found in the
+`output/` directory and subdirectories.
 
 ### Identifier files
 
