@@ -36,7 +36,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -68,16 +67,16 @@ public final class MappingsOptimizer {
     private static final Set<String> SAVED_IDENTIFIER_FILES = new HashSet<>();
 
     public static void main(final String[] args) throws IOException {
+        if (args.length != 2) {
+            LOGGER.error("Required args: from version, to version");
+            System.exit(1);
+        }
+
         MAPPINGS_DIR.mkdirs();
         OUTPUT_DIR.mkdirs();
 
-        if (false) {
-            runAll();
-            return;
-        }
-
-        final String from = args.length == 2 ? args[0] : "1.12";
-        final String to = args.length == 2 ? args[1] : "1.11";
+        final String from = args[0];
+        final String to = args[1];
         optimizeAndSaveAsNBT(from, to);
     }
 
@@ -170,7 +169,7 @@ public final class MappingsOptimizer {
     /**
      * Runs the optimizer for all mapping files present in the mappings/ directory.
      */
-    private static void runAll() throws IOException {
+    public static void runAll() throws IOException {
         final List<String> versions = new ArrayList<>();
         for (final File file : MAPPINGS_DIR.listFiles()) {
             final String name = file.getName();
@@ -180,7 +179,7 @@ public final class MappingsOptimizer {
             }
         }
 
-        versions.sort(Comparator.comparing(Version::new));
+        versions.sort(Version::compare);
 
         for (int i = 0; i < versions.size() - 1; i++) {
             final String from = versions.get(i);

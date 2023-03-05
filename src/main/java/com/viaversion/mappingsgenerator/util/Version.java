@@ -46,7 +46,19 @@ public final class Version implements Comparable<Version> {
     }
 
     public static boolean isBackwards(final String from, final String to) {
-        return new Version(from).compareTo(new Version(to)) > 0;
+        try {
+            return new Version(from).compareTo(new Version(to)) > 0;
+        } catch (final IllegalArgumentException ignored) {
+            return from.compareTo(to) > 0;
+        }
+    }
+
+    public static int compare(final String from, final String to) {
+        try {
+            return new Version(from).compareTo(new Version(to));
+        } catch (final IllegalArgumentException ignored) {
+            return from.compareTo(to);
+        }
     }
 
     /**

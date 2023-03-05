@@ -47,7 +47,8 @@ public final class MappingsGenerator {
 
     public static void main(final String[] args) throws Exception {
         if (args.length != 2 && args.length != 3) {
-            throw new IllegalArgumentException("Required args: path to server jar, version");
+            LOGGER.error("Required args: path to server jar, version");
+            System.exit(1);
         }
 
         MappingsGenerator.cleanup();
