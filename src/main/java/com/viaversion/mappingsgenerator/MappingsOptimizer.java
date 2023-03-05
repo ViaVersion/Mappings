@@ -64,8 +64,8 @@ public final class MappingsOptimizer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MappingsOptimizer.class.getSimpleName());
     private static final Set<String> STANDARD_FIELDS = Set.of("blockstates", "blocks", "items", "sounds", "blockentities", "enchantments", "paintings", "entities", "particles", "argumenttypes", "statistics", "tags");
+    private static final Set<String> SAVED_IDENTIFIER_FILES = new HashSet<>();
 
-    private final Set<String> savedIdentifierFiles = new HashSet<>();
     private final CompoundTag output;
     private final String fromVersion;
     private final String toVersion;
@@ -190,7 +190,7 @@ public final class MappingsOptimizer {
         storeIdentifiers(identifiers, object, "entities");
         storeIdentifiers(identifiers, object, "particles");
         storeIdentifiers(identifiers, object, "argumenttypes");
-        if (savedIdentifierFiles.add(version)) {
+        if (SAVED_IDENTIFIER_FILES.add(version)) {
             write(identifiers, OUTPUT_DIR.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(version)));
         }
     }
