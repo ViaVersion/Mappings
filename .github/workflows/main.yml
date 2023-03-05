@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -24,11 +27,6 @@ jobs:
         uses: s4u/setup-maven-action@v1.7.0
         with:
           java-version: 17
-
-      - name: Configure Git details
-        run: |
-          git config --global user.name 'not quite kenny'
-          git config --global user.email 'notactuallykennytv2@something.com'
 
       - name: Check for snapshot
         run: pip install -r requirements.txt && python download_server.py
@@ -61,6 +59,13 @@ jobs:
 
       - name: Commit changes
         run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "automation"
           git add .
-          git commit -m "${{ steps.last_snapshot.outputs.content }}"
-          git push
+          git commit -am "Update: ${{ steps.last_snapshot.outputs.content }}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          branch: ${{ github.ref }}
