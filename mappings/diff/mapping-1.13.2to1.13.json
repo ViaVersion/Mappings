@@ -16,5 +16,29 @@
     "fire_coral": "fire_coral",
     "horn_coral": "horn_coral",
     "conduit": "conduit"
+  },
+  "items": {
+    "smooth_stone_slab": "stone_slab",
+    "dead_brain_coral": "dead_brain_coral_block",
+    "dead_bubble_coral": "dead_bubble_coral_block",
+    "dead_fire_coral": "dead_fire_coral_block",
+    "dead_horn_coral": "dead_horn_coral_block",
+    "dead_tube_coral": "dead_tube_coral_block",
+    "oak_sign": "sign",
+    "red_dye": "rose_red",
+    "green_dye": "cactus_green",
+    "yellow_dye": "dandelion_yellow"
+  },
+  "itemnames": {
+    "smooth_stone_slab": "1.13.2 Smooth Stone Slab",
+    "dead_brain_coral": "1.13.2 Dead Brain Coral",
+    "dead_bubble_coral": "1.13.2 Dead Bubble Coral",
+    "dead_fire_coral": "1.13.2 Dead Fire Coral",
+    "dead_horn_coral": "1.13.2 Dead Horn Coral",
+    "dead_tube_coral": "1.13.2 Dead Tube Coral",
+    "oak_sign": "1.13.2 Oak Sign",
+    "red_dye": "1.13.2 Red Dye",
+    "green_dye": "1.13.2 Green Dye",
+    "yellow_dye": "1.13.2 Yellow Dye"
   }
 }

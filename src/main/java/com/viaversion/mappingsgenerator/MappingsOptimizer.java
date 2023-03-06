@@ -66,12 +66,14 @@ public final class MappingsOptimizer {
     private static final Set<String> STANDARD_FIELDS = Set.of("blockstates", "blocks", "items", "sounds", "blockentities", "enchantments", "paintings", "entities", "particles", "argumenttypes", "statistics", "tags");
     private static final Set<String> SAVED_IDENTIFIER_FILES = new HashSet<>();
 
+    private final Set<String> ignoreMissing = new HashSet<>(Arrays.asList("blocks", "statistics"));
     private final CompoundTag output;
     private final String fromVersion;
     private final String toVersion;
     private final JsonObject unmappedObject;
     private final JsonObject mappedObject;
     private JsonObject diffObject;
+    private boolean keepUnknownFields;
 
     public static void main(final String[] args) throws IOException {
         if (args.length < 2) {
@@ -89,6 +91,9 @@ public final class MappingsOptimizer {
         final MappingsOptimizer optimizer = new MappingsOptimizer(from, to);
         if (argsSet.contains("--generateDiffStubs")) {
             optimizer.writeDiffStubs();
+        }
+        if (argsSet.contains("--keepUnknownFields")) {
+            optimizer.keepUnknownFields();
         }
         optimizer.optimizeAndWrite();
     }
@@ -125,19 +130,21 @@ public final class MappingsOptimizer {
     public void optimizeAndWrite() throws IOException {
         LOGGER.info("Compacting json mapping files for versions {} → {}...", fromVersion, toVersion);
 
-        handleUnknownFields();
+        if (keepUnknownFields) {
+            handleUnknownFields();
+        }
 
-        mappings(true, true, "blockstates");
-        mappings(false, false, "blocks");
-        mappings(true, false, "items");
-        mappings(true, false, "sounds");
-        mappings(true, false, "blockentities");
-        mappings(true, false, "enchantments");
-        mappings(true, false, "paintings");
-        mappings(true, false, "entities");
-        mappings(true, false, "particles");
-        mappings(true, false, "argumenttypes");
-        mappings(false, false, "statistics");
+        mappings(true, "blockstates");
+        mappings(false, "blocks");
+        mappings(false, "items");
+        mappings(false, "sounds");
+        mappings(false, "blockentities");
+        mappings(false, "enchantments");
+        mappings(false, "paintings");
+        mappings(false, "entities");
+        mappings(false, "particles");
+        mappings(false, "argumenttypes");
+        mappings(false, "statistics");
 
         if (diffObject != null) {
             names("items", "itemnames");
@@ -166,7 +173,7 @@ public final class MappingsOptimizer {
      * @return true if the diff stubs were written, false if they were not written because there were no changes
      */
     public boolean writeDiffStubs() throws IOException {
-        final JsonObject diffObject = MappingsLoader.getDiffObjectStub(unmappedObject, mappedObject, this.diffObject);
+        final JsonObject diffObject = MappingsLoader.getDiffObjectStub(unmappedObject, mappedObject, this.diffObject, ignoreMissing);
         if (diffObject != null) {
             LOGGER.info("Writing diff stubs for versions {} → {}", fromVersion, toVersion);
             Files.writeString(MAPPINGS_DIR.resolve(DIFF_FILE_FORMAT.formatted(fromVersion, toVersion)), MappingsGenerator.GSON.toJson(diffObject));
@@ -174,6 +181,22 @@ public final class MappingsOptimizer {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Prevents warnings for missing diff mappings for the given key from being printed and does not include stubs in {@link #writeDiffStubs()}.
+     *
+     * @param key key to ignore missing mappings for
+     */
+    public void ignoreMissingMappingsFor(final String key) {
+        ignoreMissing.add(key);
+    }
+
+    /**
+     * Writing mappings will keep non-standard fields unchanged into the output file.
+     */
+    public void keepUnknownFields() {
+        this.keepUnknownFields = true;
     }
 
     /**
@@ -213,11 +236,10 @@ public final class MappingsOptimizer {
     /**
      * Reads mappings from the unmapped and mapped objects and writes them to the nbt tag.
      *
-     * @param warnOnMissing       whether to warn on missing mappings
      * @param alwaysWriteIdentity whether to always write the identity mapping with size and mapped size, even if the two arrays are equal
      * @param key                 to read from and write to
      */
-    public void mappings(final boolean warnOnMissing, final boolean alwaysWriteIdentity, final String key) {
+    public void mappings(final boolean alwaysWriteIdentity, final String key) {
         if (!unmappedObject.has(key) || !mappedObject.has(key)
                 || !unmappedObject.get(key).isJsonArray() || !mappedObject.get(key).isJsonArray()) {
             return;
@@ -230,9 +252,14 @@ public final class MappingsOptimizer {
             return;
         }
 
+        LOGGER.debug("Mapping {}: {} → {}", key, unmappedIdentifiers.size(), mappedIdentifiers.size());
         final JsonObject diffIdentifiers = diffObject != null ? diffObject.getAsJsonObject(key) : null;
-        final MappingsResult result = MappingsLoader.map(unmappedIdentifiers, mappedIdentifiers, diffIdentifiers, warnOnMissing);
+        final MappingsResult result = MappingsLoader.map(unmappedIdentifiers, mappedIdentifiers, diffIdentifiers, shouldWarn(key));
         serialize(result, output, key, alwaysWriteIdentity);
+    }
+
+    private boolean shouldWarn(final String key) {
+        return !ignoreMissing.contains(key);
     }
 
     public void cursedMappings(final String unmappedKey, final String mappedKey, final String outputKey) {

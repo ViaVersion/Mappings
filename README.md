@@ -23,8 +23,12 @@ its own by starting the `MappingsOptimizer` class with the two arguments flipped
 java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimizer <from version> <to version>
 ```
 
-Optionally, the `--generateDiffStubs` argument can be passed as a third argument to generate empty diff files for
-missing mappings.
+### Optional arguments
+
+Optional arguments must follow the two version arguments.
+
+* `--generateDiffStubs` to generate empty diff files for missing mappings
+* `--keepUnknownFields` to keep non-standard fields from json mappings in the compact files
 
 ## Json format
 

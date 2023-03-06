@@ -24,12 +24,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class ManualRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ManualRunner.class.getSimpleName());
+    private static final Set<String> SPECIAL_BACKWARDS_ONLY = Set.of("1.9.4", "1.10", "1.11");
     private static final boolean ALL = true;
 
     public static void main(final String[] args) throws IOException {
@@ -38,15 +40,15 @@ public final class ManualRunner {
             return;
         }
 
-        final String from = "1.19";
-        final String to = "1.18";
+        final String from = "1.13.2";
+        final String to = "1.13";
         MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to);
         mappingsOptimizer.writeDiffStubs();
         mappingsOptimizer.optimizeAndWrite();
 
-        mappingsOptimizer = new MappingsOptimizer(to, from);
-        mappingsOptimizer.writeDiffStubs();
-        mappingsOptimizer.optimizeAndWrite();
+        //mappingsOptimizer = new MappingsOptimizer(to, from);
+        //mappingsOptimizer.writeDiffStubs();
+        //mappingsOptimizer.optimizeAndWrite();
     }
 
     /**
@@ -74,9 +76,18 @@ public final class ManualRunner {
                 continue;
             }
 
-            new MappingsOptimizer(from, to).optimizeAndWrite();
-            LOGGER.info("-----------------------------");
-            new MappingsOptimizer(to, from).optimizeAndWrite();
+            final boolean special = SPECIAL_BACKWARDS_ONLY.contains(from);
+            if (!special) {
+                new MappingsOptimizer(from, to).optimizeAndWrite();
+                LOGGER.info("-----------------------------");
+            }
+
+            final MappingsOptimizer backwardsOptimizer = new MappingsOptimizer(to, from);
+            if (special) {
+                backwardsOptimizer.ignoreMissingMappingsFor("sounds");
+            }
+
+            backwardsOptimizer.optimizeAndWrite();
             LOGGER.info("");
         }
     }

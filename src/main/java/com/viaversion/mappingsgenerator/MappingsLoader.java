@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Set;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +132,7 @@ public final class MappingsLoader {
         final int dataIndex;
         if (diffIdentifiers == null) {
             if (warnOnMissing) {
-                LOGGER.warn("No key/diff file for {} :( ", value);
+                LOGGER.warn("No direct mapping or diff file for {} :( ", value);
             }
             return -1;
         }
@@ -167,7 +168,7 @@ public final class MappingsLoader {
         }
 
         if (mappedId == -1 && warnOnMissing) {
-            LOGGER.warn("No key for {} :( ", value);
+            LOGGER.warn("No diff entry for {} :( ", value);
         }
         return mappedId;
     }
@@ -178,13 +179,19 @@ public final class MappingsLoader {
      * @param unmappedObject     unmapped object
      * @param mappedObject       mapped object
      * @param existingDiffObject existing diff object
+     * @param toIgnore           fields to ignore missing mappings for
      * @return diff object stub, or null if no diff is needed
      */
-    public static @Nullable JsonObject getDiffObjectStub(final JsonObject unmappedObject, final JsonObject mappedObject, @Nullable final JsonObject existingDiffObject) {
+    public static @Nullable JsonObject getDiffObjectStub(
+            final JsonObject unmappedObject,
+            final JsonObject mappedObject,
+            @Nullable final JsonObject existingDiffObject,
+            final Set<String> toIgnore
+    ) {
         final JsonObject diffObject = new JsonObject();
         for (final Map.Entry<String, JsonElement> entry : unmappedObject.entrySet()) {
             final String key = entry.getKey();
-            if (!entry.getValue().isJsonArray() || !mappedObject.has(key) || key.equals("blocks")) { // Special case!
+            if (!entry.getValue().isJsonArray() || !mappedObject.has(key) || toIgnore.contains(key)) {
                 continue;
             }
 
