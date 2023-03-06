@@ -66,14 +66,6 @@
             <version>24.0.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>net.minecraft</groupId>
-            <artifactId>server</artifactId>
-            <version>LATEST</version>
-            <scope>system</scope>
-            <!-- Copy any server in there to at least be able to compile against it -->
-            <systemPath>${project.basedir}/server.jar</systemPath>
-        </dependency>
     </dependencies>
 
     <build>
