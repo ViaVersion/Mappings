@@ -51,7 +51,7 @@ jobs:
       - name: Compile MappingsGenerator jar
         run: mvn package && mvn package && mv target/MappingsGenerator-*.jar ./MappingsGenerator.jar
       - name: Run MappingsGenerator
-        run: java -jar MappingsGenerator.jar server.jar ${{ steps.next_release.outputs.content }} ${{ steps.last_release.outputs.content }}
+        run: java -jar MappingsGenerator.jar server.jar ${{ steps.next_release.outputs.content }}
       - name: Pack mappings
         run: java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimizer ${{ steps.last_release.outputs.content }} ${{ steps.next_release.outputs.content }} --generateDiffStubs
       - name: Pack backwards mappings
