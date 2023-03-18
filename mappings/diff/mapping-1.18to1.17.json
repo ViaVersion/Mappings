@@ -1,18 +1,18 @@
 {
   "sounds": {
-    "item.bundle.drop_contents": "",
-    "item.bundle.insert": "",
-    "item.bundle.remove_one": "",
-    "block.growing_plant.crop": "",
-    "music_disc.otherside": "",
-    "music.overworld.dripstone_caves": "",
-    "music.overworld.grove": "",
-    "music.overworld.jagged_peaks": "",
-    "music.overworld.lush_caves": "",
-    "music.overworld.meadow": "",
-    "music.overworld.frozen_peaks": "",
-    "music.overworld.snowy_slopes": "",
-    "music.overworld.stony_peaks": ""
+    "item.bundle.drop_contents": "item.armor.equip_leather",
+    "item.bundle.insert": "item.armor.equip_leather",
+    "item.bundle.remove_one": "item.armor.equip_leather",
+    "block.growing_plant.crop": "entity.sheep.shear",
+    "music_disc.otherside": "music_disc.mall",
+    "music.overworld.dripstone_caves": "music.game",
+    "music.overworld.grove": "music.game",
+    "music.overworld.jagged_peaks": "music.game",
+    "music.overworld.lush_caves": "music.game",
+    "music.overworld.meadow": "music.game",
+    "music.overworld.frozen_peaks": "music.game",
+    "music.overworld.snowy_slopes": "music.game",
+    "music.overworld.stony_peaks": "music.game"
   },
   "items": {
     "music_disc_otherside": "music_disc_ward"
