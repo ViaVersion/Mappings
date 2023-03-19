@@ -7,7 +7,7 @@
     "stripped_cherry_log": "stripped_acacia_log[",
     "cherry_wood": "acacia_wood[",
     "stripped_cherry_wood": "stripped_acacia_wood[",
-    "cherry_leaves": "acacia_leaves[",
+    "cherry_leaves": "flowering_azalea_leaves[",
     "torchflower": "red_tulip",
     "cherry_sign": "acacia_sign[",
     "cherry_wall_sign": "acacia_wall_sign[",
@@ -24,7 +24,7 @@
     "cherry_fence_gate": "acacia_fence_gate[",
     "cherry_door": "acacia_door[",
     "torchflower_crop": "melon_stem[",
-    "pink_petals": "air",
+    "pink_petals": "brain_coral_fan",
     "decorated_pot": "bricks"
   },
   "blockentities": {
@@ -39,7 +39,7 @@
     "stripped_cherry_log": "stripped_acacia_log",
     "stripped_cherry_wood": "stripped_acacia_wood",
     "cherry_wood": "acacia_wood",
-    "cherry_leaves": "acacia_leaves",
+    "cherry_leaves": "flowering_azalea_leaves",
     "torchflower": "red_tulip",
     "pink_petals": "brain_coral_fan",
     "cherry_slab": "acacia_slab",
