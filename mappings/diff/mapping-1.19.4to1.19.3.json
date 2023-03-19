@@ -24,7 +24,7 @@
     "cherry_fence_gate": "acacia_fence_gate[",
     "cherry_door": "acacia_door[",
     "torchflower_crop": "melon_stem[",
-    "pink_petals": "brain_coral_fan",
+    "pink_petals": "brain_coral_fan[waterlogged=false]",
     "decorated_pot": "bricks"
   },
   "blockentities": {
