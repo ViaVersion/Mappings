@@ -58,7 +58,7 @@ public final class BlockConnections {
             if (blockStateId != -1) {
                 blockTag.put("id", new ShortTag((short) blockStateId));
             } else {
-                // Used for fences, so the json file doesn't need to contain every single block state
+                // Used for fences and glass panes, so the json file doesn't need to contain every single block state
                 final int[] ids = statesMap.object2IntEntrySet().stream().filter(e -> {
                     final int propertiesIndex = e.getKey().indexOf('[');
                     if (propertiesIndex == -1) {

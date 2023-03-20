@@ -5985,7 +5985,7 @@
       "east": true
     }
   },
-  "iron_bars[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "iron_bars": {
     "pane": {
       "north": true,
       "south": true,
@@ -5993,7 +5993,7 @@
       "east": true
     }
   },
-  "glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13643,7 +13643,7 @@
       "east": true
     }
   },
-  "white_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "white_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13651,7 +13651,7 @@
       "east": true
     }
   },
-  "orange_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "orange_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13659,7 +13659,7 @@
       "east": true
     }
   },
-  "magenta_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "magenta_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13667,7 +13667,7 @@
       "east": true
     }
   },
-  "light_blue_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "light_blue_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13675,7 +13675,7 @@
       "east": true
     }
   },
-  "yellow_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "yellow_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13683,7 +13683,7 @@
       "east": true
     }
   },
-  "lime_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "lime_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13691,7 +13691,7 @@
       "east": true
     }
   },
-  "pink_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "pink_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13699,7 +13699,7 @@
       "east": true
     }
   },
-  "gray_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "gray_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13707,7 +13707,7 @@
       "east": true
     }
   },
-  "light_gray_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "light_gray_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13715,7 +13715,7 @@
       "east": true
     }
   },
-  "cyan_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "cyan_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13723,7 +13723,7 @@
       "east": true
     }
   },
-  "purple_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "purple_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13731,7 +13731,7 @@
       "east": true
     }
   },
-  "blue_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "blue_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13739,7 +13739,7 @@
       "east": true
     }
   },
-  "brown_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "brown_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13747,7 +13747,7 @@
       "east": true
     }
   },
-  "green_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "green_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13755,7 +13755,7 @@
       "east": true
     }
   },
-  "red_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "red_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
@@ -13763,7 +13763,7 @@
       "east": true
     }
   },
-  "black_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]": {
+  "black_stained_glass_pane": {
     "pane": {
       "north": true,
       "south": true,
