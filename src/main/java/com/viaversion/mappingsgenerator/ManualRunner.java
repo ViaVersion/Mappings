@@ -40,15 +40,15 @@ public final class ManualRunner {
             return;
         }
 
-        final String from = "1.13.2";
-        final String to = "1.13";
+        final String from = "1.19.4";
+        final String to = "1.20";
         MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to);
         mappingsOptimizer.writeDiffStubs();
         mappingsOptimizer.optimizeAndWrite();
 
-        //mappingsOptimizer = new MappingsOptimizer(to, from);
-        //mappingsOptimizer.writeDiffStubs();
-        //mappingsOptimizer.optimizeAndWrite();
+        mappingsOptimizer = new MappingsOptimizer(to, from);
+        mappingsOptimizer.writeDiffStubs();
+        mappingsOptimizer.optimizeAndWrite();
     }
 
     /**
@@ -106,6 +106,6 @@ public final class ManualRunner {
             mainClass.getDeclaredMethod("main", String[].class).invoke(null, (Object) new String[]{"--reports"});
         }
 
-        MappingsGenerator.collectMappings("23w08a");
+        MappingsGenerator.collectMappings("1.20");
     }
 }

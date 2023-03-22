@@ -7,7 +7,7 @@
     <groupId>com.viaversion</groupId>
     <artifactId>mappingsgenerator</artifactId>
     <name>MappingsGenerator</name>
-    <version>3.2.1</version>
+    <version>3.3.0</version>
 
     <url>https://github.com/ViaVersion/Mappings</url>
     <inceptionYear>2020</inceptionYear>
@@ -50,22 +50,31 @@
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>fastutil</artifactId>
-            <version>8.5.11</version>
+            <version>8.5.12</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.5</version>
+            <version>1.4.6</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>24.0.0</version>
+            <version>24.0.1</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Uncomment to manually run mappings gen in ide -->
+        <!--<dependency>
+            <groupId>net.minecraft</groupId>
+            <artifactId>minecraft</artifactId>
+            <version>LATEST</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/server.jar</systemPath>
+        </dependency>-->
     </dependencies>
 
     <build>

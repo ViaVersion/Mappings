@@ -1,0 +1,33 @@
+{
+  "blockstates": {
+    "decorated_pot[facing=north,waterlogged=true]": "decorated_pot[cracked=false,facing=north,waterlogged=true]",
+    "decorated_pot[facing=north,waterlogged=false]": "decorated_pot[cracked=false,facing=north,waterlogged=false]",
+    "decorated_pot[facing=south,waterlogged=true]": "decorated_pot[cracked=false,facing=south,waterlogged=true]",
+    "decorated_pot[facing=south,waterlogged=false]": "decorated_pot[cracked=false,facing=south,waterlogged=false]",
+    "decorated_pot[facing=west,waterlogged=true]": "decorated_pot[cracked=false,facing=west,waterlogged=true]",
+    "decorated_pot[facing=west,waterlogged=false]": "decorated_pot[cracked=false,facing=west,waterlogged=false]",
+    "decorated_pot[facing=east,waterlogged=true]": "decorated_pot[cracked=false,facing=east,waterlogged=true]",
+    "decorated_pot[facing=east,waterlogged=false]": "decorated_pot[cracked=false,facing=east,waterlogged=false]"
+  },
+  "items": {
+    "pottery_shard_archer": "archer_pottery_shard",
+    "pottery_shard_prize": "prize_pottery_shard",
+    "pottery_shard_arms_up": "arms_up_pottery_shard",
+    "pottery_shard_skull": "skull_pottery_shard"
+  },
+  "sounds": {
+    "item.brush.brushing": "item.brush.brushing.sand",
+    "item.brush.brush_sand_completed": "item.brush.brushing.sand.complete"
+  },
+  "particles": {
+    "dripping_cherry_leaves": "cherry_leaves",
+    "falling_cherry_leaves": "cherry_leaves",
+    "landing_cherry_leaves": "cherry_leaves"
+  },
+  "blockentities": {
+    "suspicious_sand": ""
+  },
+  "menus": {
+    "legacy_smithing": ""
+  }
+}
