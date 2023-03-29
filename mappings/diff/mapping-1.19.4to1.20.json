@@ -7,7 +7,8 @@
     "decorated_pot[facing=west,waterlogged=true]": "decorated_pot[cracked=false,facing=west,waterlogged=true]",
     "decorated_pot[facing=west,waterlogged=false]": "decorated_pot[cracked=false,facing=west,waterlogged=false]",
     "decorated_pot[facing=east,waterlogged=true]": "decorated_pot[cracked=false,facing=east,waterlogged=true]",
-    "decorated_pot[facing=east,waterlogged=false]": "decorated_pot[cracked=false,facing=east,waterlogged=false]"
+    "decorated_pot[facing=east,waterlogged=false]": "decorated_pot[cracked=false,facing=east,waterlogged=false]",
+    "torchflower_crop[age=2]": "torchflower_crop[age=1]"
   },
   "items": {
     "pottery_shard_archer": "archer_pottery_shard",
