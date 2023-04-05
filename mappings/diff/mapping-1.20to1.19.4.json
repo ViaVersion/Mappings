@@ -415,7 +415,10 @@
     "decorated_pot[cracked=false,facing=west,waterlogged=true]": "decorated_pot[facing=west,waterlogged=true]",
     "decorated_pot[cracked=false,facing=west,waterlogged=false]": "decorated_pot[facing=west,waterlogged=false]",
     "decorated_pot[cracked=false,facing=east,waterlogged=true]": "decorated_pot[facing=east,waterlogged=true]",
-    "decorated_pot[cracked=false,facing=east,waterlogged=false]": "decorated_pot[facing=east,waterlogged=false]"
+    "decorated_pot[cracked=false,facing=east,waterlogged=false]": "decorated_pot[facing=east,waterlogged=false]",
+    "sniffer_egg[hatch=0]": "",
+    "sniffer_egg[hatch=1]": "",
+    "sniffer_egg[hatch=2]": ""
   },
   "items": {
     "suspicious_gravel": "gravel",
@@ -463,7 +466,9 @@
     "block.suspicious_gravel.fall": "",
     "entity.sniffer.egg_crack": "",
     "entity.sniffer.egg_hatch": "",
-    "block.sign.waxed_interact_fail": ""
+    "block.sign.waxed_interact_fail": "",
+    "block.sniffer.egg_crack": "",
+    "block.sniffer.egg_hatch": ""
   },
   "particles": {
     "cherry_leaves": "falling_cherry_leaves",
