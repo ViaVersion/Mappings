@@ -13,9 +13,9 @@
     "pitcher_crop[age=4,half=lower]": "lilac[half=lower]",
     "pitcher_plant[half=upper]": "lilac[half=upper]",
     "pitcher_plant[half=lower]": "lilac[half=lower]",
-    "sniffer_egg[age=0]": "red_glazed_terracotta[facing=north]",
-    "sniffer_egg[age=1]": "red_glazed_terracotta[facing=north]",
-    "sniffer_egg[age=2]": "red_glazed_terracotta[facing=north]",
+    "sniffer_egg[hatch=0]": "red_glazed_terracotta[facing=north]",
+    "sniffer_egg[hatch=1]": "red_glazed_terracotta[facing=north]",
+    "sniffer_egg[hatch=2]": "red_glazed_terracotta[facing=north]",
     "calibrated_sculk_sensor[facing=north,power=0,sculk_sensor_phase=inactive,waterlogged=true]": "sculk_sensor[power=0,sculk_sensor_phase=inactive,waterlogged=true]",
     "calibrated_sculk_sensor[facing=north,power=0,sculk_sensor_phase=inactive,waterlogged=false]": "sculk_sensor[power=0,sculk_sensor_phase=inactive,waterlogged=false]",
     "calibrated_sculk_sensor[facing=north,power=0,sculk_sensor_phase=active,waterlogged=true]": "sculk_sensor[power=0,sculk_sensor_phase=active,waterlogged=true]",
@@ -415,10 +415,7 @@
     "decorated_pot[cracked=false,facing=west,waterlogged=true]": "decorated_pot[facing=west,waterlogged=true]",
     "decorated_pot[cracked=false,facing=west,waterlogged=false]": "decorated_pot[facing=west,waterlogged=false]",
     "decorated_pot[cracked=false,facing=east,waterlogged=true]": "decorated_pot[facing=east,waterlogged=true]",
-    "decorated_pot[cracked=false,facing=east,waterlogged=false]": "decorated_pot[facing=east,waterlogged=false]",
-    "sniffer_egg[hatch=0]": "",
-    "sniffer_egg[hatch=1]": "",
-    "sniffer_egg[hatch=2]": ""
+    "decorated_pot[cracked=false,facing=east,waterlogged=false]": "decorated_pot[facing=east,waterlogged=false]"
   },
   "items": {
     "suspicious_gravel": "gravel",
