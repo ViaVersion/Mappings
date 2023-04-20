@@ -447,7 +447,27 @@
     "sheaf_pottery_shard": "pottery_shard_archer",
     "shelter_pottery_shard": "pottery_shard_archer",
     "skull_pottery_shard": "pottery_shard_skull",
-    "snort_pottery_shard": "pottery_shard_archer"
+    "snort_pottery_shard": "pottery_shard_archer",
+    "angler_pottery_sherd": "",
+    "archer_pottery_sherd": "",
+    "arms_up_pottery_sherd": "",
+    "blade_pottery_sherd": "",
+    "brewer_pottery_sherd": "",
+    "burn_pottery_sherd": "",
+    "danger_pottery_sherd": "",
+    "explorer_pottery_sherd": "",
+    "friend_pottery_sherd": "",
+    "heart_pottery_sherd": "",
+    "heartbreak_pottery_sherd": "",
+    "howl_pottery_sherd": "",
+    "miner_pottery_sherd": "",
+    "mourner_pottery_sherd": "",
+    "plenty_pottery_sherd": "",
+    "prize_pottery_sherd": "",
+    "sheaf_pottery_sherd": "",
+    "shelter_pottery_sherd": "",
+    "skull_pottery_sherd": "",
+    "snort_pottery_sherd": ""
   },
   "sounds": {
     "block.amethyst_block.resonate": "",
@@ -465,7 +485,10 @@
     "entity.sniffer.egg_hatch": "",
     "block.sign.waxed_interact_fail": "",
     "block.sniffer.egg_crack": "",
-    "block.sniffer.egg_hatch": ""
+    "block.sniffer.egg_hatch": "",
+    "block.sniffer_egg.plop": "",
+    "block.sniffer_egg.crack": "",
+    "block.sniffer_egg.hatch": ""
   },
   "particles": {
     "cherry_leaves": "falling_cherry_leaves",
