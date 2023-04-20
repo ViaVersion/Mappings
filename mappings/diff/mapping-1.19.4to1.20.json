@@ -43,10 +43,10 @@
     "sculk_sensor[power=15,sculk_sensor_phase=cooldown,waterlogged=false]": "sculk_sensor[power=15,sculk_sensor_phase=inactive,waterlogged=false]"
   },
   "items": {
-    "pottery_shard_archer": "archer_pottery_shard",
-    "pottery_shard_prize": "prize_pottery_shard",
-    "pottery_shard_arms_up": "arms_up_pottery_shard",
-    "pottery_shard_skull": "skull_pottery_shard"
+    "pottery_shard_archer": "archer_pottery_sherd",
+    "pottery_shard_prize": "prize_pottery_sherd",
+    "pottery_shard_arms_up": "arms_up_pottery_sherd",
+    "pottery_shard_skull": "skull_pottery_sherd"
   },
   "sounds": {
     "item.brush.brushing": "item.brush.brushing.sand",
