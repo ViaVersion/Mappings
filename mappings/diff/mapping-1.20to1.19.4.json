@@ -447,7 +447,8 @@
     "sheaf_pottery_sherd": "pottery_shard_archer",
     "shelter_pottery_sherd": "pottery_shard_archer",
     "skull_pottery_sherd": "pottery_shard_skull",
-    "snort_pottery_sherd": "pottery_shard_archer"
+    "snort_pottery_sherd": "pottery_shard_archer",
+    "music_disc_relic": ""
   },
   "sounds": {
     "block.amethyst_block.resonate": "",
@@ -468,7 +469,15 @@
     "block.sniffer.egg_hatch": "",
     "block.sniffer_egg.plop": "",
     "block.sniffer_egg.crack": "",
-    "block.sniffer_egg.hatch": ""
+    "block.sniffer_egg.hatch": "",
+    "music_disc.relic": "",
+    "music.overworld.forest": "",
+    "music.overworld.flower_forest": "",
+    "music.overworld.desert": "",
+    "music.overworld.badlands": "",
+    "music.overworld.jungle": "",
+    "music.overworld.sparse_jungle": "",
+    "music.overworld.bamboo_jungle": ""
   },
   "particles": {
     "cherry_leaves": "falling_cherry_leaves",

@@ -50,7 +50,8 @@
   },
   "sounds": {
     "item.brush.brushing": "item.brush.brushing.sand",
-    "item.brush.brush_sand_completed": "item.brush.brushing.sand.complete"
+    "item.brush.brush_sand_completed": "item.brush.brushing.sand.complete",
+    "music.overworld.jungle_and_forest": ""
   },
   "particles": {
     "dripping_cherry_leaves": "cherry_leaves",
