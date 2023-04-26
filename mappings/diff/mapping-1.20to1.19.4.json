@@ -448,7 +448,7 @@
     "shelter_pottery_sherd": "pottery_shard_archer",
     "skull_pottery_sherd": "pottery_shard_skull",
     "snort_pottery_sherd": "pottery_shard_archer",
-    "music_disc_relic": ""
+    "music_disc_relic": "music_disc_pigstep"
   },
   "sounds": {
     "block.amethyst_block.resonate": "",
