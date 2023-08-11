@@ -1,5 +1,5 @@
 {
   "blockstates": {
-    "barrier": ""
+    "barrier": "barrier[waterlogged=false]"
   }
 }
