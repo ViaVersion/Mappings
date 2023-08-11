@@ -1,0 +1,9 @@
+{
+  "blockstates": {
+    "barrier[waterlogged=true]": "",
+    "barrier[waterlogged=false]": ""
+  },
+  "sounds": {
+    "block.sponge.absorb": ""
+  }
+}
