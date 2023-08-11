@@ -30,6 +30,10 @@ Optional arguments must follow the two version arguments.
 * `--generateDiffStubs` to generate empty diff files for missing mappings
 * `--keepUnknownFields` to keep non-standard fields from json mappings in the compact files
 
+## Updating version files
+On Minecraft updates, the `next_release.txt` and `last_release.txt` files need to be updated manually.
+`last_release.txt` needs the last release **ViaVersion requires mappings for**.
+
 ## Json format
 
 The json files contain a number of Minecraft registries in form of json arrays, where the index corresponds to the id of

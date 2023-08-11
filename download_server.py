@@ -60,8 +60,6 @@ def main():
 
     with open(last_snapshot_path, 'w') as f:
         f.write(snapshot)
-    with open(Path('last_release.txt'), 'w') as f:
-        f.write(release)
 
     sys.exit(0)
 
