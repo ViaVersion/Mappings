@@ -4,6 +4,16 @@
     "barrier[waterlogged=false]": "barrier"
   },
   "sounds": {
-    "block.sponge.absorb": ""
+    "block.sponge.absorb": "",
+    "block.sponge.break": "",
+    "block.sponge.fall": "",
+    "block.sponge.hit": "",
+    "block.sponge.place": "",
+    "block.sponge.step": "",
+    "block.wet_sponge.break": "",
+    "block.wet_sponge.fall": "",
+    "block.wet_sponge.hit": "",
+    "block.wet_sponge.place": "",
+    "block.wet_sponge.step": ""
   }
 }
