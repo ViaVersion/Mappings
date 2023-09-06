@@ -61,8 +61,8 @@ jobs:
 
       - name: Commit changes
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "automata"
+          git config --local user.email "action@github.com"
+          git config --local user.name "automation"
           git add .
           git commit -am "Update: ${{ steps.last_snapshot.outputs.content }}"
 
