@@ -4,7 +4,7 @@ Generates and compiles mapping files for Via*. Current mapping files can be foun
 
 ## Generating json mapping files for a Minecraft version
 
-Compile the project using `mvn clean build` and put the jar in some directory, ideally the project root.
+Compile the project using `./gradlew build` and put the jar in some directory, ideally the project root.
 
 Then run the jar with:
 
