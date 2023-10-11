@@ -1,0 +1,10 @@
+{
+  "sounds": {
+    "block.decorated_pot.insert": "",
+    "block.decorated_pot.insert_fail": "",
+    "block.hanging_sign.waxed_interact_fail": ""
+  },
+  "particles": {
+    "dust_plume": ""
+  }
+}

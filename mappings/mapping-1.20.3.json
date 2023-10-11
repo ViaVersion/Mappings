@@ -26872,6 +26872,8 @@
     "block.decorated_pot.break",
     "block.decorated_pot.fall",
     "block.decorated_pot.hit",
+    "block.decorated_pot.insert",
+    "block.decorated_pot.insert_fail",
     "block.decorated_pot.step",
     "block.decorated_pot.place",
     "block.decorated_pot.shatter",
@@ -27939,6 +27941,7 @@
     "entity.warden.sonic_charge",
     "entity.warden.step",
     "entity.warden.tendril_clicks",
+    "block.hanging_sign.waxed_interact_fail",
     "block.sign.waxed_interact_fail",
     "block.water.ambient",
     "weather.rain",
@@ -28121,7 +28124,8 @@
     "electric_spark",
     "scrape",
     "shriek",
-    "egg_crack"
+    "egg_crack",
+    "dust_plume"
   ],
   "blockentities": [
     "furnace",
