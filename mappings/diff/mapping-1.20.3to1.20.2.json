@@ -5,6 +5,6 @@
     "block.hanging_sign.waxed_interact_fail": ""
   },
   "particles": {
-    "dust_plume": ""
+    "dust_plume": "ash"
   }
 }
