@@ -27,7 +27,7 @@ java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimize
 
 Optional arguments must follow the two version arguments.
 
-* `--generateDiffStubs` to generate empty diff files for missing mappings
+* `--generateDiffStubs` to generate diff files with empty stubs for missing mappings
 * `--keepUnknownFields` to keep non-standard fields from json mappings in the compact files
 
 ## Updating version files
@@ -50,7 +50,7 @@ the `mapping/diff/` directory.
 ## Compact format
 
 Compact files are always saved as [NBT](https://minecraft.fandom.com/wiki/NBT_format). ViaVersion uses its
-own [OpenNBT](https://github.com/ViaVersion/OpenNBT) as the NBT reader/writer. Compact files are found in the
+own [ViaNBT](https://github.com/ViaVersion/ViaNBT) as the NBT reader/writer. Compact files are found in the
 `output/` directory and subdirectories.
 
 ### Identifier files
