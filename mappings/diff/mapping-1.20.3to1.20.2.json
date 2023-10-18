@@ -2,9 +2,71 @@
   "sounds": {
     "block.decorated_pot.insert": "",
     "block.decorated_pot.insert_fail": "",
-    "block.hanging_sign.waxed_interact_fail": ""
+    "block.hanging_sign.waxed_interact_fail": "",
+    "block.crafter.craft": "",
+    "block.crafter.fail": ""
   },
   "particles": {
-    "dust_plume": "ash"
+    "dust_plume": "ash",
+    "white_smoke": ""
+  },
+  "blockstates": {
+    "crafter[crafting=true,orientation=down_east,triggered=true]": "",
+    "crafter[crafting=true,orientation=down_east,triggered=false]": "",
+    "crafter[crafting=true,orientation=down_north,triggered=true]": "",
+    "crafter[crafting=true,orientation=down_north,triggered=false]": "",
+    "crafter[crafting=true,orientation=down_south,triggered=true]": "",
+    "crafter[crafting=true,orientation=down_south,triggered=false]": "",
+    "crafter[crafting=true,orientation=down_west,triggered=true]": "",
+    "crafter[crafting=true,orientation=down_west,triggered=false]": "",
+    "crafter[crafting=true,orientation=up_east,triggered=true]": "",
+    "crafter[crafting=true,orientation=up_east,triggered=false]": "",
+    "crafter[crafting=true,orientation=up_north,triggered=true]": "",
+    "crafter[crafting=true,orientation=up_north,triggered=false]": "",
+    "crafter[crafting=true,orientation=up_south,triggered=true]": "",
+    "crafter[crafting=true,orientation=up_south,triggered=false]": "",
+    "crafter[crafting=true,orientation=up_west,triggered=true]": "",
+    "crafter[crafting=true,orientation=up_west,triggered=false]": "",
+    "crafter[crafting=true,orientation=west_up,triggered=true]": "",
+    "crafter[crafting=true,orientation=west_up,triggered=false]": "",
+    "crafter[crafting=true,orientation=east_up,triggered=true]": "",
+    "crafter[crafting=true,orientation=east_up,triggered=false]": "",
+    "crafter[crafting=true,orientation=north_up,triggered=true]": "",
+    "crafter[crafting=true,orientation=north_up,triggered=false]": "",
+    "crafter[crafting=true,orientation=south_up,triggered=true]": "",
+    "crafter[crafting=true,orientation=south_up,triggered=false]": "",
+    "crafter[crafting=false,orientation=down_east,triggered=true]": "",
+    "crafter[crafting=false,orientation=down_east,triggered=false]": "",
+    "crafter[crafting=false,orientation=down_north,triggered=true]": "",
+    "crafter[crafting=false,orientation=down_north,triggered=false]": "",
+    "crafter[crafting=false,orientation=down_south,triggered=true]": "",
+    "crafter[crafting=false,orientation=down_south,triggered=false]": "",
+    "crafter[crafting=false,orientation=down_west,triggered=true]": "",
+    "crafter[crafting=false,orientation=down_west,triggered=false]": "",
+    "crafter[crafting=false,orientation=up_east,triggered=true]": "",
+    "crafter[crafting=false,orientation=up_east,triggered=false]": "",
+    "crafter[crafting=false,orientation=up_north,triggered=true]": "",
+    "crafter[crafting=false,orientation=up_north,triggered=false]": "",
+    "crafter[crafting=false,orientation=up_south,triggered=true]": "",
+    "crafter[crafting=false,orientation=up_south,triggered=false]": "",
+    "crafter[crafting=false,orientation=up_west,triggered=true]": "",
+    "crafter[crafting=false,orientation=up_west,triggered=false]": "",
+    "crafter[crafting=false,orientation=west_up,triggered=true]": "",
+    "crafter[crafting=false,orientation=west_up,triggered=false]": "",
+    "crafter[crafting=false,orientation=east_up,triggered=true]": "",
+    "crafter[crafting=false,orientation=east_up,triggered=false]": "",
+    "crafter[crafting=false,orientation=north_up,triggered=true]": "",
+    "crafter[crafting=false,orientation=north_up,triggered=false]": "",
+    "crafter[crafting=false,orientation=south_up,triggered=true]": "",
+    "crafter[crafting=false,orientation=south_up,triggered=false]": ""
+  },
+  "items": {
+    "crafter": ""
+  },
+  "blockentities": {
+    "crafter": ""
+  },
+  "menus": {
+    "crafter_3x3": ""
   }
 }
