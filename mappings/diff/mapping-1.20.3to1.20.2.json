@@ -16,6 +16,9 @@
   "items": {
     "crafter": "crafting_table"
   },
+  "itemnames": {
+    "crafter": "1.21 Crafter"
+  },
   "blockentities": {
     "crafter": ""
   },
