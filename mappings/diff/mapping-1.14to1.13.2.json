@@ -320,7 +320,7 @@
     "cut_sandstone_slab": "sandstone_slab[",
     "cut_red_sandstone_slab": "red_sandstone_slab[",
     "bamboo_sapling": "jungle_sapling[stage=0]",
-    "bamboo": "sugar_cane[age=0]",
+    "bamboo": "lime_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]",
     "potted_bamboo": "potted_cactus",
     "polished_granite_stairs": "stone_brick_stairs[",
     "smooth_red_sandstone_stairs": "red_sandstone_stairs[",
