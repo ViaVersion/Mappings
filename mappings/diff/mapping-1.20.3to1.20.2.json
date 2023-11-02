@@ -2,7 +2,7 @@
   "sounds": {
     "block.decorated_pot.insert": "entity.item_frame.add_item",
     "block.decorated_pot.insert_fail": "entity.item_frame.remove_item",
-    "block.hanging_sign.waxed_interact_fail": "block.wood.break",
+    "block.hanging_sign.waxed_interact_fail": "block.wood.place",
     "block.crafter.craft": "block.dispenser.dispense",
     "block.crafter.fail": "block.dispenser.fail",
     "block.copper_bulb.break": "block.glass.break",
