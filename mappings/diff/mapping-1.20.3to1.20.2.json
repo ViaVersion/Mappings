@@ -31,11 +31,37 @@
     "block.polished_tuff.fall": "block.tuff.fall",
     "block.polished_tuff.hit": "block.tuff.hit",
     "block.polished_tuff.place": "block.tuff.place",
-    "block.polished_tuff.step": "block.tuff.step"
+    "block.polished_tuff.step": "block.tuff.step",
+    "entity.breeze.inhale": "",
+    "entity.breeze.idle_ground": "",
+    "entity.breeze.idle_air": "",
+    "entity.breeze.shoot": "",
+    "entity.breeze.jump": "",
+    "entity.breeze.land": "",
+    "entity.breeze.slide": "",
+    "entity.breeze.death": "",
+    "entity.breeze.hurt": "",
+    "block.trial_spawner.break": "",
+    "block.trial_spawner.step": "",
+    "block.trial_spawner.place": "",
+    "block.trial_spawner.hit": "",
+    "block.trial_spawner.fall": "",
+    "block.trial_spawner.spawn_mob": "",
+    "block.trial_spawner.detect_player": "",
+    "block.trial_spawner.ambient": "",
+    "block.trial_spawner.open_shutter": "",
+    "block.trial_spawner.close_shutter": "",
+    "block.trial_spawner.eject_item": "",
+    "entity.parrot.imitate.breeze": "",
+    "entity.generic.wind_burst": ""
   },
   "particles": {
     "dust_plume": "ash",
-    "white_smoke": "smoke"
+    "white_smoke": "smoke",
+    "gust": "",
+    "gust_emitter": "",
+    "gust_dust": "",
+    "trial_spawner_detection": ""
   },
   "blockstates": {
     "crafter": "crafting_table",
@@ -115,7 +141,13 @@
     "waxed_oxidized_copper_bulb[lit=true,powered=true]": "redstone_lamp[lit=true]",
     "waxed_oxidized_copper_bulb[lit=true,powered=false]": "redstone_lamp[lit=true]",
     "waxed_oxidized_copper_bulb[lit=false,powered=true]": "redstone_lamp[lit=false]",
-    "waxed_oxidized_copper_bulb[lit=false,powered=false]": "redstone_lamp[lit=false]"
+    "waxed_oxidized_copper_bulb[lit=false,powered=false]": "redstone_lamp[lit=false]",
+    "trial_spawner[trial_spawner_state=inactive]": "",
+    "trial_spawner[trial_spawner_state=waiting_for_players]": "",
+    "trial_spawner[trial_spawner_state=active]": "",
+    "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]": "",
+    "trial_spawner[trial_spawner_state=ejecting_reward]": "",
+    "trial_spawner[trial_spawner_state=cooldown]": ""
   },
   "items": {
     "crafter": "crafting_table",
@@ -171,7 +203,10 @@
     "waxed_copper_bulb": "redstone_lamp",
     "waxed_exposed_copper_bulb": "redstone_lamp",
     "waxed_weathered_copper_bulb": "redstone_lamp",
-    "waxed_oxidized_copper_bulb": "redstone_lamp"
+    "waxed_oxidized_copper_bulb": "redstone_lamp",
+    "breeze_spawn_egg": "",
+    "trial_spawner": "",
+    "trial_key": ""
   },
   "itemnames": {
     "crafter": "1.20.3 Crafter",
@@ -230,9 +265,14 @@
     "waxed_oxidized_copper_bulb": "1.20.3 Waxed Oxidized Copper Bulb"
   },
   "blockentities": {
-    "crafter": ""
+    "crafter": "",
+    "trial_spawner": ""
   },
   "menus": {
     "crafter_3x3": "generic_3x3"
+  },
+  "entities": {
+    "breeze": "",
+    "wind_charge": ""
   }
 }
