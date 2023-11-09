@@ -277,5 +277,9 @@
   "entities": {
     "breeze": "blaze",
     "wind_charge": "llama_spit"
+  },
+  "entitynames": {
+    "breeze": "Breeze",
+    "wind_charge": ""
   }
 }
