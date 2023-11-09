@@ -58,10 +58,10 @@
   "particles": {
     "dust_plume": "ash",
     "white_smoke": "smoke",
-    "gust": "",
-    "gust_emitter": "",
-    "gust_dust": "",
-    "trial_spawner_detection": ""
+    "gust": "explosion",
+    "gust_emitter": "explosion_emitter",
+    "gust_dust": "campfire_cosy_smoke",
+    "trial_spawner_detection": "flame"
   },
   "blockstates": {
     "crafter": "crafting_table",
@@ -142,12 +142,12 @@
     "waxed_oxidized_copper_bulb[lit=true,powered=false]": "redstone_lamp[lit=true]",
     "waxed_oxidized_copper_bulb[lit=false,powered=true]": "redstone_lamp[lit=false]",
     "waxed_oxidized_copper_bulb[lit=false,powered=false]": "redstone_lamp[lit=false]",
-    "trial_spawner[trial_spawner_state=inactive]": "",
-    "trial_spawner[trial_spawner_state=waiting_for_players]": "",
-    "trial_spawner[trial_spawner_state=active]": "",
-    "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]": "",
-    "trial_spawner[trial_spawner_state=ejecting_reward]": "",
-    "trial_spawner[trial_spawner_state=cooldown]": ""
+    "trial_spawner[trial_spawner_state=inactive]": "spawner",
+    "trial_spawner[trial_spawner_state=waiting_for_players]": "spawner",
+    "trial_spawner[trial_spawner_state=active]": "spawner",
+    "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]": "spawner",
+    "trial_spawner[trial_spawner_state=ejecting_reward]": "spawner",
+    "trial_spawner[trial_spawner_state=cooldown]": "spawner"
   },
   "items": {
     "crafter": "crafting_table",
@@ -204,9 +204,9 @@
     "waxed_exposed_copper_bulb": "redstone_lamp",
     "waxed_weathered_copper_bulb": "redstone_lamp",
     "waxed_oxidized_copper_bulb": "redstone_lamp",
-    "breeze_spawn_egg": "",
-    "trial_spawner": "",
-    "trial_key": ""
+    "breeze_spawn_egg": "shulker_spawn_egg",
+    "trial_spawner": "spawner",
+    "trial_key": "tripwire_hook"
   },
   "itemnames": {
     "crafter": "1.20.3 Crafter",
@@ -262,7 +262,10 @@
     "waxed_copper_bulb": "1.20.3 Waxed Copper Bulb",
     "waxed_exposed_copper_bulb": "1.20.3 Waxed Exposed Copper Bulb",
     "waxed_weathered_copper_bulb": "1.20.3 Waxed Weathered Copper Bulb",
-    "waxed_oxidized_copper_bulb": "1.20.3 Waxed Oxidized Copper Bulb"
+    "waxed_oxidized_copper_bulb": "1.20.3 Waxed Oxidized Copper Bulb",
+    "breeze_spawn_egg": "1.20.3 Breeze Spawn Egg",
+    "trial_spawner": "1.20.3 Trial Spawner",
+    "trial_key": "1.20.3 Trial Key"
   },
   "blockentities": {
     "crafter": "",
@@ -272,7 +275,7 @@
     "crafter_3x3": "generic_3x3"
   },
   "entities": {
-    "breeze": "",
-    "wind_charge": ""
+    "breeze": "blaze",
+    "wind_charge": "llama_spit"
   }
 }
