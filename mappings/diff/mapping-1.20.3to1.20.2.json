@@ -282,6 +282,6 @@
     "breeze": "Breeze"
   },
   "argumenttypes": {
-    "style": ""
+    "style": "brigadier:string"
   }
 }

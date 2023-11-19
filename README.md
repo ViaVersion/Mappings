@@ -71,7 +71,8 @@ and statistics) are stored as compound tags, containing:
 * `mappedSize` (int tag) the number of mapped entries in the registry
 
 The rest of the content depends on the storage type, each resulting in vastly different storage sizes depending on the
-number and distribution of id changes, used to make the mapping files about as small as possible.
+number and distribution of id changes, used to make the mapping files about as small as possible without sacrifing
+deserialization performance or making the formats *too* complex.
 
 ### Direct value storage
 
