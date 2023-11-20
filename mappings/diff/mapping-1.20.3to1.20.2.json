@@ -147,7 +147,8 @@
     "trial_spawner[trial_spawner_state=active]": "spawner",
     "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]": "spawner",
     "trial_spawner[trial_spawner_state=ejecting_reward]": "spawner",
-    "trial_spawner[trial_spawner_state=cooldown]": "spawner"
+    "trial_spawner[trial_spawner_state=cooldown]": "spawner",
+    "short_grass": ""
   },
   "items": {
     "crafter": "crafting_table",
@@ -206,7 +207,8 @@
     "waxed_oxidized_copper_bulb": "redstone_lamp",
     "breeze_spawn_egg": "shulker_spawn_egg",
     "trial_spawner": "spawner",
-    "trial_key": "tripwire_hook"
+    "trial_key": "tripwire_hook",
+    "short_grass": ""
   },
   "itemnames": {
     "crafter": "1.20.3 Crafter",
