@@ -150,6 +150,9 @@
     "trial_spawner[trial_spawner_state=cooldown]": "spawner",
     "short_grass": "grass"
   },
+  "blocks": {
+    "short_grass": "grass"
+  },
   "items": {
     "crafter": "crafting_table",
     "tuff_slab": "andesite_slab",

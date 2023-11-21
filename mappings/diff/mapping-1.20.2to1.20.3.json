@@ -2,6 +2,9 @@
   "blockstates": {
     "grass": "short_grass"
   },
+  "blocks": {
+    "grass": "short_grass"
+  },
   "items": {
     "grass": "short_grass"
   }
