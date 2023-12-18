@@ -1,9 +1,15 @@
 {
   "items": {
-    "turtle_scute": "",
-    "armadillo_scute": "",
-    "wolf_armor": "",
-    "armadillo_spawn_egg": ""
+    "turtle_scute": "scute",
+    "armadillo_scute": "scute",
+    "wolf_armor": "leather_horse_armor",
+    "armadillo_spawn_egg": "horse_spawn_egg"
+  },
+  "itemnames": {
+    "turtle_scute": "1.20.5 Turtle Scute",
+    "armadillo_scute": "1.20.5 Armadillo Scute",
+    "wolf_armor": "1.20.5 Wolf Armor",
+    "armadillo_spawn_egg": "1.20.5 Armadillo Spawn Egg"
   },
   "sounds": {
     "entity.armadillo.eat": "",
@@ -23,6 +29,15 @@
     "entity.breeze.whirl": ""
   },
   "entities": {
-    "armadillo": ""
+    "armadillo": "cow"
+  },
+  "entitynames": {
+    "armadillo": "Armadillo"
+  },
+  "attributes": {
+    "generic.block_interaction_range": "",
+    "generic.entity_interaction_range": "",
+    "generic.scale": "",
+    "generic.step_height": ""
   }
 }

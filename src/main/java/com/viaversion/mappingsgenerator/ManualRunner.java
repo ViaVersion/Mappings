@@ -106,6 +106,6 @@ public final class ManualRunner {
             mainClass.getDeclaredMethod("main", String[].class).invoke(null, (Object) new String[]{"--reports"});
         }
 
-        MappingsGenerator.collectMappings("1.20");
+        MappingsGenerator.collectMappings("1.20.5");
     }
 }

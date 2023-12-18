@@ -160,6 +160,7 @@ public final class MappingsGenerator {
         addArray(viaMappings, registries, "minecraft:motive", "paintings");
         addArray(viaMappings, registries, "minecraft:painting_variant", "paintings");
         addArray(viaMappings, registries, "minecraft:menu", "menus");
+        addArray(viaMappings, registries, "minecraft:attribute", "attributes");
 
         // Save
         new File("mappings").mkdir();

@@ -63,7 +63,22 @@ public final class MappingsOptimizer {
     public static final String OUTPUT_IDENTIFIERS_FILE_FORMAT = "identifiers-%s.nbt";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MappingsOptimizer.class.getSimpleName());
-    private static final Set<String> STANDARD_FIELDS = Set.of("blockstates", "blocks", "items", "menus", "sounds", "blockentities", "enchantments", "paintings", "entities", "particles", "argumenttypes", "statistics", "tags");
+    private static final Set<String> STANDARD_FIELDS = Set.of(
+            "blockstates",
+            "blocks",
+            "items",
+            "menus",
+            "sounds",
+            "blockentities",
+            "enchantments",
+            "paintings",
+            "entities",
+            "particles",
+            "argumenttypes",
+            "statistics",
+            "tags",
+            "attributes"
+    );
     private static final Set<String> SAVED_IDENTIFIER_FILES = new HashSet<>();
 
     private final Set<String> ignoreMissing = new HashSet<>(Arrays.asList("blocks", "statistics"));
@@ -146,6 +161,7 @@ public final class MappingsOptimizer {
         mappings(false, "argumenttypes");
         mappings(false, "statistics");
         mappings(false, "menus");
+        mappings(false, "attributes");
 
         if (diffObject != null) {
             names("items", "itemnames");
