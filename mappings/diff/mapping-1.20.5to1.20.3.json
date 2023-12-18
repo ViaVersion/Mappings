@@ -1,0 +1,28 @@
+{
+  "items": {
+    "turtle_scute": "",
+    "armadillo_scute": "",
+    "wolf_armor": "",
+    "armadillo_spawn_egg": ""
+  },
+  "sounds": {
+    "entity.armadillo.eat": "",
+    "entity.armadillo.hurt": "",
+    "entity.armadillo.ambient": "",
+    "entity.armadillo.step": "",
+    "entity.armadillo.death": "",
+    "entity.armadillo.roll": "",
+    "entity.armadillo.land": "",
+    "entity.armadillo.scute_drop": "",
+    "entity.armadillo.unroll": "",
+    "entity.armadillo.brush": "",
+    "item.armor.equip_wolf": "",
+    "item.armor.unequip_wolf": "",
+    "entity.breeze.charge": "",
+    "entity.breeze.deflect": "",
+    "entity.breeze.whirl": ""
+  },
+  "entities": {
+    "armadillo": ""
+  }
+}
