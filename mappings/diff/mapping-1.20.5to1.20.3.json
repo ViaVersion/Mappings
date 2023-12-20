@@ -16,7 +16,7 @@
     "entity.armadillo.hurt": "entity.llama.hurt",
     "entity.armadillo.ambient": "entity.sniffer.idle",
     "entity.armadillo.step": "entity.horse.step",
-    "entity.armadillo.death": "",
+    "entity.armadillo.death": "entity.strider.death",
     "entity.armadillo.roll": "entity.player.attack.nodamage",
     "entity.armadillo.land": "entity.player.small_fall",
     "entity.armadillo.scute_drop": "entity.chicken.egg",
