@@ -25,18 +25,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class ManualRunner {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ManualRunner.class.getSimpleName());
     private static final Set<String> SPECIAL_BACKWARDS_ONLY = Set.of("1.9.4", "1.10", "1.11");
     private static final boolean ALL = true;
 
     public static void main(final String[] args) throws IOException {
         if (ALL) {
-            runAll();
+            runAll(ErrorStrategy.WARN);
             return;
         }
 
@@ -52,9 +49,9 @@ public final class ManualRunner {
     }
 
     /**
-     * Runs the optimizer for all mapping files present in the mappings/ directory.
+     * Runs the optimizer for all mapping files present in the 'mappings' directory.
      */
-    public static void runAll() throws IOException {
+    public static void runAll(final ErrorStrategy errorStrategy) throws IOException {
         final List<String> versions = new ArrayList<>();
         for (final File file : MappingsOptimizer.MAPPINGS_DIR.toFile().listFiles()) {
             final String name = file.getName();
@@ -69,7 +66,6 @@ public final class ManualRunner {
         for (int i = 0; i < versions.size() - 1; i++) {
             final String from = versions.get(i);
             final String to = versions.get(i + 1);
-            LOGGER.info("=============================");
             if (from.equals("1.12") && to.equals("1.13")) {
                 CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBT();
                 CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBTBackwards();
@@ -78,17 +74,18 @@ public final class ManualRunner {
 
             final boolean special = SPECIAL_BACKWARDS_ONLY.contains(from);
             if (!special) {
-                new MappingsOptimizer(from, to).optimizeAndWrite();
-                LOGGER.info("-----------------------------");
+                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to);
+                mappingsOptimizer.setErrorStrategy(errorStrategy);
+                mappingsOptimizer.optimizeAndWrite();
             }
 
             final MappingsOptimizer backwardsOptimizer = new MappingsOptimizer(to, from);
+            backwardsOptimizer.setErrorStrategy(errorStrategy);
             if (special) {
                 backwardsOptimizer.ignoreMissingMappingsFor("sounds");
             }
 
             backwardsOptimizer.optimizeAndWrite();
-            LOGGER.info("");
         }
     }
 

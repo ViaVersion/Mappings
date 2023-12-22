@@ -23,27 +23,29 @@ import java.io.IOException;
 public final class CursedMappings {
 
     public static void optimizeAndSaveOhSoSpecial1_12AsNBT() throws IOException {
-        final MappingsOptimizer optimizer = new MappingsOptimizer("1.12", "1.13");
-        optimizer.keepUnknownFields();
-        optimizer.handleUnknownFields();
+        final MappingsOptimizer optimizer = create("1.12", "1.13");
         optimizer.cursedMappings("blocks", "blockstates", "blockstates", 4084);
-        optimizer.cursedMappings("items", "items", "items");
         optimizer.cursedMappings("legacy_enchantments", "enchantments", "enchantments", 72);
-        optimizer.mappings(false, "sounds");
         optimizer.write(MappingsOptimizer.OUTPUT_DIR);
     }
 
     public static void optimizeAndSaveOhSoSpecial1_12AsNBTBackwards() throws IOException {
-        final MappingsOptimizer optimizer = new MappingsOptimizer("1.13", "1.12");
-        optimizer.keepUnknownFields();
-        optimizer.handleUnknownFields();
+        final MappingsOptimizer optimizer = create("1.13", "1.12");
         optimizer.cursedMappings("blockstates", "blocks", "blockstates", 8582);
-        optimizer.cursedMappings("items", "items", "items");
         optimizer.cursedMappings("enchantments", "legacy_enchantments", "enchantments");
         optimizer.names("items", "itemnames");
         optimizer.fullNames("entitynames", "entitynames");
         optimizer.fullNames("sounds", "soundnames");
-        optimizer.mappings(false, "sounds");
         optimizer.write(MappingsOptimizer.OUTPUT_BACKWARDS_DIR);
+    }
+
+    private static MappingsOptimizer create(final String from, final String to) throws IOException {
+        final MappingsOptimizer optimizer = new MappingsOptimizer(from, to);
+        optimizer.setErrorStrategy(ErrorStrategy.IGNORE);
+        optimizer.keepUnknownFields();
+        optimizer.handleUnknownFields();
+        optimizer.cursedMappings("items", "items", "items");
+        optimizer.mappings(false, "sounds");
+        return optimizer;
     }
 }

@@ -87,6 +87,7 @@ public final class MappingsOptimizer {
     private final String toVersion;
     private final JsonObject unmappedObject;
     private final JsonObject mappedObject;
+    private ErrorStrategy errorStrategy = ErrorStrategy.WARN;
     private JsonObject diffObject;
     private boolean keepUnknownFields;
 
@@ -143,7 +144,7 @@ public final class MappingsOptimizer {
      * Optimizes mapping files as nbt files with only the necessary data (int to int mappings in form of int arrays).
      */
     public void optimizeAndWrite() throws IOException {
-        LOGGER.info("Compacting json mapping files for versions {} → {}...", fromVersion, toVersion);
+        LOGGER.info("=== Compacting json mapping files for versions {} → {}...", fromVersion, toVersion);
 
         if (keepUnknownFields) {
             handleUnknownFields();
@@ -244,7 +245,8 @@ public final class MappingsOptimizer {
                 continue;
             }
 
-            LOGGER.warn("NON-STANDARD FIELD: {} - writing it to the file without changes", key);
+            errorStrategy.apply("NON-STANDARD FIELD: " + key + " - writing it to the file without changes");
+
             final Tag asTag = JsonConverter.toTag(unmappedObject.get(key));
             output.put(key, asTag);
         }
@@ -275,8 +277,8 @@ public final class MappingsOptimizer {
         serialize(result, output, key, alwaysWriteIdentity);
     }
 
-    private boolean shouldWarn(final String key) {
-        return !ignoreMissing.contains(key);
+    private ErrorStrategy shouldWarn(final String key) {
+        return ignoreMissing.contains(key) ? ErrorStrategy.IGNORE : errorStrategy;
     }
 
     public void cursedMappings(final String unmappedKey, final String mappedKey, final String outputKey) {
@@ -295,7 +297,7 @@ public final class MappingsOptimizer {
                 JsonConverter.toJsonObject(unmappedObject.get(unmappedKey)),
                 mappedIdentifiers,
                 diffObject != null ? diffObject.getAsJsonObject(unmappedKey) : null,
-                true
+                errorStrategy
         );
 
         final CompoundTag changedTag = new CompoundTag();
@@ -559,5 +561,9 @@ public final class MappingsOptimizer {
     private static int approximateShiftFormatSize(final MappingsResult result) {
         // One entry in two arrays each time the id is not shifted by 1 from the last id + more approximate length for extra tags
         return result.shiftChanges() * 2 + 10;
+    }
+
+    public void setErrorStrategy(final ErrorStrategy errorStrategy) {
+        this.errorStrategy = errorStrategy;
     }
 }
