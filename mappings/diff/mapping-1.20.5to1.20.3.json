@@ -22,10 +22,10 @@
     "entity.armadillo.scute_drop": "entity.chicken.egg",
     "entity.armadillo.unroll": "block.wood.hit",
     "entity.armadillo.brush": "entity.chicken.egg",
-    "item.armor.equip_wolf": "",
-    "item.armor.unequip_wolf": "",
-    "entity.breeze.charge": "",
-    "entity.breeze.deflect": "",
+    "item.armor.equip_wolf": "item.armor.equip_leather",
+    "item.armor.unequip_wolf": "entity.sheep.shear",
+    "entity.breeze.charge": "entity.breeze.idle_air",
+    "entity.breeze.deflect": "item.shield.block",
     "entity.breeze.whirl": ""
   },
   "entities": {
