@@ -18,7 +18,6 @@
  */
 package com.viaversion.mappingsgenerator;
 
-import com.github.steveice10.opennbt.NBTIO;
 import com.github.steveice10.opennbt.tag.builtin.ByteTag;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.builtin.IntArrayTag;
@@ -26,6 +25,8 @@ import com.github.steveice10.opennbt.tag.builtin.IntTag;
 import com.github.steveice10.opennbt.tag.builtin.ListTag;
 import com.github.steveice10.opennbt.tag.builtin.StringTag;
 import com.github.steveice10.opennbt.tag.builtin.Tag;
+import com.github.steveice10.opennbt.tag.io.NBTIO;
+import com.github.steveice10.opennbt.tag.io.TagWriter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -63,6 +64,7 @@ public final class MappingsOptimizer {
     public static final String OUTPUT_IDENTIFIERS_FILE_FORMAT = "identifiers-%s.nbt";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MappingsOptimizer.class.getSimpleName());
+    private static final TagWriter TAG_WRITER = NBTIO.writer().named();
     private static final Set<String> STANDARD_FIELDS = Set.of(
             "blockstates",
             "blocks",
@@ -550,7 +552,7 @@ public final class MappingsOptimizer {
     }
 
     public static void write(final CompoundTag tag, final Path path) throws IOException {
-        NBTIO.writeFile(tag, path.toFile(), false, false);
+        TAG_WRITER.write(path, tag, false);
     }
 
     private static int approximateChangedFormatSize(final MappingsResult result) {
