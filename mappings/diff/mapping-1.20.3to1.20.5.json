@@ -1,5 +1,8 @@
 {
   "items": {
     "scute": "turtle_scute"
+  },
+  "enchantments": {
+    "sweeping": ""
   }
 }
