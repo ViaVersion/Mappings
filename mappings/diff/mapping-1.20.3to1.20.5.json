@@ -6,6 +6,6 @@
     "sweeping": "sweeping_edge"
   },
   "particles": {
-    "gust_dust": ""
+    "gust_dust": "campfire_cosy_smoke"
   }
 }
