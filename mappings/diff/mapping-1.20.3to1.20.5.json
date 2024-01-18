@@ -4,5 +4,8 @@
   },
   "enchantments": {
     "sweeping": "sweeping_edge"
+  },
+  "particles": {
+    "gust_dust": ""
   }
 }
