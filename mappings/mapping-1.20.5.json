@@ -29079,6 +29079,7 @@
     "block.anvil.use",
     "entity.armadillo.eat",
     "entity.armadillo.hurt",
+    "entity.armadillo.hurt_reduced",
     "entity.armadillo.ambient",
     "entity.armadillo.step",
     "entity.armadillo.death",

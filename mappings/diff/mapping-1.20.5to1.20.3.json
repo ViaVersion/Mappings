@@ -26,7 +26,8 @@
     "item.armor.unequip_wolf": "entity.sheep.shear",
     "entity.breeze.charge": "entity.breeze.idle_air",
     "entity.breeze.deflect": "item.shield.block",
-    "entity.breeze.whirl": ""
+    "entity.breeze.whirl": "",
+    "entity.armadillo.hurt_reduced": ""
   },
   "entities": {
     "armadillo": "cow"
