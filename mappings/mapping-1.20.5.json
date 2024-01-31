@@ -26643,7 +26643,23 @@
     "trial_spawner[trial_spawner_state=active]",
     "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]",
     "trial_spawner[trial_spawner_state=ejecting_reward]",
-    "trial_spawner[trial_spawner_state=cooldown]"
+    "trial_spawner[trial_spawner_state=cooldown]",
+    "vault[facing=north,vault_state=inactive]",
+    "vault[facing=north,vault_state=active]",
+    "vault[facing=north,vault_state=unlocking]",
+    "vault[facing=north,vault_state=ejecting]",
+    "vault[facing=south,vault_state=inactive]",
+    "vault[facing=south,vault_state=active]",
+    "vault[facing=south,vault_state=unlocking]",
+    "vault[facing=south,vault_state=ejecting]",
+    "vault[facing=west,vault_state=inactive]",
+    "vault[facing=west,vault_state=active]",
+    "vault[facing=west,vault_state=unlocking]",
+    "vault[facing=west,vault_state=ejecting]",
+    "vault[facing=east,vault_state=inactive]",
+    "vault[facing=east,vault_state=active]",
+    "vault[facing=east,vault_state=unlocking]",
+    "vault[facing=east,vault_state=ejecting]"
   ],
   "blocks": [
     "air",
@@ -27703,7 +27719,8 @@
     "reinforced_deepslate",
     "decorated_pot",
     "crafter",
-    "trial_spawner"
+    "trial_spawner",
+    "vault"
   ],
   "items": [
     "air",
@@ -29020,7 +29037,8 @@
     "waxed_weathered_copper_bulb",
     "waxed_oxidized_copper_bulb",
     "trial_spawner",
-    "trial_key"
+    "trial_key",
+    "vault"
   ],
   "sounds": [
     "entity.allay.ambient_with_item",
@@ -30426,6 +30444,19 @@
     "ui.toast.challenge_complete",
     "ui.toast.in",
     "ui.toast.out",
+    "block.vault.activate",
+    "block.vault.ambient",
+    "block.vault.break",
+    "block.vault.close_shutter",
+    "block.vault.deactivate",
+    "block.vault.eject_item",
+    "block.vault.fall",
+    "block.vault.hit",
+    "block.vault.insert_item",
+    "block.vault.insert_item_fail",
+    "block.vault.open_shutter",
+    "block.vault.place",
+    "block.vault.step",
     "entity.vex.ambient",
     "entity.vex.charge",
     "entity.vex.death",
@@ -30679,7 +30710,8 @@
     "shriek",
     "egg_crack",
     "dust_plume",
-    "trial_spawner_detection"
+    "trial_spawner_detection",
+    "vault_connection"
   ],
   "blockentities": [
     "furnace",
@@ -30724,7 +30756,8 @@
     "brushable_block",
     "decorated_pot",
     "crafter",
-    "trial_spawner"
+    "trial_spawner",
+    "vault"
   ],
   "argumenttypes": [
     "brigadier:bool",

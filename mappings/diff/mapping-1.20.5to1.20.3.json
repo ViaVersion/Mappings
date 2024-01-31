@@ -3,7 +3,8 @@
     "turtle_scute": "scute",
     "armadillo_scute": "scute",
     "wolf_armor": "leather_horse_armor",
-    "armadillo_spawn_egg": "horse_spawn_egg"
+    "armadillo_spawn_egg": "horse_spawn_egg",
+    "vault": ""
   },
   "itemnames": {
     "turtle_scute": "1.20.5 Turtle Scute",
@@ -27,7 +28,20 @@
     "entity.breeze.charge": "entity.breeze.idle_air",
     "entity.breeze.deflect": "item.shield.block",
     "entity.breeze.whirl": "",
-    "entity.armadillo.hurt_reduced": ""
+    "entity.armadillo.hurt_reduced": "",
+    "block.vault.activate": "",
+    "block.vault.ambient": "",
+    "block.vault.break": "",
+    "block.vault.close_shutter": "",
+    "block.vault.deactivate": "",
+    "block.vault.eject_item": "",
+    "block.vault.fall": "",
+    "block.vault.hit": "",
+    "block.vault.insert_item": "",
+    "block.vault.insert_item_fail": "",
+    "block.vault.open_shutter": "",
+    "block.vault.place": "",
+    "block.vault.step": ""
   },
   "entities": {
     "armadillo": "cow"
@@ -43,5 +57,29 @@
   },
   "enchantments": {
     "sweeping_edge": "sweeping"
+  },
+  "blockstates": {
+    "vault[facing=north,vault_state=inactive]": "",
+    "vault[facing=north,vault_state=active]": "",
+    "vault[facing=north,vault_state=unlocking]": "",
+    "vault[facing=north,vault_state=ejecting]": "",
+    "vault[facing=south,vault_state=inactive]": "",
+    "vault[facing=south,vault_state=active]": "",
+    "vault[facing=south,vault_state=unlocking]": "",
+    "vault[facing=south,vault_state=ejecting]": "",
+    "vault[facing=west,vault_state=inactive]": "",
+    "vault[facing=west,vault_state=active]": "",
+    "vault[facing=west,vault_state=unlocking]": "",
+    "vault[facing=west,vault_state=ejecting]": "",
+    "vault[facing=east,vault_state=inactive]": "",
+    "vault[facing=east,vault_state=active]": "",
+    "vault[facing=east,vault_state=unlocking]": "",
+    "vault[facing=east,vault_state=ejecting]": ""
+  },
+  "particles": {
+    "vault_connection": ""
+  },
+  "blockentities": {
+    "vault": ""
   }
 }
