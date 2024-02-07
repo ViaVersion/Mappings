@@ -7,12 +7,12 @@
   },
   "particles": {
     "gust_dust": "campfire_cosy_smoke",
-    "gust_emitter": ""
+    "gust_emitter": "gust_emitter_large"
   },
   "sounds": {
     "entity.generic.wind_burst": ""
   },
   "attributes": {
-    "horse.jump_strength": ""
+    "horse.jump_strength": "generic.jump_strength"
   }
 }

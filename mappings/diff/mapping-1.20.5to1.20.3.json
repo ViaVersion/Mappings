@@ -66,7 +66,7 @@
     "player.block_break_speed": "",
     "generic.fall_damage_multiplier": "",
     "generic.gravity": "",
-    "generic.jump_strength": "",
+    "generic.jump_strength": "horse.jump_strength",
     "generic.safe_fall_distance": ""
   },
   "enchantments": {
@@ -77,8 +77,8 @@
   },
   "particles": {
     "vault_connection": "enchant",
-    "gust_emitter_large": "",
-    "gust_emitter_small": ""
+    "gust_emitter_large": "gust_emitter",
+    "gust_emitter_small": "gust_emitter"
   },
   "blockentities": {
     "vault": ""
