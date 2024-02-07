@@ -6,6 +6,13 @@
     "sweeping": "sweeping_edge"
   },
   "particles": {
-    "gust_dust": "campfire_cosy_smoke"
+    "gust_dust": "campfire_cosy_smoke",
+    "gust_emitter": ""
+  },
+  "sounds": {
+    "entity.generic.wind_burst": ""
+  },
+  "attributes": {
+    "horse.jump_strength": ""
   }
 }

@@ -4,7 +4,8 @@
     "armadillo_scute": "scute",
     "wolf_armor": "leather_horse_armor",
     "armadillo_spawn_egg": "horse_spawn_egg",
-    "vault": "spawner"
+    "vault": "spawner",
+    "wind_charge": ""
   },
   "itemnames": {
     "turtle_scute": "1.20.5 Turtle Scute",
@@ -42,10 +43,17 @@
     "block.vault.insert_item_fail": "",
     "block.vault.open_shutter": "",
     "block.vault.place": "",
-    "block.vault.step": ""
+    "block.vault.step": "",
+    "entity.armadillo.unroll_finish": "",
+    "entity.armadillo.peek": "",
+    "entity.armadillo.unroll_start": "",
+    "entity.breeze.wind_burst": "",
+    "entity.wind_charge.wind_burst": "",
+    "entity.wind_charge.throw": ""
   },
   "entities": {
-    "armadillo": "cow"
+    "armadillo": "cow",
+    "breeze_wind_charge": ""
   },
   "entitynames": {
     "armadillo": "Armadillo"
@@ -54,7 +62,12 @@
     "generic.scale": "",
     "generic.step_height": "",
     "player.block_interaction_range": "",
-    "player.entity_interaction_range": ""
+    "player.entity_interaction_range": "",
+    "player.block_break_speed": "",
+    "generic.fall_damage_multiplier": "",
+    "generic.gravity": "",
+    "generic.jump_strength": "",
+    "generic.safe_fall_distance": ""
   },
   "enchantments": {
     "sweeping_edge": "sweeping"
@@ -63,7 +76,9 @@
     "vault": "spawner"
   },
   "particles": {
-    "vault_connection": "enchant"
+    "vault_connection": "enchant",
+    "gust_emitter_large": "",
+    "gust_emitter_small": ""
   },
   "blockentities": {
     "vault": ""
