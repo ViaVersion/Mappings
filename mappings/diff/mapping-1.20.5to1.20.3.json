@@ -5,14 +5,15 @@
     "wolf_armor": "leather_horse_armor",
     "armadillo_spawn_egg": "horse_spawn_egg",
     "vault": "spawner",
-    "wind_charge": ""
+    "wind_charge": "snowball"
   },
   "itemnames": {
     "turtle_scute": "1.20.5 Turtle Scute",
     "armadillo_scute": "1.20.5 Armadillo Scute",
     "wolf_armor": "1.20.5 Wolf Armor",
     "armadillo_spawn_egg": "1.20.5 Armadillo Spawn Egg",
-    "vault": "1.20.5 Vault"
+    "vault": "1.20.5 Vault",
+    "wind_charge": "1.20.5 Wind Charge"
   },
   "sounds": {
     "entity.armadillo.eat": "entity.sniffer.eat",
@@ -53,10 +54,11 @@
   },
   "entities": {
     "armadillo": "cow",
-    "breeze_wind_charge": ""
+    "breeze_wind_charge": "wind_charge"
   },
   "entitynames": {
-    "armadillo": "Armadillo"
+    "armadillo": "Armadillo",
+    "breeze_wind_charge": "Wind Charge"
   },
   "attributes": {
     "generic.scale": "",
