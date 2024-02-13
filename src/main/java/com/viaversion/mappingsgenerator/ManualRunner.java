@@ -37,8 +37,8 @@ public final class ManualRunner {
             return;
         }
 
-        final String from = "1.20.2";
-        final String to = "1.20.3";
+        final String from = "1.20.3";
+        final String to = "1.20.5";
         MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to);
         mappingsOptimizer.writeDiffStubs();
         mappingsOptimizer.optimizeAndWrite();

@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     api("com.google.code.gson:gson:2.10.1")
-    api("com.viaversion:nbt:4.0.0")
+    api("com.viaversion:nbt:4.2.0")
     api("it.unimi.dsi:fastutil:8.5.12")
     api("ch.qos.logback:logback-classic:1.4.14")
     compileOnly("org.jetbrains:annotations:24.0.1")
@@ -22,7 +22,7 @@ dependencies {
 }
 
 group = "com.viaversion"
-version = "3.3.2"
+version = "3.3.3"
 description = "MappingsGenerator"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
