@@ -5,7 +5,8 @@
     "wolf_armor": "leather_horse_armor",
     "armadillo_spawn_egg": "horse_spawn_egg",
     "vault": "spawner",
-    "wind_charge": "snowball"
+    "wind_charge": "snowball",
+    "bogged_spawn_egg": ""
   },
   "itemnames": {
     "turtle_scute": "1.20.5 Turtle Scute",
@@ -50,11 +51,17 @@
     "entity.armadillo.unroll_start": "",
     "entity.breeze.wind_burst": "",
     "entity.wind_charge.wind_burst": "",
-    "entity.wind_charge.throw": ""
+    "entity.wind_charge.throw": "",
+    "entity.bogged.ambient": "",
+    "entity.bogged.death": "",
+    "entity.bogged.hurt": "",
+    "entity.bogged.step": "",
+    "entity.parrot.imitate.bogged": ""
   },
   "entities": {
     "armadillo": "cow",
-    "breeze_wind_charge": "wind_charge"
+    "breeze_wind_charge": "wind_charge",
+    "bogged": ""
   },
   "entitynames": {
     "armadillo": "Armadillo",
