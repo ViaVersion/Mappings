@@ -165,6 +165,7 @@ public final class MappingsOptimizer {
         mappings(false, "menus");
         mappings(false, "attributes");
         mappings(false, "recipe_serializers");
+        mappings(false, "data_component_type");
 
         if (diffObject != null) {
             names("items", "itemnames");
@@ -234,6 +235,7 @@ public final class MappingsOptimizer {
         storeIdentifiers(identifiers, object, "particles");
         storeIdentifiers(identifiers, object, "argumenttypes");
         storeIdentifiers(identifiers, object, "recipe_serializers");
+        storeIdentifiers(identifiers, object, "data_component_type");
         if (SAVED_IDENTIFIER_FILES.add(version)) {
             write(identifiers, OUTPUT_DIR.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(version)));
         }
