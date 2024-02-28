@@ -57,7 +57,15 @@
     "entity.bogged.death": "",
     "entity.bogged.hurt": "",
     "entity.bogged.step": "",
-    "entity.parrot.imitate.bogged": ""
+    "entity.parrot.imitate.bogged": "",
+    "entity.bogged.shear": "",
+    "entity.donkey.jump": "",
+    "entity.mule.jump": "",
+    "block.wet_sponge.dries": "",
+    "item.wolf_armor.break": "",
+    "item.wolf_armor.crack": "",
+    "item.wolf_armor.damage": "",
+    "item.wolf_armor.repair": ""
   },
   "entities": {
     "armadillo": "cow",
