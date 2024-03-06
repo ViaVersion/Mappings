@@ -14,5 +14,8 @@
   },
   "attributes": {
     "horse.jump_strength": "generic.jump_strength"
+  },
+  "data_component_type": {
+    "lodestone_target": ""
   }
 }

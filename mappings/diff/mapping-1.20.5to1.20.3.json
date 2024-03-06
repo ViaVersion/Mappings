@@ -101,5 +101,11 @@
   },
   "blockentities": {
     "vault": ""
+  },
+  "argumenttypes": {
+    "item_slots": ""
+  },
+  "data_component_type": {
+    "lodestone_tracker": ""
   }
 }
