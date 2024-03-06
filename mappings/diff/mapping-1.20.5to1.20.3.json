@@ -103,9 +103,6 @@
     "vault": ""
   },
   "argumenttypes": {
-    "item_slots": ""
-  },
-  "data_component_type": {
-    "lodestone_tracker": ""
+    "item_slots": "item_slot"
   }
 }
