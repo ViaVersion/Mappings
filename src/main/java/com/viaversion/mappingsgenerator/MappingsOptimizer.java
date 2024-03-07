@@ -429,7 +429,7 @@ public final class MappingsOptimizer {
             return;
         }
 
-        final ListTag list = new ListTag(StringTag.class);
+        final ListTag<StringTag> list = new ListTag<>(StringTag.class);
         for (final JsonElement identifier : identifiers) {
             list.add(new StringTag(identifier.getAsString()));
         }

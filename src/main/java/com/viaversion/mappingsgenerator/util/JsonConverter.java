@@ -29,6 +29,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public final class JsonConverter {
@@ -52,11 +54,11 @@ public final class JsonConverter {
                 return new IntArrayTag(ints);
             }
 
-            final ListTag tag = new ListTag();
+            final List<Tag> tags = new ArrayList<>();
             for (final JsonElement arrayElement : array) {
-                tag.add(toTag(arrayElement));
+                tags.add(toTag(arrayElement));
             }
-            return tag;
+            return new ListTag<>(tags);
         } else if (element.isJsonPrimitive()) {
             final JsonPrimitive primitive = element.getAsJsonPrimitive();
             if (primitive.isNumber()) {
