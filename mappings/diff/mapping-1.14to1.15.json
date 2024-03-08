@@ -16,5 +16,12 @@
     "11211": "bell[attachment=double_wall,facing=south,powered=false]",
     "11212": "bell[attachment=double_wall,facing=west,powered=false]",
     "11213": "bell[attachment=double_wall,facing=east,powered=false]"
+  },
+  "sounds": {
+    "entity.parrot.imitate.enderman": "",
+    "entity.parrot.imitate.panda": "",
+    "entity.parrot.imitate.polar_bear": "",
+    "entity.parrot.imitate.wolf": "",
+    "entity.parrot.imitate.zombie_pigman": ""
   }
 }

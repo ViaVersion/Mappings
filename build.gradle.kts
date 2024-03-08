@@ -10,16 +10,19 @@ repositories {
 
 dependencies {
     api("com.google.code.gson:gson:2.10.1")
-    api("com.viaversion:nbt:3.0.0")
+    api("com.viaversion:nbt:4.4.0")
     api("it.unimi.dsi:fastutil:8.5.12")
-    api("ch.qos.logback:logback-classic:1.4.6")
+    api("ch.qos.logback:logback-classic:1.4.14")
     compileOnly("org.jetbrains:annotations:24.0.1")
     // Uncomment to manually run mappings gen in ide
-    // compileOnly(files("server.jar"))
+    compileOnly(files("server.jar"))
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 group = "com.viaversion"
-version = "3.3.1"
+version = "3.3.3"
 description = "MappingsGenerator"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -65,9 +68,12 @@ tasks {
         exclude("it/unimi/dsi/fastutil/*/*Big*")
         exclude("it/unimi/dsi/fastutil/*/*Synchronized*")
         exclude("it/unimi/dsi/fastutil/*/*Unmodifiable*")
-        exclude("it/unimi/dsi/fastutil/io/*")
     }
     build {
         dependsOn(shadowJar)
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }

@@ -38,8 +38,8 @@ import org.slf4j.LoggerFactory;
 
 public final class MappingsLoader {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(MappingsLoader.class.getSimpleName());
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
-    private static final Logger LOGGER = LoggerFactory.getLogger(MappingsLoader.class.getSimpleName());
 
     /**
      * Loads and return the json mappings file.
@@ -63,10 +63,10 @@ public final class MappingsLoader {
      * @param unmappedIdentifiers array of unmapped identifiers
      * @param mappedIdentifiers   array of mapped identifiers
      * @param diffIdentifiers     diff identifiers
-     * @param warnOnMissing       whether to warn on missing mappings
+     * @param errorStrategy       whether to warn on missing mappings
      * @return mappings result with int to int array mappings
      */
-    public static MappingsResult map(final JsonArray unmappedIdentifiers, final JsonArray mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final boolean warnOnMissing) {
+    public static MappingsResult map(final JsonArray unmappedIdentifiers, final JsonArray mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final ErrorStrategy errorStrategy) {
         final int[] output = new int[unmappedIdentifiers.size()];
         final Object2IntMap<String> mappedIdentifierMap = MappingsLoader.arrayToMap(mappedIdentifiers);
         int emptyMappings = 0;
@@ -74,7 +74,7 @@ public final class MappingsLoader {
         int shiftChanges = 0;
         for (int id = 0; id < unmappedIdentifiers.size(); id++) {
             final JsonElement unmappedIdentifier = unmappedIdentifiers.get(id);
-            final int mappedId = mapEntry(id, unmappedIdentifier.getAsString(), mappedIdentifierMap, diffIdentifiers, warnOnMissing);
+            final int mappedId = mapEntry(id, unmappedIdentifier.getAsString(), mappedIdentifierMap, diffIdentifiers, errorStrategy);
             output[id] = mappedId;
 
             if (mappedId == -1) {
@@ -98,16 +98,16 @@ public final class MappingsLoader {
      * @param unmappedIdentifiers object of unmapped identifiers, keyed by their int id
      * @param mappedIdentifiers   object of mapped identifiers, keyed by their int id
      * @param diffIdentifiers     diff identifiers
-     * @param warnOnMissing       whether to warn on missing mappings
+     * @param errorStrategy       whether to warn on missing mappings
      * @return mappings result
      */
-    public static Int2IntMap map(final JsonObject unmappedIdentifiers, final JsonObject mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final boolean warnOnMissing) {
+    public static Int2IntMap map(final JsonObject unmappedIdentifiers, final JsonObject mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final ErrorStrategy errorStrategy) {
         final Int2IntMap output = new Int2IntLinkedOpenHashMap();
         output.defaultReturnValue(-1);
         final Object2IntMap<String> mappedIdentifierMap = MappingsLoader.indexedObjectToMap(mappedIdentifiers);
         for (final Map.Entry<String, JsonElement> entry : unmappedIdentifiers.entrySet()) {
             final int id = Integer.parseInt(entry.getKey());
-            final int mappedId = mapEntry(id, entry.getValue().getAsString(), mappedIdentifierMap, diffIdentifiers, warnOnMissing);
+            final int mappedId = mapEntry(id, entry.getValue().getAsString(), mappedIdentifierMap, diffIdentifiers, errorStrategy);
             output.put(id, mappedId);
         }
         return output;
@@ -120,10 +120,10 @@ public final class MappingsLoader {
      * @param value             value of the entry
      * @param mappedIdentifiers mapped identifiers
      * @param diffIdentifiers   diff identifiers
-     * @param warnOnMissing     whether to warn on missing mappings
+     * @param errorStrategy     whether to warn on missing mappings
      * @return mapped id, or -1 if it was not found
      */
-    private static int mapEntry(final int id, final String value, final Object2IntMap<String> mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final boolean warnOnMissing) {
+    private static int mapEntry(final int id, final String value, final Object2IntMap<String> mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final ErrorStrategy errorStrategy) {
         int mappedId = mappedIdentifiers.getInt(value);
         if (mappedId != -1) {
             return mappedId;
@@ -131,9 +131,7 @@ public final class MappingsLoader {
 
         final int dataIndex;
         if (diffIdentifiers == null) {
-            if (warnOnMissing) {
-                LOGGER.warn("No direct mapping or diff file for {} :( ", value);
-            }
+            errorStrategy.apply("No direct mapping or diff file for " + value + " :( ");
             return -1;
         }
 
@@ -167,8 +165,8 @@ public final class MappingsLoader {
             mappedId = mappedIdentifiers.getInt(mappedName);
         }
 
-        if (mappedId == -1 && warnOnMissing) {
-            LOGGER.warn("No diff entry for {} :( ", value);
+        if (mappedId == -1) {
+            errorStrategy.apply("No mapping for " + value + " :( ");
         }
         return mappedId;
     }
@@ -202,7 +200,7 @@ public final class MappingsLoader {
             final JsonObject existingDiffIdentifiers = existingDiffObject != null && existingDiffObject.has(key) ? existingDiffObject.getAsJsonObject(key) : null;
             for (int id = 0; id < unmappedIdentifiers.size(); id++) {
                 final String unmappedIdentifier = unmappedIdentifiers.get(id).getAsString();
-                final int mappedId = mapEntry(id, unmappedIdentifier, mappedIdentifierMap, existingDiffIdentifiers, false);
+                final int mappedId = mapEntry(id, unmappedIdentifier, mappedIdentifierMap, existingDiffIdentifiers, ErrorStrategy.IGNORE);
                 if (mappedId != -1) {
                     continue;
                 }
@@ -281,6 +279,6 @@ public final class MappingsLoader {
      * @param identityMappings number of identity mappings
      * @param shiftChanges     number of shift changes where a mapped id is not the last mapped id + 1
      */
-    record MappingsResult(int[] mappings, int mappedSize, int emptyMappings, int identityMappings, int shiftChanges) {
+    public record MappingsResult(int[] mappings, int mappedSize, int emptyMappings, int identityMappings, int shiftChanges) {
     }
 }

@@ -3,13 +3,19 @@
     "turtle_scute": "scute",
     "armadillo_scute": "scute",
     "wolf_armor": "leather_horse_armor",
-    "armadillo_spawn_egg": "horse_spawn_egg"
+    "armadillo_spawn_egg": "horse_spawn_egg",
+    "vault": "spawner",
+    "wind_charge": "snowball",
+    "bogged_spawn_egg": "stray_spawn_egg"
   },
   "itemnames": {
     "turtle_scute": "1.20.5 Turtle Scute",
     "armadillo_scute": "1.20.5 Armadillo Scute",
     "wolf_armor": "1.20.5 Wolf Armor",
-    "armadillo_spawn_egg": "1.20.5 Armadillo Spawn Egg"
+    "armadillo_spawn_egg": "1.20.5 Armadillo Spawn Egg",
+    "vault": "1.20.5 Vault",
+    "wind_charge": "1.20.5 Wind Charge",
+    "bogged_spawn_egg": "1.20.5 Bogged Spawn Egg"
   },
   "sounds": {
     "entity.armadillo.eat": "entity.sniffer.eat",
@@ -26,18 +32,77 @@
     "item.armor.unequip_wolf": "entity.sheep.shear",
     "entity.breeze.charge": "entity.breeze.idle_air",
     "entity.breeze.deflect": "item.shield.block",
-    "entity.breeze.whirl": ""
+    "entity.breeze.whirl": "",
+    "entity.armadillo.hurt_reduced": "",
+    "block.vault.activate": "",
+    "block.vault.ambient": "",
+    "block.vault.break": "",
+    "block.vault.close_shutter": "",
+    "block.vault.deactivate": "",
+    "block.vault.eject_item": "",
+    "block.vault.fall": "",
+    "block.vault.hit": "",
+    "block.vault.insert_item": "",
+    "block.vault.insert_item_fail": "",
+    "block.vault.open_shutter": "",
+    "block.vault.place": "",
+    "block.vault.step": "",
+    "entity.armadillo.unroll_finish": "",
+    "entity.armadillo.peek": "",
+    "entity.armadillo.unroll_start": "",
+    "entity.breeze.wind_burst": "",
+    "entity.wind_charge.wind_burst": "",
+    "entity.wind_charge.throw": "",
+    "entity.bogged.ambient": "",
+    "entity.bogged.death": "",
+    "entity.bogged.hurt": "",
+    "entity.bogged.step": "",
+    "entity.parrot.imitate.bogged": "",
+    "entity.bogged.shear": "",
+    "entity.donkey.jump": "",
+    "entity.mule.jump": "",
+    "block.wet_sponge.dries": "",
+    "item.wolf_armor.break": "",
+    "item.wolf_armor.crack": "",
+    "item.wolf_armor.damage": "",
+    "item.wolf_armor.repair": ""
   },
   "entities": {
-    "armadillo": "cow"
+    "armadillo": "cow",
+    "breeze_wind_charge": "wind_charge",
+    "bogged": "stray"
   },
   "entitynames": {
-    "armadillo": "Armadillo"
+    "armadillo": "Armadillo",
+    "breeze_wind_charge": "Wind Charge",
+    "bogged": "Bogged"
   },
   "attributes": {
-    "generic.block_interaction_range": "",
-    "generic.entity_interaction_range": "",
     "generic.scale": "",
-    "generic.step_height": ""
+    "generic.step_height": "",
+    "player.block_interaction_range": "",
+    "player.entity_interaction_range": "",
+    "player.block_break_speed": "",
+    "generic.fall_damage_multiplier": "",
+    "generic.gravity": "",
+    "generic.jump_strength": "horse.jump_strength",
+    "generic.safe_fall_distance": ""
+  },
+  "enchantments": {
+    "sweeping_edge": "sweeping"
+  },
+  "blockstates": {
+    "vault": "spawner"
+  },
+  "particles": {
+    "vault_connection": "enchant",
+    "gust_emitter_large": "gust_emitter",
+    "gust_emitter_small": "gust_emitter"
+  },
+  "blockentities": {
+    "vault": ""
+  },
+  "argumenttypes": {
+    "item_slots": "item_slot"
   }
 }

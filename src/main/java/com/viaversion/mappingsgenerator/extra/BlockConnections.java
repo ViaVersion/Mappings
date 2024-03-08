@@ -50,7 +50,7 @@ public final class BlockConnections {
 
         final JsonObject object = MappingsLoader.load("extra/blockConnections.json");
         final CompoundTag tag = new CompoundTag();
-        ListTag list = new ListTag();
+        ListTag<CompoundTag> list = new ListTag<>(CompoundTag.class);
         tag.put("data", list);
         for (final Map.Entry<String, JsonElement> entry : object.entrySet()) {
             final CompoundTag blockTag = new CompoundTag();

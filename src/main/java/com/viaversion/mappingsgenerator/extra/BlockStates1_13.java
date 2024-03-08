@@ -32,7 +32,7 @@ public final class BlockStates1_13 {
     public static void main(final String[] args) throws IOException {
         final JsonArray blockstates = MappingsLoader.load("mapping-1.13.json").getAsJsonArray("blockstates");
         final CompoundTag tag = new CompoundTag();
-        final ListTag list = new ListTag(StringTag.class);
+        final ListTag<StringTag> list = new ListTag<>(StringTag.class);
         for (final JsonElement element : blockstates) {
             list.add(new StringTag(element.getAsString()));
         }
