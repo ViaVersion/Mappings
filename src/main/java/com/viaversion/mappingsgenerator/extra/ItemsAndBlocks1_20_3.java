@@ -23,21 +23,21 @@ import com.github.steveice10.opennbt.tag.builtin.ListTag;
 import com.github.steveice10.opennbt.tag.builtin.StringTag;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.viaversion.mappingsgenerator.MappingsLoader;
 import com.viaversion.mappingsgenerator.MappingsOptimizer;
 
 import java.io.IOException;
 
-public final class ItemIds1_20_3 {
+import static com.viaversion.mappingsgenerator.util.JsonConverter.collectStringList;
+
+public final class ItemsAndBlocks1_20_3 {
 
     public static void main(final String[] args) throws IOException {
-        final JsonArray items = MappingsLoader.load("mapping-1.20.3.json").getAsJsonArray("items");
+        final JsonObject mappings = MappingsLoader.load("mapping-1.20.3.json");
         final CompoundTag tag = new CompoundTag();
-        final ListTag<StringTag> list = new ListTag<>(StringTag.class);
-        for (final JsonElement element : items) {
-            list.add(new StringTag(element.getAsString()));
-        }
-        tag.put("items", list);
-        MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("itemIds-1.20.3.nbt"));
+        tag.put("items", collectStringList(mappings.getAsJsonArray("items")));
+        tag.put("blocks", collectStringList(mappings.getAsJsonArray("blocks")));
+        MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("extra/items-blocks-1.20.3.nbt"));
     }
 }

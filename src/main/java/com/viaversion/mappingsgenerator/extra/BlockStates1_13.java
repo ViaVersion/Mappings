@@ -19,24 +19,19 @@
 package com.viaversion.mappingsgenerator.extra;
 
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.github.steveice10.opennbt.tag.builtin.ListTag;
-import com.github.steveice10.opennbt.tag.builtin.StringTag;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.viaversion.mappingsgenerator.MappingsLoader;
 import com.viaversion.mappingsgenerator.MappingsOptimizer;
 import java.io.IOException;
 
+import static com.viaversion.mappingsgenerator.util.JsonConverter.collectStringList;
+
 public final class BlockStates1_13 {
 
     public static void main(final String[] args) throws IOException {
-        final JsonArray blockstates = MappingsLoader.load("mapping-1.13.json").getAsJsonArray("blockstates");
+        final JsonObject mappings = MappingsLoader.load("mapping-1.13.json");
         final CompoundTag tag = new CompoundTag();
-        final ListTag<StringTag> list = new ListTag<>(StringTag.class);
-        for (final JsonElement element : blockstates) {
-            list.add(new StringTag(element.getAsString()));
-        }
-        tag.put("blockstates", list);
-        MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("blockstates-1.13.nbt"));
+        tag.put("blockstates", collectStringList(mappings.getAsJsonArray("blockstates")));
+        MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("extra/blockstates-1.13.nbt"));
     }
 }

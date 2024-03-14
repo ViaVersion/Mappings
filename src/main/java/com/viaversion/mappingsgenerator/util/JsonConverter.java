@@ -35,6 +35,14 @@ import java.util.Map;
 
 public final class JsonConverter {
 
+    public static ListTag<StringTag> collectStringList(final JsonArray items) {
+        final ListTag<StringTag> list = new ListTag<>(StringTag.class);
+        for (final JsonElement element : items) {
+            list.add(new StringTag(element.getAsString()));
+        }
+        return list;
+    }
+
     public static Tag toTag(final JsonElement element) {
         if (element.isJsonObject()) {
             final JsonObject object = element.getAsJsonObject();
