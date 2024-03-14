@@ -6,7 +6,17 @@
     "armadillo_spawn_egg": "horse_spawn_egg",
     "vault": "spawner",
     "wind_charge": "snowball",
-    "bogged_spawn_egg": "stray_spawn_egg"
+    "bogged_spawn_egg": "stray_spawn_egg",
+    "heavy_core": "",
+    "mace": "",
+    "flow_banner_pattern": "",
+    "guster_banner_pattern": "",
+    "flow_armor_trim_smithing_template": "",
+    "bolt_armor_trim_smithing_template": "",
+    "flow_pottery_sherd": "",
+    "guster_pottery_sherd": "",
+    "scrape_pottery_sherd": "",
+    "breeze_rod": ""
   },
   "itemnames": {
     "turtle_scute": "1.20.5 Turtle Scute",
@@ -65,7 +75,14 @@
     "item.wolf_armor.break": "",
     "item.wolf_armor.crack": "",
     "item.wolf_armor.damage": "",
-    "item.wolf_armor.repair": ""
+    "item.wolf_armor.repair": "",
+    "block.heavy_core.break": "",
+    "block.heavy_core.fall": "",
+    "block.heavy_core.hit": "",
+    "block.heavy_core.place": "",
+    "block.heavy_core.step": "",
+    "item.mace.smash_air": "",
+    "item.mace.smash_ground": ""
   },
   "entities": {
     "armadillo": "cow",
@@ -92,7 +109,19 @@
     "sweeping_edge": "sweeping"
   },
   "blockstates": {
-    "vault": "spawner"
+    "vault": "spawner",
+    "heavy_core[orientation=down_east]": "",
+    "heavy_core[orientation=down_north]": "",
+    "heavy_core[orientation=down_south]": "",
+    "heavy_core[orientation=down_west]": "",
+    "heavy_core[orientation=up_east]": "",
+    "heavy_core[orientation=up_north]": "",
+    "heavy_core[orientation=up_south]": "",
+    "heavy_core[orientation=up_west]": "",
+    "heavy_core[orientation=west_up]": "",
+    "heavy_core[orientation=east_up]": "",
+    "heavy_core[orientation=north_up]": "",
+    "heavy_core[orientation=south_up]": ""
   },
   "particles": {
     "vault_connection": "enchant",

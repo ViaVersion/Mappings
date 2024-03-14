@@ -7,7 +7,8 @@
   },
   "particles": {
     "gust_dust": "campfire_cosy_smoke",
-    "gust_emitter": "gust_emitter_large"
+    "gust_emitter": "gust_emitter_large",
+    "ambient_entity_effect": ""
   },
   "sounds": {
     "entity.generic.wind_burst": ""
