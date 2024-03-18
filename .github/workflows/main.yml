@@ -38,7 +38,7 @@ jobs:
           path: ./last_snapshot.txt
       - name: Read last release
         id: last_release
-        uses: juliangruber/read-file-action@v1.
+        uses: juliangruber/read-file-action@v1
         with:
           path: ./last_release.txt
       - name: Read next release
