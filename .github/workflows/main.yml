@@ -28,22 +28,22 @@ jobs:
           check-latest: true
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v2.1.1
+        uses: gradle/wrapper-validation-action@v2
 
       # Wooyeah
       - name: Read last snapshot
         id: last_snapshot
-        uses: juliangruber/read-file-action@v1.1.7
+        uses: juliangruber/read-file-action@v1
         with:
           path: ./last_snapshot.txt
       - name: Read last release
         id: last_release
-        uses: juliangruber/read-file-action@v1.1.7
+        uses: juliangruber/read-file-action@v1.
         with:
           path: ./last_release.txt
       - name: Read next release
         id: next_release
-        uses: juliangruber/read-file-action@v1.1.7
+        uses: juliangruber/read-file-action@v1
         with:
           path: ./next_release.txt
 
