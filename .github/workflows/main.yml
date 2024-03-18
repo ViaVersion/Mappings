@@ -28,7 +28,7 @@ jobs:
           check-latest: true
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v2.1
+        uses: gradle/wrapper-validation-action@v2.1.1
 
       # Wooyeah
       - name: Read last snapshot
