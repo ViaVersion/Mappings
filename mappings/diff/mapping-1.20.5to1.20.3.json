@@ -92,7 +92,8 @@
     "block.heavy_core.place": "",
     "block.heavy_core.step": "",
     "item.mace.smash_air": "",
-    "item.mace.smash_ground": ""
+    "item.mace.smash_ground": "",
+    "item.mace.smash_ground_heavy": ""
   },
   "entities": {
     "armadillo": "cow",
@@ -131,6 +132,18 @@
     "vault": ""
   },
   "argumenttypes": {
-    "item_slots": "item_slot"
+    "item_slots": "item_slot",
+    "loot_table": "",
+    "loot_predicate": "",
+    "loot_modifier": ""
+  },
+  "data_component_type": {
+    "max_stack_size": "",
+    "max_damage": "",
+    "rarity": "",
+    "hide_tooltip": "",
+    "food": "",
+    "fire_resistant": "",
+    "tool": ""
   }
 }
