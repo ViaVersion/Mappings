@@ -133,17 +133,8 @@
   },
   "argumenttypes": {
     "item_slots": "item_slot",
-    "loot_table": "",
-    "loot_predicate": "",
-    "loot_modifier": ""
-  },
-  "data_component_type": {
-    "max_stack_size": "",
-    "max_damage": "",
-    "rarity": "",
-    "hide_tooltip": "",
-    "food": "",
-    "fire_resistant": "",
-    "tool": ""
+    "loot_table": "brigadier:string",
+    "loot_predicate": "brigadier:string",
+    "loot_modifier": "brigadier:string"
   }
 }
