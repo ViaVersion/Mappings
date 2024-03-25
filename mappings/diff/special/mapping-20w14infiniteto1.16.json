@@ -1,7 +1,7 @@
 {
   "blockstates": {
     "soul_fire_torch": "soul_torch",
-    "soul_fire_wall_torch[facing=north]": "soul_wall_torch[",
+    "soul_fire_wall_torch": "soul_wall_torch[",
     "netherite_stairs": "blackstone_stairs[",
     "cursor": "lime_concrete",
     "zone": "moving_piston[facing=north,type=normal]",
