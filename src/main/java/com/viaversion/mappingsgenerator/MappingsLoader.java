@@ -27,11 +27,13 @@ import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
+
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,14 +43,20 @@ public final class MappingsLoader {
     public static final Logger LOGGER = LoggerFactory.getLogger(MappingsLoader.class.getSimpleName());
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
 
+
+    public static @Nullable JsonObject load(final String name) throws IOException {
+        return load(MappingsOptimizer.MAPPINGS_DIR, name);
+    }
+
     /**
      * Loads and return the json mappings file.
      *
-     * @param name name of the mappings file
+     * @param mappingsDir mappings directory
+     * @param name        name of the mappings file
      * @return the mappings file as a JsonObject, or null if it does not exist
      */
-    public static @Nullable JsonObject load(final String name) throws IOException {
-        final Path path = MappingsOptimizer.MAPPINGS_DIR.resolve(name);
+    public static @Nullable JsonObject load(final Path mappingsDir, final String name) throws IOException {
+        final Path path = mappingsDir.resolve(name);
         if (!Files.exists(path)) {
             return null;
         }

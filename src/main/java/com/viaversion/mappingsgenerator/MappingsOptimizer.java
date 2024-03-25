@@ -58,7 +58,7 @@ public final class MappingsOptimizer {
     public static final Path MAPPINGS_DIR = Path.of("mappings");
     public static final Path OUTPUT_DIR = Path.of("output");
     public static final Path OUTPUT_BACKWARDS_DIR = OUTPUT_DIR.resolve("backwards");
-    public static final String DIFF_FILE_FORMAT = "diff/mapping-%sto%s.json";
+    public static final String DIFF_FILE_FORMAT = "mapping-%sto%s.json";
     public static final String MAPPING_FILE_FORMAT = "mapping-%s.json";
     public static final String OUTPUT_FILE_FORMAT = "mappings-%sto%s.nbt";
     public static final String OUTPUT_IDENTIFIERS_FILE_FORMAT = "identifiers-%s.nbt";
@@ -89,6 +89,7 @@ public final class MappingsOptimizer {
     private final String toVersion;
     private final JsonObject unmappedObject;
     private final JsonObject mappedObject;
+    private final boolean special;
     private final boolean backwards;
     private ErrorStrategy errorStrategy = ErrorStrategy.WARN;
     private JsonObject diffObject;
@@ -118,34 +119,44 @@ public final class MappingsOptimizer {
     }
 
     public MappingsOptimizer(final String from, final String to) throws IOException {
-        this(from, to, Version.isBackwards(from, to));
+        this(from, to, false);
+    }
+
+    private Path getMappingsDir() {
+        return special ? MAPPINGS_DIR.resolve("special") : MAPPINGS_DIR;
+    }
+
+    private Path getDiffDir() {
+        final Path diffDir = MAPPINGS_DIR.resolve("diff");
+        return special ? diffDir.resolve("special") : diffDir;
     }
 
     /**
      * Creates a new MappingsOptimizer instance.
      *
-     * @param from      version to map from
-     * @param to        version to map to
-     * @param backwards whether the mapping is backwards
+     * @param from    version to map from
+     * @param to      version to map to
+     * @param special If true, the special folders will be used for input and output
      * @see #optimizeAndWrite()
      */
-    public MappingsOptimizer(final String from, final String to, final boolean backwards) throws IOException {
+    public MappingsOptimizer(final String from, final String to, final boolean special) throws IOException {
         this.fromVersion = from;
         this.toVersion = to;
-        this.backwards = backwards;
+        this.special = special;
+        this.backwards = special || Version.isBackwards(from, to);
         output.putInt("version", VERSION);
 
-        unmappedObject = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(from));
+        unmappedObject = MappingsLoader.load(getMappingsDir(), MAPPING_FILE_FORMAT.formatted(from));
         if (unmappedObject == null) {
             throw new IllegalArgumentException("Mapping file for version " + from + " does not exist");
         }
 
-        mappedObject = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(to));
+        mappedObject = MappingsLoader.load(MAPPINGS_DIR, MAPPING_FILE_FORMAT.formatted(to));
         if (mappedObject == null) {
             throw new IllegalArgumentException("Mapping file for version " + to + " does not exist");
         }
 
-        diffObject = MappingsLoader.load(DIFF_FILE_FORMAT.formatted(from, to));
+        diffObject = MappingsLoader.load(getDiffDir(), DIFF_FILE_FORMAT.formatted(from, to));
     }
 
     /**
@@ -187,7 +198,8 @@ public final class MappingsOptimizer {
             }
         }
 
-        write(backwards ? OUTPUT_BACKWARDS_DIR : OUTPUT_DIR);
+        final Path outputDir = backwards ? OUTPUT_BACKWARDS_DIR : OUTPUT_DIR;
+        write(special ? outputDir.resolve("special") : outputDir);
 
         // Save full identifiers to a separate file per version
         saveIdentifierFiles(fromVersion, unmappedObject);
@@ -204,7 +216,7 @@ public final class MappingsOptimizer {
         final JsonObject diffObject = MappingsLoader.getDiffObjectStub(unmappedObject, mappedObject, this.diffObject, ignoreMissing);
         if (diffObject != null) {
             LOGGER.info("Writing diff stubs for versions {} → {}", fromVersion, toVersion);
-            Files.writeString(MAPPINGS_DIR.resolve(DIFF_FILE_FORMAT.formatted(fromVersion, toVersion)), MappingsGenerator.GSON.toJson(diffObject));
+            Files.writeString(getDiffDir().resolve(DIFF_FILE_FORMAT.formatted(fromVersion, toVersion)), MappingsGenerator.GSON.toJson(diffObject));
             this.diffObject = diffObject;
             return true;
         }
@@ -244,7 +256,8 @@ public final class MappingsOptimizer {
         storeIdentifiers(identifiers, object, "recipe_serializers");
         storeIdentifiers(identifiers, object, "data_component_type");
         if (SAVED_IDENTIFIER_FILES.add(version)) {
-            write(identifiers, OUTPUT_DIR.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(version)));
+            final Path outputDir = special ? OUTPUT_DIR.resolve("special") : OUTPUT_DIR;
+            write(identifiers, outputDir.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(version)));
         }
     }
 
