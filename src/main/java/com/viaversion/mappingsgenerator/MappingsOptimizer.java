@@ -33,6 +33,7 @@ import com.viaversion.mappingsgenerator.util.JsonConverter;
 import com.viaversion.mappingsgenerator.util.Version;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,6 +41,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,17 +117,22 @@ public final class MappingsOptimizer {
         optimizer.optimizeAndWrite();
     }
 
+    public MappingsOptimizer(final String from, final String to) throws IOException {
+        this(from, to, Version.isBackwards(from, to));
+    }
+
     /**
      * Creates a new MappingsOptimizer instance.
      *
-     * @param from version to map from
-     * @param to   version to map to
+     * @param from      version to map from
+     * @param to        version to map to
+     * @param backwards whether the mapping is backwards
      * @see #optimizeAndWrite()
      */
-    public MappingsOptimizer(final String from, final String to) throws IOException {
+    public MappingsOptimizer(final String from, final String to, final boolean backwards) throws IOException {
         this.fromVersion = from;
         this.toVersion = to;
-        backwards = Version.isBackwards(fromVersion, toVersion);
+        this.backwards = backwards;
         output.putInt("version", VERSION);
 
         unmappedObject = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(from));

@@ -24,11 +24,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public final class ManualRunner {
 
     private static final Set<String> SPECIAL_BACKWARDS_ONLY = Set.of("1.9.4", "1.10", "1.11");
+
+    // april Fool -> counterpart version (release)
+    public static final Map<String, String> APRIL_FOOLS = Map.of("3D_Shareware", "1.14", "20w14infinite", "1.16");
+
     private static final boolean ALL = true;
 
     public static void main(final String[] args) throws IOException {
@@ -57,6 +62,9 @@ public final class ManualRunner {
             final String name = file.getName();
             if (name.startsWith("mapping-")) {
                 final String version = name.substring("mapping-".length(), name.length() - ".json".length());
+                if (APRIL_FOOLS.containsKey(version)) {
+                    continue; // Generation is handled separately
+                }
                 versions.add(version);
             }
         }
@@ -86,6 +94,12 @@ public final class ManualRunner {
             }
 
             backwardsOptimizer.optimizeAndWrite();
+        }
+
+        for (Map.Entry<String, String> entry : APRIL_FOOLS.entrySet()) {
+            final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), true);
+            mappingsOptimizer.setErrorStrategy(errorStrategy);
+            mappingsOptimizer.optimizeAndWrite();
         }
     }
 
