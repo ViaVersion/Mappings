@@ -32,7 +32,7 @@ public final class ManualRunner {
     private static final Set<String> SPECIAL_BACKWARDS_ONLY = Set.of("1.9.4", "1.10", "1.11");
 
     // April Fool version -> Release version
-    public static final Map<String, String> SPECIAL_VERSIONS = Map.of(
+    private static final Map<String, String> SPECIAL_VERSIONS = Map.of(
             "3D_Shareware", "1.14",
             "20w14infinite", "1.16"
     );
