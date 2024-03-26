@@ -1,0 +1,41 @@
+{
+  "blockstates": {
+    "soul_fire_torch": "soul_torch",
+    "soul_fire_wall_torch": "soul_wall_torch[",
+    "netherite_stairs": "blackstone_stairs[",
+    "cursor": "lime_concrete",
+    "zone": "moving_piston[facing=north,type=normal]",
+    "ant[facing=north]": "magenta_glazed_terracotta[facing=south]",
+    "ant[facing=south]": "magenta_glazed_terracotta[facing=north]",
+    "ant[facing=west]": "magenta_glazed_terracotta[facing=east]",
+    "ant[facing=east]": "magenta_glazed_terracotta[facing=west]",
+    "neither_portal": "nether_portal[",
+    "soul_fire_lantern": "soul_lantern[",
+    "book_box[facing=north]": "bookshelf",
+    "book_box[facing=south]": "bookshelf",
+    "book_box[facing=west]": "bookshelf",
+    "book_box[facing=east]": "bookshelf"
+  },
+  "items": {
+    "soul_fire_torch": "soul_torch",
+    "soul_fire_lantern": "soul_lantern",
+    "netherite_stairs": "blackstone_stairs",
+    "book_box": "bookshelf",
+    "footprint": "gray_stained_glass_pane",
+    "cursor": "lime_concrete",
+    "fine_item": "paper"
+  },
+  "sounds": {
+    "nothingtoseeheremovealong:awesome_intro": "entity.dragon_fireball.explode",
+    "music.nether": ""
+  },
+  "itemnames": {
+    "soul_fire_torch": "20w14infinite Soul Fire Torch",
+    "soul_fire_lantern": "20w14infinite Soul Fire Latern",
+    "netherite_stairs": "20w14infinite Netherite Stairs",
+    "book_box": "20w14infinite Box of Infinite Books",
+    "footprint": "20w14infinite Footprint",
+    "cursor": "20w14infinite Cursor",
+    "fine_item": "20w14infinite Fine Item"
+  }
+}

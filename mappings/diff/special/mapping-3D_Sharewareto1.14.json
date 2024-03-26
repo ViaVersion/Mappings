@@ -1,0 +1,17 @@
+{
+  "items": {
+    "red_key": "tripwire_hook",
+    "blue_key": "tripwire_hook",
+    "yellow_key": "tripwire_hook",
+    "3d": "golden_carrot"
+  },
+  "sounds": {
+    "awesome_intro": "entity.dragon_fireball.explode"
+  },
+  "itemnames": {
+    "red_key": "3D Shareware Red Key",
+    "blue_key": "3D Shareware Blue Key",
+    "yellow_key": "3D Shareware Yellow Key",
+    "3d": "3D Shareware 3D"
+  }
+}

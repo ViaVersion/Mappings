@@ -24,11 +24,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public final class ManualRunner {
 
     private static final Set<String> SPECIAL_BACKWARDS_ONLY = Set.of("1.9.4", "1.10", "1.11");
+
+    // April Fool version -> Release version
+    private static final Map<String, String> SPECIAL_VERSIONS = Map.of(
+            "3D_Shareware", "1.14",
+            "20w14infinite", "1.16"
+    );
+
     private static final boolean ALL = true;
 
     public static void main(final String[] args) throws IOException {
@@ -86,6 +94,12 @@ public final class ManualRunner {
             }
 
             backwardsOptimizer.optimizeAndWrite();
+        }
+
+        for (Map.Entry<String, String> entry : SPECIAL_VERSIONS.entrySet()) {
+            final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), true);
+            mappingsOptimizer.setErrorStrategy(errorStrategy);
+            mappingsOptimizer.optimizeAndWrite();
         }
     }
 
