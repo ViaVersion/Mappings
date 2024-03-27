@@ -16,7 +16,9 @@
     "flow_pottery_sherd": "friend_pottery_sherd",
     "guster_pottery_sherd": "friend_pottery_sherd",
     "scrape_pottery_sherd": "blade_pottery_sherd",
-    "breeze_rod": "blaze_rod"
+    "breeze_rod": "blaze_rod",
+    "ominous_trial_key": "",
+    "ominous_bottle": ""
   },
   "itemnames": {
     "turtle_scute": "1.20.5 Turtle Scute",
@@ -93,12 +95,27 @@
     "block.heavy_core.step": "",
     "item.mace.smash_air": "",
     "item.mace.smash_ground": "",
-    "item.mace.smash_ground_heavy": ""
+    "item.mace.smash_ground_heavy": "",
+    "block.cobweb.break": "",
+    "block.cobweb.step": "",
+    "block.cobweb.place": "",
+    "block.cobweb.hit": "",
+    "block.cobweb.fall": "",
+    "block.trial_spawner.about_to_spawn_item": "",
+    "block.trial_spawner.spawn_item": "",
+    "block.trial_spawner.spawn_item_begin": "",
+    "block.trial_spawner.charge_activate": "",
+    "block.trial_spawner.ambient_charged": "",
+    "item.ominous_bottle.dispose": "",
+    "event.mob_effect.bad_omen": "",
+    "event.mob_effect.trial_omen": "",
+    "event.mob_effect.raid_omen": ""
   },
   "entities": {
     "armadillo": "cow",
     "breeze_wind_charge": "wind_charge",
-    "bogged": "stray"
+    "bogged": "stray",
+    "ominous_item_spawner": ""
   },
   "entitynames": {
     "armadillo": "Armadillo",
@@ -117,16 +134,39 @@
     "generic.safe_fall_distance": ""
   },
   "enchantments": {
-    "sweeping_edge": "sweeping"
+    "sweeping_edge": "sweeping",
+    "density": "",
+    "breach": "",
+    "wind_burst": ""
   },
   "blockstates": {
     "vault": "spawner",
-    "heavy_core": "wither_skeleton_skull[powered=false,rotation=0]"
+    "heavy_core": "wither_skeleton_skull[powered=false,rotation=0]",
+    "trial_spawner[ominous=true,trial_spawner_state=inactive]": "",
+    "trial_spawner[ominous=true,trial_spawner_state=waiting_for_players]": "",
+    "trial_spawner[ominous=true,trial_spawner_state=active]": "",
+    "trial_spawner[ominous=true,trial_spawner_state=waiting_for_reward_ejection]": "",
+    "trial_spawner[ominous=true,trial_spawner_state=ejecting_reward]": "",
+    "trial_spawner[ominous=true,trial_spawner_state=cooldown]": "",
+    "trial_spawner[ominous=false,trial_spawner_state=inactive]": "",
+    "trial_spawner[ominous=false,trial_spawner_state=waiting_for_players]": "",
+    "trial_spawner[ominous=false,trial_spawner_state=active]": "",
+    "trial_spawner[ominous=false,trial_spawner_state=waiting_for_reward_ejection]": "",
+    "trial_spawner[ominous=false,trial_spawner_state=ejecting_reward]": "",
+    "trial_spawner[ominous=false,trial_spawner_state=cooldown]": ""
   },
   "particles": {
     "vault_connection": "enchant",
     "gust_emitter_large": "gust_emitter",
-    "gust_emitter_small": "gust_emitter"
+    "gust_emitter_small": "gust_emitter",
+    "small_gust": "",
+    "infested": "",
+    "item_cobweb": "",
+    "trial_spawner_detection_ominous": "",
+    "dust_pillar": "",
+    "ominous_spawning": "",
+    "raid_omen": "",
+    "trial_omen": ""
   },
   "blockentities": {
     "vault": ""
@@ -136,5 +176,9 @@
     "loot_table": "brigadier:string",
     "loot_predicate": "brigadier:string",
     "loot_modifier": "brigadier:string"
+  },
+  "data_component_type": {
+    "item_name": "",
+    "ominous_bottle_amplifier": ""
   }
 }
