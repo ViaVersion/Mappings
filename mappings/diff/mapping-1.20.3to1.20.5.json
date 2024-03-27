@@ -17,11 +17,11 @@
     "horse.jump_strength": "generic.jump_strength"
   },
   "blockstates": {
-    "trial_spawner[trial_spawner_state=inactive]": "",
-    "trial_spawner[trial_spawner_state=waiting_for_players]": "",
-    "trial_spawner[trial_spawner_state=active]": "",
-    "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]": "",
-    "trial_spawner[trial_spawner_state=ejecting_reward]": "",
-    "trial_spawner[trial_spawner_state=cooldown]": ""
+    "trial_spawner[trial_spawner_state=inactive]": "trial_spawner[ominous=false,trial_spawner_state=inactive]",
+    "trial_spawner[trial_spawner_state=waiting_for_players]": "trial_spawner[ominous=false,trial_spawner_state=waiting_for_players]",
+    "trial_spawner[trial_spawner_state=active]": "trial_spawner[ominous=false,trial_spawner_state=active]",
+    "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]": "trial_spawner[ominous=false,trial_spawner_state=waiting_for_reward_ejection]",
+    "trial_spawner[trial_spawner_state=ejecting_reward]": "trial_spawner[ominous=false,trial_spawner_state=ejecting_reward]",
+    "trial_spawner[trial_spawner_state=cooldown]": "trial_spawner[ominous=false,trial_spawner_state=cooldown]"
   }
 }

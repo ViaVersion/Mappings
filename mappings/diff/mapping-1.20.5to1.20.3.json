@@ -17,27 +17,28 @@
     "guster_pottery_sherd": "friend_pottery_sherd",
     "scrape_pottery_sherd": "blade_pottery_sherd",
     "breeze_rod": "blaze_rod",
-    "ominous_trial_key": "",
-    "ominous_bottle": ""
+    "ominous_trial_key": "trial_key",
+    "ominous_bottle": "honey_bottle"
   },
   "itemnames": {
-    "turtle_scute": "1.20.5 Turtle Scute",
     "armadillo_scute": "1.20.5 Armadillo Scute",
     "wolf_armor": "1.20.5 Wolf Armor",
     "armadillo_spawn_egg": "1.20.5 Armadillo Spawn Egg",
-    "vault": "1.20.5 Vault",
-    "wind_charge": "1.20.5 Wind Charge",
-    "bogged_spawn_egg": "1.20.5 Bogged Spawn Egg",
-    "heavy_core": "1.20.5 Heavy Core",
-    "mace": "1.20.5 Mace",
-    "flow_banner_pattern": "1.20.5 Flow Banner Pattern",
-    "guster_banner_pattern": "1.20.5 Guster Banner Pattern",
-    "flow_armor_trim_smithing_template": "1.20.5 Flow Armor Trim Smithing Template",
-    "bolt_armor_trim_smithing_template": "1.20.5 Bolt Armor Trim Smithing Template",
-    "flow_pottery_sherd": "1.20.5 Flow Pottery Sherd",
-    "guster_pottery_sherd": "1.20.5 Guster Pottery Sherd",
-    "scrape_pottery_sherd": "1.20.5 Scrape Pottery Sherd",
-    "breeze_rod": "1.20.5 Breeze Rod"
+    "vault": "1.21 Vault",
+    "wind_charge": "1.21 Wind Charge",
+    "bogged_spawn_egg": "1.21 Bogged Spawn Egg",
+    "heavy_core": "1.21 Heavy Core",
+    "mace": "1.21 Mace",
+    "flow_banner_pattern": "1.21 Flow Banner Pattern",
+    "guster_banner_pattern": "1.21 Guster Banner Pattern",
+    "flow_armor_trim_smithing_template": "1.21 Flow Armor Trim Smithing Template",
+    "bolt_armor_trim_smithing_template": "1.21 Bolt Armor Trim Smithing Template",
+    "flow_pottery_sherd": "1.21 Flow Pottery Sherd",
+    "guster_pottery_sherd": "1.21 Guster Pottery Sherd",
+    "scrape_pottery_sherd": "1.21 Scrape Pottery Sherd",
+    "breeze_rod": "1.21 Breeze Rod",
+    "ominous_trial_key": "1.21 Ominous Trial Key",
+    "ominous_bottle": "1.21 Ominous Bottle"
   },
   "sounds": {
     "entity.armadillo.eat": "entity.sniffer.eat",
@@ -115,7 +116,7 @@
     "armadillo": "cow",
     "breeze_wind_charge": "wind_charge",
     "bogged": "stray",
-    "ominous_item_spawner": ""
+    "ominous_item_spawner": "text_display"
   },
   "entitynames": {
     "armadillo": "Armadillo",
@@ -142,31 +143,31 @@
   "blockstates": {
     "vault": "spawner",
     "heavy_core": "wither_skeleton_skull[powered=false,rotation=0]",
-    "trial_spawner[ominous=true,trial_spawner_state=inactive]": "",
-    "trial_spawner[ominous=true,trial_spawner_state=waiting_for_players]": "",
-    "trial_spawner[ominous=true,trial_spawner_state=active]": "",
-    "trial_spawner[ominous=true,trial_spawner_state=waiting_for_reward_ejection]": "",
-    "trial_spawner[ominous=true,trial_spawner_state=ejecting_reward]": "",
-    "trial_spawner[ominous=true,trial_spawner_state=cooldown]": "",
-    "trial_spawner[ominous=false,trial_spawner_state=inactive]": "",
-    "trial_spawner[ominous=false,trial_spawner_state=waiting_for_players]": "",
-    "trial_spawner[ominous=false,trial_spawner_state=active]": "",
-    "trial_spawner[ominous=false,trial_spawner_state=waiting_for_reward_ejection]": "",
-    "trial_spawner[ominous=false,trial_spawner_state=ejecting_reward]": "",
-    "trial_spawner[ominous=false,trial_spawner_state=cooldown]": ""
+    "trial_spawner[ominous=true,trial_spawner_state=inactive]": "trial_spawner[trial_spawner_state=inactive]",
+    "trial_spawner[ominous=true,trial_spawner_state=waiting_for_players]": "trial_spawner[trial_spawner_state=waiting_for_players]",
+    "trial_spawner[ominous=true,trial_spawner_state=active]": "trial_spawner[trial_spawner_state=active]",
+    "trial_spawner[ominous=true,trial_spawner_state=waiting_for_reward_ejection]": "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]",
+    "trial_spawner[ominous=true,trial_spawner_state=ejecting_reward]": "trial_spawner[trial_spawner_state=ejecting_reward]",
+    "trial_spawner[ominous=true,trial_spawner_state=cooldown]": "trial_spawner[trial_spawner_state=cooldown]",
+    "trial_spawner[ominous=false,trial_spawner_state=inactive]": "trial_spawner[trial_spawner_state=inactive]",
+    "trial_spawner[ominous=false,trial_spawner_state=waiting_for_players]": "trial_spawner[trial_spawner_state=waiting_for_players]",
+    "trial_spawner[ominous=false,trial_spawner_state=active]": "trial_spawner[trial_spawner_state=active]",
+    "trial_spawner[ominous=false,trial_spawner_state=waiting_for_reward_ejection]": "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]",
+    "trial_spawner[ominous=false,trial_spawner_state=ejecting_reward]": "trial_spawner[trial_spawner_state=ejecting_reward]",
+    "trial_spawner[ominous=false,trial_spawner_state=cooldown]": "trial_spawner[trial_spawner_state=cooldown]"
   },
   "particles": {
     "vault_connection": "enchant",
     "gust_emitter_large": "gust_emitter",
     "gust_emitter_small": "gust_emitter",
-    "small_gust": "",
-    "infested": "",
-    "item_cobweb": "",
-    "trial_spawner_detection_ominous": "",
-    "dust_pillar": "",
-    "ominous_spawning": "",
-    "raid_omen": "",
-    "trial_omen": ""
+    "small_gust": "dust_plume",
+    "infested": "mycelium",
+    "item_cobweb": "snowflake",
+    "trial_spawner_detection_ominous": "soul_fire_flame",
+    "dust_pillar": "falling_dust",
+    "ominous_spawning": "wax_off",
+    "raid_omen": "soul",
+    "trial_omen": "soul"
   },
   "blockentities": {
     "vault": ""
@@ -176,9 +177,5 @@
     "loot_table": "brigadier:string",
     "loot_predicate": "brigadier:string",
     "loot_modifier": "brigadier:string"
-  },
-  "data_component_type": {
-    "item_name": "",
-    "ominous_bottle_amplifier": ""
   }
 }
