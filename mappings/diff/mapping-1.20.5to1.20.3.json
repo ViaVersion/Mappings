@@ -140,6 +140,11 @@
     "breach": "",
     "wind_burst": ""
   },
+  "enchantmentnames": {
+    "density": "Density",
+    "breach": "Breach",
+    "wind_burst": "Wind Burst"
+  },
   "blockstates": {
     "vault": "spawner",
     "heavy_core": "wither_skeleton_skull[powered=false,rotation=0]",

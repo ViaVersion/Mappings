@@ -187,6 +187,7 @@ public final class MappingsOptimizer {
 
         if (diffObject != null) {
             names("items", "itemnames");
+            names("enchantments", "enchantmentnames");
             fullNames("entitynames", "entitynames");
 
             if (backwards) {
