@@ -22,9 +22,9 @@ dependencies {
 }
 
 group = "com.viaversion"
-version = "3.3.3"
+version = "3.4.0"
 description = "MappingsGenerator"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 tasks {
     withType<JavaCompile> {
