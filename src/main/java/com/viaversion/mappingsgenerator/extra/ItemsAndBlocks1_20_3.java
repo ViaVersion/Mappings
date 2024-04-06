@@ -38,6 +38,7 @@ public final class ItemsAndBlocks1_20_3 {
         final CompoundTag tag = new CompoundTag();
         tag.put("items", collectStringList(mappings.getAsJsonArray("items")));
         tag.put("blocks", collectStringList(mappings.getAsJsonArray("blocks")));
-        MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("extra/items-blocks-1.20.3.nbt"));
+        tag.put("sounds", collectStringList(mappings.getAsJsonArray("sounds")));
+        MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("extra/extra-identifiers-1.20.3.nbt"));
     }
 }
