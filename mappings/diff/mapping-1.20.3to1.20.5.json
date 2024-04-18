@@ -23,5 +23,22 @@
     "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]": "trial_spawner[ominous=false,trial_spawner_state=waiting_for_reward_ejection]",
     "trial_spawner[trial_spawner_state=ejecting_reward]": "trial_spawner[ominous=false,trial_spawner_state=ejecting_reward]",
     "trial_spawner[trial_spawner_state=cooldown]": "trial_spawner[ominous=false,trial_spawner_state=cooldown]"
+  },
+  "tags": {
+    "item": {
+      "wolf_food": [
+        "beef",
+        "chicken",
+        "cooked_beef",
+        "cooked_chicken",
+        "cooked_mutton",
+        "cooked_porkchop",
+        "cooked_rabbit",
+        "mutton",
+        "porkchop",
+        "rabbit",
+        "rotten_flesh"
+      ]
+    }
   }
 }
