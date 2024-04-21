@@ -23,6 +23,7 @@ import com.viaversion.mappingsgenerator.util.Version;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,11 +32,11 @@ public final class ManualRunner {
 
     private static final Set<String> SPECIAL_BACKWARDS_ONLY = Set.of("1.9.4", "1.10", "1.11");
 
-    // April Fool version -> Release version
-    private static final Map<String, String> SPECIAL_VERSIONS = Map.of(
+    // April Fool version -> Release version. Linked map to keep order during mapping writing
+    private static final Map<String, String> SPECIAL_VERSIONS = new LinkedHashMap<>(Map.of(
             "3D_Shareware", "1.14",
             "20w14infinite", "1.16"
-    );
+    ));
 
     private static final boolean ALL = true;
 

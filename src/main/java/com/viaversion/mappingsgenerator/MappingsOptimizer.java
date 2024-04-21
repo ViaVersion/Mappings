@@ -32,6 +32,7 @@ import com.viaversion.mappingsgenerator.util.Version;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -56,7 +57,6 @@ public final class MappingsOptimizer {
     public static final Path MAPPINGS_DIR = Path.of("mappings");
     public static final Path OUTPUT_DIR = Path.of("output");
     public static final Path OUTPUT_BACKWARDS_DIR = OUTPUT_DIR.resolve("backwards");
-    public static final String GLOBAL_IDENTIFIERS_FILE = "identifier-table.json";
     public static final String DIFF_FILE_FORMAT = "mapping-%sto%s.json";
     public static final String MAPPING_FILE_FORMAT = "mapping-%s.json";
     public static final String OUTPUT_FILE_FORMAT = "mappings-%sto%s.nbt";
@@ -83,6 +83,7 @@ public final class MappingsOptimizer {
     );
     private static final Set<String> savedIdentifierFiles = new HashSet<>();
     private static JsonObject globalIdentifiersObject;
+    private static JsonObject fileHashesObject;
 
     private final Set<String> ignoreMissing = new HashSet<>(Arrays.asList("blocks", "statistics"));
     private final CompoundTag output = new CompoundTag();
@@ -120,16 +121,16 @@ public final class MappingsOptimizer {
         optimizer.optimizeAndWrite();
     }
 
-    private JsonObject loadGlobalIdentifiers() {
+    private void loadGlobalFiles() throws IOException {
         // Load and reuse identifiers file, being a global table across all versions
         if (globalIdentifiersObject == null) {
-            try {
-                return MappingsLoader.load(MAPPINGS_DIR, GLOBAL_IDENTIFIERS_FILE);
-            } catch (final IOException e) {
-                throw new RuntimeException("Failed to load global identifiers", e);
+            globalIdentifiersObject = MappingsLoader.load(MAPPINGS_DIR, "identifier-table.json");
+        }
+        if (fileHashesObject == null) {
+            try (final BufferedReader reader = Files.newBufferedReader(Path.of("output_hashes.json"))) {
+                fileHashesObject = MappingsGenerator.GSON.fromJson(reader, JsonObject.class);
             }
         }
-        return globalIdentifiersObject;
     }
 
     public MappingsOptimizer(final String from, final String to) throws IOException {
@@ -172,7 +173,7 @@ public final class MappingsOptimizer {
 
         diffObject = MappingsLoader.load(getDiffDir(), DIFF_FILE_FORMAT.formatted(from, to));
 
-        globalIdentifiersObject = loadGlobalIdentifiers();
+        loadGlobalFiles();
     }
 
     /**
@@ -215,12 +216,20 @@ public final class MappingsOptimizer {
             }
         }
 
-        final Path outputDir = backwards ? OUTPUT_BACKWARDS_DIR : OUTPUT_DIR;
-        write(special ? outputDir.resolve("special") : outputDir);
+        Path outputDir = backwards ? OUTPUT_BACKWARDS_DIR : OUTPUT_DIR;
+        if (special) {
+            outputDir = outputDir.resolve("special");
+        }
+
+        final Path outputPath = outputDir.resolve(OUTPUT_FILE_FORMAT.formatted(fromVersion, toVersion));
+        write(output, outputPath);
 
         // Save full identifiers to a separate file per version
         saveIdentifierFiles(fromVersion, unmappedObject);
         saveIdentifierFiles(toVersion, mappedObject);
+
+        // Store object/file data to keep track of changes
+        addFileData(fromVersion + ":" + toVersion, output.hashCode(), outputPath);
     }
 
     /**
@@ -261,33 +270,58 @@ public final class MappingsOptimizer {
      *
      * @param directory directory to write the output file to
      */
-    public void write(final Path directory) throws IOException {
+    public void writeToDir(final Path directory) throws IOException {
         write(output, directory.resolve(OUTPUT_FILE_FORMAT.formatted(fromVersion, toVersion)));
     }
 
     public void saveIdentifierFiles(final String version, final JsonObject object) throws IOException {
         final CompoundTag identifiers = new CompoundTag();
-        storeIdentifiers(identifiers, object, "entities");
-        storeIdentifiers(identifiers, object, "items");
-        storeIdentifiers(identifiers, object, "particles");
-        storeIdentifiers(identifiers, object, "argumenttypes");
-        storeIdentifiers(identifiers, object, "recipe_serializers");
-        storeIdentifiers(identifiers, object, "data_component_type");
+        storeIdentifierIndexes(identifiers, object, "entities");
+        storeIdentifierIndexes(identifiers, object, "items");
+        storeIdentifierIndexes(identifiers, object, "particles");
+        storeIdentifierIndexes(identifiers, object, "argumenttypes");
+        storeIdentifierIndexes(identifiers, object, "recipe_serializers");
+        storeIdentifierIndexes(identifiers, object, "data_component_type");
 
         // No need to save the same identifiers multiple times if one version appears in multiple runs
         if (savedIdentifierFiles.add(version) && !identifiers.isEmpty()) {
             final Path outputDir = special ? OUTPUT_DIR.resolve("special") : OUTPUT_DIR;
-            write(identifiers, outputDir.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(version)));
+            final Path outputPath = outputDir.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(version));
+
+            write(identifiers, outputPath);
+            addFileData(version, identifiers.hashCode(), outputPath);
         }
 
         // Update global identifiers file if necessary
         if (updatedGlobalIdentifiers) {
-            try (final BufferedWriter writer = Files.newBufferedWriter(MAPPINGS_DIR.resolve(GLOBAL_IDENTIFIERS_FILE))) {
-                MappingsGenerator.GSON.toJson(globalIdentifiersObject, writer);
-            }
-            write((CompoundTag) JsonConverter.toTag(globalIdentifiersObject), OUTPUT_DIR.resolve(OUTPUT_GLOBAL_IDENTIFIERS_FILE));
+            // Also keep a json file around for easier viewing
+            writeJson(globalIdentifiersObject, MAPPINGS_DIR.resolve("identifier-table.json"));
+
+            final Path outputPath = OUTPUT_DIR.resolve(OUTPUT_GLOBAL_IDENTIFIERS_FILE);
+            final CompoundTag globalIdentifiersTag = (CompoundTag) JsonConverter.toTag(globalIdentifiersObject);
+            write(globalIdentifiersTag, outputPath);
             updatedGlobalIdentifiers = false;
             LOGGER.info("Updated global identifiers file");
+        }
+    }
+
+    private static void addFileData(final String key, final int hash, final Path path) throws IOException {
+        JsonObject fileData = fileHashesObject.getAsJsonObject(key);
+        if (fileData == null) {
+            fileData = new JsonObject();
+            fileHashesObject.add(key, fileData);
+        }
+
+        // The object hash is good enough
+        fileData.addProperty("object-hash", hash);
+        fileData.addProperty("size", Files.size(path));
+
+        writeJson(fileHashesObject, Path.of("output_hashes.json"));
+    }
+
+    private static void writeJson(final JsonObject object, final Path path) throws IOException {
+        try (final BufferedWriter writer = Files.newBufferedWriter(path)) {
+            MappingsGenerator.GSON.toJson(object, writer);
         }
     }
 
@@ -469,7 +503,7 @@ public final class MappingsOptimizer {
      * @param object object to read identifiers from
      * @param key    to read from and write to
      */
-    private void storeIdentifiers(
+    private void storeIdentifierIndexes(
             final CompoundTag tag,
             final JsonObject object,
             final String key

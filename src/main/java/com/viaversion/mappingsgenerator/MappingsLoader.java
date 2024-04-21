@@ -27,13 +27,12 @@ import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
-
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,8 +60,9 @@ public final class MappingsLoader {
             return null;
         }
 
-        final String content = Files.readString(path);
-        return GSON.fromJson(content, JsonObject.class);
+        try (final BufferedReader reader = Files.newBufferedReader(path)) {
+            return GSON.fromJson(reader, JsonObject.class);
+        }
     }
 
     /**
@@ -287,6 +287,7 @@ public final class MappingsLoader {
      * @param identityMappings number of identity mappings
      * @param shiftChanges     number of shift changes where a mapped id is not the last mapped id + 1
      */
-    public record MappingsResult(int[] mappings, int mappedSize, int emptyMappings, int identityMappings, int shiftChanges) {
+    public record MappingsResult(int[] mappings, int mappedSize, int emptyMappings, int identityMappings,
+                                 int shiftChanges) {
     }
 }

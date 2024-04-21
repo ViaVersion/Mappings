@@ -26,7 +26,7 @@ public final class CursedMappings {
         final MappingsOptimizer optimizer = create("1.12", "1.13");
         optimizer.cursedMappings("blocks", "blockstates", "blockstates", 4084);
         optimizer.cursedMappings("legacy_enchantments", "enchantments", "enchantments", 72);
-        optimizer.write(MappingsOptimizer.OUTPUT_DIR);
+        optimizer.writeToDir(MappingsOptimizer.OUTPUT_DIR);
     }
 
     public static void optimizeAndSaveOhSoSpecial1_12AsNBTBackwards() throws IOException {
@@ -36,7 +36,7 @@ public final class CursedMappings {
         optimizer.names("items", "itemnames");
         optimizer.fullNames("entitynames", "entitynames");
         optimizer.fullNames("sounds", "soundnames");
-        optimizer.write(MappingsOptimizer.OUTPUT_BACKWARDS_DIR);
+        optimizer.writeToDir(MappingsOptimizer.OUTPUT_BACKWARDS_DIR);
     }
 
     private static MappingsOptimizer create(final String from, final String to) throws IOException {
