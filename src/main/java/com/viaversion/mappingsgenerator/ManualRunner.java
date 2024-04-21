@@ -33,12 +33,13 @@ public final class ManualRunner {
     private static final Set<String> SPECIAL_BACKWARDS_ONLY = Set.of("1.9.4", "1.10", "1.11");
 
     // April Fool version -> Release version. Linked map to keep order during mapping writing
-    private static final Map<String, String> SPECIAL_VERSIONS = new LinkedHashMap<>(Map.of(
-            "3D_Shareware", "1.14",
-            "20w14infinite", "1.16"
-    ));
-
+    private static final Map<String, String> SPECIAL_VERSIONS = new LinkedHashMap<>();
     private static final boolean ALL = true;
+
+    static {
+        SPECIAL_VERSIONS.put("3D_Shareware", "1.14");
+        SPECIAL_VERSIONS.put("20w14infinite", "1.16");
+    }
 
     public static void main(final String[] args) throws IOException {
         if (ALL) {
