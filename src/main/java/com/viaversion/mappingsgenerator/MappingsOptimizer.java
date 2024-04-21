@@ -20,8 +20,6 @@ package com.viaversion.mappingsgenerator;
 
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.builtin.IntArrayTag;
-import com.github.steveice10.opennbt.tag.builtin.ListTag;
-import com.github.steveice10.opennbt.tag.builtin.StringTag;
 import com.github.steveice10.opennbt.tag.builtin.Tag;
 import com.github.steveice10.opennbt.tag.io.NBTIO;
 import com.github.steveice10.opennbt.tag.io.TagWriter;
@@ -33,7 +31,8 @@ import com.viaversion.mappingsgenerator.util.JsonConverter;
 import com.viaversion.mappingsgenerator.util.Version;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,7 +40,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,10 +56,12 @@ public final class MappingsOptimizer {
     public static final Path MAPPINGS_DIR = Path.of("mappings");
     public static final Path OUTPUT_DIR = Path.of("output");
     public static final Path OUTPUT_BACKWARDS_DIR = OUTPUT_DIR.resolve("backwards");
+    public static final String GLOBAL_IDENTIFIERS_FILE = "identifier-table.json";
     public static final String DIFF_FILE_FORMAT = "mapping-%sto%s.json";
     public static final String MAPPING_FILE_FORMAT = "mapping-%s.json";
     public static final String OUTPUT_FILE_FORMAT = "mappings-%sto%s.nbt";
     public static final String OUTPUT_IDENTIFIERS_FILE_FORMAT = "identifiers-%s.nbt";
+    public static final String OUTPUT_GLOBAL_IDENTIFIERS_FILE = "identifier-table.nbt";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MappingsOptimizer.class.getSimpleName());
     private static final TagWriter TAG_WRITER = NBTIO.writer().named();
@@ -81,7 +81,8 @@ public final class MappingsOptimizer {
             "tags",
             "attributes"
     );
-    private static final Set<String> SAVED_IDENTIFIER_FILES = new HashSet<>();
+    private static final Set<String> savedIdentifierFiles = new HashSet<>();
+    private static JsonObject globalIdentifiersObject;
 
     private final Set<String> ignoreMissing = new HashSet<>(Arrays.asList("blocks", "statistics"));
     private final CompoundTag output = new CompoundTag();
@@ -94,6 +95,7 @@ public final class MappingsOptimizer {
     private ErrorStrategy errorStrategy = ErrorStrategy.WARN;
     private JsonObject diffObject;
     private boolean keepUnknownFields;
+    private boolean updatedGlobalIdentifiers;
 
     public static void main(final String[] args) throws IOException {
         if (args.length < 2) {
@@ -116,6 +118,18 @@ public final class MappingsOptimizer {
             optimizer.keepUnknownFields();
         }
         optimizer.optimizeAndWrite();
+    }
+
+    private JsonObject loadGlobalIdentifiers() {
+        // Load and reuse identifiers file, being a global table across all versions
+        if (globalIdentifiersObject == null) {
+            try {
+                return MappingsLoader.load(MAPPINGS_DIR, GLOBAL_IDENTIFIERS_FILE);
+            } catch (final IOException e) {
+                throw new RuntimeException("Failed to load global identifiers", e);
+            }
+        }
+        return globalIdentifiersObject;
     }
 
     public MappingsOptimizer(final String from, final String to) throws IOException {
@@ -157,6 +171,8 @@ public final class MappingsOptimizer {
         }
 
         diffObject = MappingsLoader.load(getDiffDir(), DIFF_FILE_FORMAT.formatted(from, to));
+
+        globalIdentifiersObject = loadGlobalIdentifiers();
     }
 
     /**
@@ -189,8 +205,8 @@ public final class MappingsOptimizer {
             names("items", "itemnames");
             names("enchantments", "enchantmentnames");
             fullNames("entitynames", "entitynames");
-
             if (backwards) {
+                // No need to put sounds into the identifier files, so just use full names
                 fullNames("sounds", "soundnames");
             }
 
@@ -252,13 +268,26 @@ public final class MappingsOptimizer {
     public void saveIdentifierFiles(final String version, final JsonObject object) throws IOException {
         final CompoundTag identifiers = new CompoundTag();
         storeIdentifiers(identifiers, object, "entities");
+        storeIdentifiers(identifiers, object, "items");
         storeIdentifiers(identifiers, object, "particles");
         storeIdentifiers(identifiers, object, "argumenttypes");
         storeIdentifiers(identifiers, object, "recipe_serializers");
         storeIdentifiers(identifiers, object, "data_component_type");
-        if (SAVED_IDENTIFIER_FILES.add(version)) {
+
+        // No need to save the same identifiers multiple times if one version appears in multiple runs
+        if (savedIdentifierFiles.add(version) && !identifiers.isEmpty()) {
             final Path outputDir = special ? OUTPUT_DIR.resolve("special") : OUTPUT_DIR;
             write(identifiers, outputDir.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(version)));
+        }
+
+        // Update global identifiers file if necessary
+        if (updatedGlobalIdentifiers) {
+            try (final BufferedWriter writer = Files.newBufferedWriter(MAPPINGS_DIR.resolve(GLOBAL_IDENTIFIERS_FILE))) {
+                MappingsGenerator.GSON.toJson(globalIdentifiersObject, writer);
+            }
+            write((CompoundTag) JsonConverter.toTag(globalIdentifiersObject), OUTPUT_DIR.resolve(OUTPUT_GLOBAL_IDENTIFIERS_FILE));
+            updatedGlobalIdentifiers = false;
+            LOGGER.info("Updated global identifiers file");
         }
     }
 
@@ -434,28 +463,63 @@ public final class MappingsOptimizer {
     }
 
     /**
-     * Stores a list of string identifiers in the given tag.
+     * Stores a list of global identifier indexes in the given tag.
      *
      * @param tag    tag to write to
      * @param object object to read identifiers from
      * @param key    to read from and write to
      */
-    private static void storeIdentifiers(
+    private void storeIdentifiers(
             final CompoundTag tag,
             final JsonObject object,
             final String key
     ) {
-        final JsonArray identifiers = object.getAsJsonArray(key);
-        if (identifiers == null) {
+        final JsonElement identifiersElement = object.get(key);
+        if (identifiersElement == null) {
             return;
         }
 
-        final ListTag<StringTag> list = new ListTag<>(StringTag.class);
-        for (final JsonElement identifier : identifiers) {
-            list.add(new StringTag(identifier.getAsString()));
+        if (identifiersElement.isJsonObject()) {
+            // Pre 1.13
+            LOGGER.debug("Identifiers for {} are not an array", key);
+            return;
         }
 
-        tag.put(key, list);
+        // Add to global identifiers if not already present
+        final JsonArray identifiers = identifiersElement.getAsJsonArray();
+        JsonArray globalIdentifiersArray = globalIdentifiersObject.getAsJsonArray(key);
+        if (globalIdentifiersArray == null) {
+            globalIdentifiersArray = new JsonArray();
+            globalIdentifiersObject.add(key, globalIdentifiersArray);
+        }
+
+        final Object2IntMap<String> globalIdentifiers = new Object2IntOpenHashMap<>(globalIdentifiersArray.size());
+        globalIdentifiers.defaultReturnValue(-1);
+        for (int globalId = 0; globalId < globalIdentifiersArray.size(); globalId++) {
+            final String identifier = globalIdentifiersArray.get(globalId).getAsString();
+            globalIdentifiers.put(identifier, globalId);
+        }
+
+        for (int id = 0; id < identifiers.size(); id++) {
+            final JsonElement entry = identifiers.get(id);
+            if (entry.isJsonNull()) {
+                continue;
+            }
+
+            final String identifier = entry.getAsString();
+            if (globalIdentifiers.containsKey(identifier)) {
+                continue;
+            }
+
+            final int addedGlobalIndex = globalIdentifiersArray.size();
+            globalIdentifiersArray.add(identifier);
+            globalIdentifiers.put(identifier, addedGlobalIndex);
+            updatedGlobalIdentifiers = true;
+        }
+
+        // Use the same compact storage on the identifier->global identifier files, just about halves the size
+        final MappingsResult result = MappingsLoader.map(identifiers, globalIdentifiersArray, null, errorStrategy);
+        serialize(result, tag, key, true);
     }
 
     /**

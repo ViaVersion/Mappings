@@ -1,6 +1,7 @@
 libraries/
 logs/
 generated/
+output/
 
 ### Java files ###
 *.class

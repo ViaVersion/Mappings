@@ -22,7 +22,7 @@ dependencies {
 }
 
 group = "com.viaversion"
-version = "3.4.0"
+version = "4.0.0"
 description = "MappingsGenerator"
 java.sourceCompatibility = JavaVersion.VERSION_21
 

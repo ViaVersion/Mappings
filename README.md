@@ -55,8 +55,10 @@ own [ViaNBT](https://github.com/ViaVersion/ViaNBT) as the NBT reader/writer. Com
 
 ### Identifier files
 
-Next to a standardized compact format, there are extra files per version to store the identifier arrays of certain
-registries, as their full keys might be required. These files simply contain any number of json arrays.
+Next to a standardized compact format for int id mappings, the full identifiers of some registries are also required.
+For this, we generate a list of *all* identifiers in the registry across all versions, so that their names only need to
+be stored once, as opposed to storing them again in every new version they are still in. Wherever needed, these
+identifiers are then referred to via their index in the global list.
 
 ### Mapping files
 
@@ -81,25 +83,25 @@ The direct storage simply stores an array of ints exactly as they can be used in
 * `id` (byte tag) is `0`
 * `val` (int array tag) contains the mapped ids, where their array index corresponds to the unmapped id
 
-### Changed value storage
-
-The changed value storage stores two int arrays: One containing the changed unmapped ids, and one their corresponding
-mapped ids in a simple int→int mapping over the two arrays.
-
-* `id` (byte tag) is `1`
-* `at` (int array tag) contains the unmapped ids that have been changed
-* `val` (int array tag) contains the mapped ids, indexed by the same index as the unmapped id in `at`
-* Optional: `nofill` (byte tag): Unless present, all ids between the ones found in `at` are mapped to their identity
-
 ### Shifted value storage
 
 The shifted value storage stores two int arrays: One containing the unmapped ids that end a sequence of mapped ids. For
 an index `i`, all unmapped ids between `at[i] + sequence` (inclusive) and `at[i + 1]` (exclusive) are mapped
 to `to[i] + sequence`.
 
-* `id` (byte tag) is `2`
+* `id` (byte tag) is `1`
 * `at` (int array tag) contains the unmapped ids, where their mapped is is *not* simply the last mapped id + 1
 * `to` (int array tag) contains the mapped ids, indexed by the same index as the unmapped id in `at`
+
+### Changed value storage
+
+The changed value storage stores two int arrays: One containing the changed unmapped ids, and one their corresponding
+mapped ids in a simple int→int mapping over the two arrays.
+
+* `id` (byte tag) is `2`
+* `at` (int array tag) contains the unmapped ids that have been changed
+* `val` (int array tag) contains the mapped ids, indexed by the same index as the unmapped id in `at`
+* Optional: `nofill` (byte tag): Unless present, all ids between the ones found in `at` are mapped to their identity
 
 ### Identity storage
 

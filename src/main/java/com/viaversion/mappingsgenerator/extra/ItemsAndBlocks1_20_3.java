@@ -36,7 +36,6 @@ public final class ItemsAndBlocks1_20_3 {
     public static void main(final String[] args) throws IOException {
         final JsonObject mappings = MappingsLoader.load("mapping-1.20.3.json");
         final CompoundTag tag = new CompoundTag();
-        tag.put("items", collectStringList(mappings.getAsJsonArray("items")));
         tag.put("blocks", collectStringList(mappings.getAsJsonArray("blocks")));
         tag.put("sounds", collectStringList(mappings.getAsJsonArray("sounds")));
         MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("extra/extra-identifiers-1.20.3.nbt"));
