@@ -62,7 +62,7 @@
     "suspicious_sand": ""
   },
   "menus": {
-    "legacy_smithing": "furnace"
+    "legacy_smithing": "anvil"
   },
   "tags": {
     "block": {
