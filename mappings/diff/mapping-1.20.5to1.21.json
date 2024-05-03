@@ -1,6 +1,6 @@
 {
   "sounds": {
-    "block.trial_spawner.charge_activate": "",
-    "block.trial_spawner.ambient_charged": ""
+    "block.trial_spawner.charge_activate": "block.trial_spawner.ominous_activate",
+    "block.trial_spawner.ambient_charged": "block.trial_spawner.ambient_ominous"
   }
 }

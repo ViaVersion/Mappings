@@ -1,12 +1,17 @@
 {
   "items": {
-    "music_disc_creator": "",
-    "music_disc_creator_music_box": "",
-    "music_disc_precipice": ""
+    "music_disc_creator": "music_disc_far",
+    "music_disc_creator_music_box": "music_disc_blocks",
+    "music_disc_precipice": "music_disc_ward"
+  },
+  "itemnames": {
+    "music_disc_creator": "1.21 Music Disc Creator",
+    "music_disc_creator_music_box": "1.21 Music Disc Creator (Music Box)",
+    "music_disc_precipice": "1.21 Music Disc Precipice"
   },
   "sounds": {
-    "block.trial_spawner.ominous_activate": "",
-    "block.trial_spawner.ambient_ominous": "",
+    "block.trial_spawner.ominous_activate": "block.trial_spawner.charge_activate",
+    "block.trial_spawner.ambient_ominous": "block.trial_spawner.ambient_charged",
     "music_disc.creator": "",
     "music_disc.creator_music_box": "",
     "music_disc.precipice": ""
