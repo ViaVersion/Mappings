@@ -296,13 +296,14 @@ public final class MappingsOptimizer {
         if (updatedGlobalIdentifiers) {
             // Also keep a json file around for easier viewing
             writeJson(globalIdentifiersObject, MAPPINGS_DIR.resolve("identifier-table.json"));
-
-            final Path outputPath = OUTPUT_DIR.resolve(OUTPUT_GLOBAL_IDENTIFIERS_FILE);
-            final CompoundTag globalIdentifiersTag = (CompoundTag) JsonConverter.toTag(globalIdentifiersObject);
-            write(globalIdentifiersTag, outputPath);
-            updatedGlobalIdentifiers = false;
             LOGGER.info("Updated global identifiers file");
         }
+
+        // Always create output file
+        final Path outputPath = OUTPUT_DIR.resolve(OUTPUT_GLOBAL_IDENTIFIERS_FILE);
+        final CompoundTag globalIdentifiersTag = (CompoundTag) JsonConverter.toTag(globalIdentifiersObject);
+        write(globalIdentifiersTag, outputPath);
+        updatedGlobalIdentifiers = false;
     }
 
     private static void addFileData(final String key, final int hash, final Path path) throws IOException {
@@ -552,6 +553,7 @@ public final class MappingsOptimizer {
         }
 
         // Use the same compact storage on the identifier->global identifier files, just about halves the size
+        // TODO Omit mapped size?
         final MappingsResult result = MappingsLoader.map(identifiers, globalIdentifiersArray, null, errorStrategy);
         serialize(result, tag, key, true);
     }
