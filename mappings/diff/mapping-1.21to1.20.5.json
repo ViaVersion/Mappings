@@ -1,0 +1,25 @@
+{
+  "items": {
+    "music_disc_creator": "",
+    "music_disc_creator_music_box": "",
+    "music_disc_precipice": ""
+  },
+  "sounds": {
+    "block.trial_spawner.ominous_activate": "",
+    "block.trial_spawner.ambient_ominous": "",
+    "music_disc.creator": "",
+    "music_disc.creator_music_box": "",
+    "music_disc.precipice": ""
+  },
+  "attributes": {
+    "generic.burning_time": "",
+    "generic.explosion_knockback_resistance": "",
+    "player.mining_efficiency": "",
+    "generic.movement_efficiency": "",
+    "generic.oxygen_bonus": "",
+    "player.sneaking_speed": "",
+    "player.submerged_mining_speed": "",
+    "player.sweeping_damage_ratio": "",
+    "generic.water_movement_efficiency": ""
+  }
+}

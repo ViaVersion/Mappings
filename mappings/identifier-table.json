@@ -1352,7 +1352,10 @@
     "red_key",
     "blue_key",
     "yellow_key",
-    "3d"
+    "3d",
+    "music_disc_creator",
+    "music_disc_creator_music_box",
+    "music_disc_precipice"
   ],
   "particles": [
     "ambient_entity_effect",
