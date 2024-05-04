@@ -1,70 +1,70 @@
 {
   "1.13": {
-    "object-hash": 1835999553,
+    "object-hash": -1850665106,
     "size": 94
   },
   "1.13.2": {
-    "object-hash": 214381662,
+    "object-hash": 889809547,
     "size": 192
   },
   "1.14": {
-    "object-hash": 1631090925,
+    "object-hash": -1451839750,
     "size": 570
   },
   "1.15": {
-    "object-hash": 667164480,
+    "object-hash": 1610749133,
     "size": 594
   },
   "1.16": {
-    "object-hash": 978512757,
+    "object-hash": 766827418,
     "size": 1210
   },
   "1.16.2": {
-    "object-hash": 1064891083,
+    "object-hash": 919790320,
     "size": 1394
   },
   "1.17": {
-    "object-hash": -1238441106,
+    "object-hash": -1301227109,
     "size": 2594
   },
   "1.18": {
-    "object-hash": 521012554,
+    "object-hash": 483524585,
     "size": 2707
   },
   "1.19": {
-    "object-hash": -929747205,
+    "object-hash": -697884142,
     "size": 3444
   },
   "1.19.3": {
-    "object-hash": 537457032,
+    "object-hash": 928039847,
     "size": 3583
   },
   "1.19.4": {
-    "object-hash": -2120264189,
+    "object-hash": -1194242262,
     "size": 4215
   },
   "1.20": {
-    "object-hash": 1019999238,
+    "object-hash": 1947742501,
     "size": 4287
   },
   "1.20.2": {
-    "object-hash": 1019999238,
+    "object-hash": 1947742501,
     "size": 4287
   },
   "1.20.3": {
-    "object-hash": -898988326,
+    "object-hash": -1436253462,
     "size": 4568
   },
   "1.20.5": {
-    "object-hash": 123791905,
+    "object-hash": 257878529,
     "size": 4840
   },
   "3D_Shareware": {
-    "object-hash": -639482337,
+    "object-hash": -165329112,
     "size": 972
   },
   "20w14infinite": {
-    "object-hash": 682358462,
+    "object-hash": -274535993,
     "size": 1522
   },
   "1.10:1.9.4": {
@@ -160,7 +160,7 @@
     "size": 7639
   },
   "1.19.4:1.20": {
-    "object-hash": -809213508,
+    "object-hash": -809213450,
     "size": 1136
   },
   "1.20:1.19.4": {
@@ -216,7 +216,7 @@
     "size": 94
   },
   "1.21": {
-    "object-hash": -193969417,
+    "object-hash": -395427113,
     "size": 4864
   },
   "1.20.5:1.21": {

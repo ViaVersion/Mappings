@@ -553,8 +553,9 @@ public final class MappingsOptimizer {
         }
 
         // Use the same compact storage on the identifier->global identifier files, just about halves the size
-        // TODO Omit mapped size?
-        final MappingsResult result = MappingsLoader.map(identifiers, globalIdentifiersArray, null, errorStrategy);
+        // Remove mapped size to avoid unnecessary file changes
+        MappingsResult result = MappingsLoader.map(identifiers, globalIdentifiersArray, null, errorStrategy);
+        result = new MappingsResult(result.mappings(), -1, result.emptyMappings(), result.identityMappings(), result.shiftChanges());
         serialize(result, tag, key, true);
     }
 
