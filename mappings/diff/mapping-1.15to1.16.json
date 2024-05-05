@@ -2,6 +2,9 @@
   "items": {
     "754": "zombified_piglin_spawn_egg"
   },
+  "entities": {
+    "zombie_pigman": "zombified_piglin"
+  },
   "sounds": {
     "entity.zombie_pigman.ambient": "entity.zombified_piglin.ambient",
     "entity.zombie_pigman.angry": "entity.zombified_piglin.angry",

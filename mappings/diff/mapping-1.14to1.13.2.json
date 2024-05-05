@@ -748,6 +748,15 @@
     "campfire_cosy_smoke": "cloud",
     "campfire_signal_smoke": "cloud"
   },
+  "entities": {
+    "cat": "ocelot",
+    "trader_llama": "llama",
+    "fox": "wolf",
+    "panda": "polar_bear",
+    "pillager": "villager",
+    "wandering_trader": "villager",
+    "ravager": "cow"
+  },
   "entitynames": {
     "cat": "Cat",
     "trader_llama": "Trader Llama",

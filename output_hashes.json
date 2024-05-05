@@ -4,28 +4,28 @@
     "size": 94
   },
   "1.13.2": {
-    "object-hash": 889809547,
-    "size": 192
+    "object-hash": 165963320,
+    "size": 520
   },
   "1.14": {
-    "object-hash": -1451839750,
-    "size": 570
+    "object-hash": -260504028,
+    "size": 882
   },
   "1.15": {
-    "object-hash": 1610749133,
-    "size": 594
+    "object-hash": 1965328789,
+    "size": 898
   },
   "1.16": {
-    "object-hash": 766827418,
-    "size": 1210
+    "object-hash": 890021744,
+    "size": 1306
   },
   "1.16.2": {
-    "object-hash": 919790320,
-    "size": 1394
+    "object-hash": 1044571439,
+    "size": 1482
   },
   "1.17": {
-    "object-hash": -1301227109,
-    "size": 2594
+    "object-hash": -1175960307,
+    "size": 2640
   },
   "1.18": {
     "object-hash": 483524585,
@@ -88,44 +88,44 @@
     "size": 814
   },
   "1.13.2:1.14": {
-    "object-hash": 2028478608,
-    "size": 2103
+    "object-hash": -1044792523,
+    "size": 2231
   },
   "1.14:1.13.2": {
-    "object-hash": 54259356,
-    "size": 15127
+    "object-hash": -641840917,
+    "size": 15311
   },
   "1.14:1.15": {
-    "object-hash": 1174694439,
-    "size": 456
+    "object-hash": 1042348425,
+    "size": 528
   },
   "1.15:1.14": {
-    "object-hash": -392279077,
-    "size": 5293
+    "object-hash": -524596908,
+    "size": 5373
   },
   "1.15:1.16": {
-    "object-hash": -1634129381,
-    "size": 8553
+    "object-hash": -217012630,
+    "size": 8833
   },
   "1.16:1.15": {
-    "object-hash": 681874607,
-    "size": 59760
+    "object-hash": 1512123090,
+    "size": 60099
   },
   "1.16:1.16.2": {
-    "object-hash": 969359550,
-    "size": 560
+    "object-hash": 837013454,
+    "size": 632
   },
   "1.16.2:1.16": {
-    "object-hash": 771013598,
-    "size": 1087
+    "object-hash": 638667506,
+    "size": 1159
   },
   "1.16.2:1.17": {
-    "object-hash": -1050831736,
-    "size": 4688
+    "object-hash": -1183115967,
+    "size": 4776
   },
   "1.17:1.16.2": {
-    "object-hash": -1923510301,
-    "size": 22976
+    "object-hash": 1608600130,
+    "size": 23104
   },
   "1.17:1.18": {
     "object-hash": 1536701233,
@@ -196,8 +196,8 @@
     "size": 7046
   },
   "20w14infinite:1.16": {
-    "object-hash": 1666812931,
-    "size": 9803
+    "object-hash": -1719298584,
+    "size": 10107
   },
   "1.8:1.9.4": {
     "object-hash": 2002027499,

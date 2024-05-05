@@ -5967,10 +5967,18 @@
     "reverse_portal": "portal",
     "white_ash": "mycelium"
   },
+  "entities": {
+    "hoglin": "cow",
+    "zoglin": "cow",
+    "piglin": "zombie_pigman",
+    "zombified_piglin": "zombie_pigman",
+    "strider": "magma_cube"
+  },
   "entitynames": {
     "hoglin": "Hoglin",
     "zoglin": "Zoglin",
     "piglin": "Piglin",
+    "zombified_piglin": "Piglin",
     "strider": "Strider"
   },
   "itemnames": {

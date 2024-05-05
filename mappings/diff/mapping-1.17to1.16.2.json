@@ -1067,6 +1067,13 @@
     "scrape": "happy_villager",
     "light": "barrier"
   },
+  "entities": {
+    "axolotl": "tropical_fish",
+    "glow_squid": "squid",
+    "goat": "sheep",
+    "glow_item_frame": "item_frame",
+    "marker": ""
+  },
   "entitynames": {
     "axolotl": "Axolotl",
     "goat": "Goat",
