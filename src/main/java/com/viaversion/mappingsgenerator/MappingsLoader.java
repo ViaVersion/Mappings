@@ -42,9 +42,12 @@ public final class MappingsLoader {
     public static final Logger LOGGER = LoggerFactory.getLogger(MappingsLoader.class.getSimpleName());
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
 
-
     public static @Nullable JsonObject load(final String name) throws IOException {
-        return load(MappingsOptimizer.MAPPINGS_DIR, name);
+        return load(name, JsonObject.class);
+    }
+
+    public static <T> @Nullable T load(final String name, final Class<T> outputClass) throws IOException {
+        return load(MappingsOptimizer.MAPPINGS_DIR, name, outputClass);
     }
 
     /**
@@ -55,13 +58,17 @@ public final class MappingsLoader {
      * @return the mappings file as a JsonObject, or null if it does not exist
      */
     public static @Nullable JsonObject load(final Path mappingsDir, final String name) throws IOException {
+        return load(mappingsDir, name, JsonObject.class);
+    }
+
+    public static <T> @Nullable T load(final Path mappingsDir, final String name, final Class<T> outputClass) throws IOException {
         final Path path = mappingsDir.resolve(name);
         if (!Files.exists(path)) {
             return null;
         }
 
         try (final BufferedReader reader = Files.newBufferedReader(path)) {
-            return GSON.fromJson(reader, JsonObject.class);
+            return GSON.fromJson(reader, outputClass);
         }
     }
 

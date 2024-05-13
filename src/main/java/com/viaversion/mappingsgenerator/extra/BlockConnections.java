@@ -32,6 +32,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -114,7 +115,23 @@ public final class BlockConnections {
             }
         }
 
+        addOccludingBlockStates(tag, statesMap);
         MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("extra/blockConnections.nbt"));
+    }
+
+    private static void addOccludingBlockStates(final CompoundTag tag, final Object2IntMap<String> statesMap) throws IOException {
+        final JsonArray states = MappingsLoader.load("extra/occluding-states-1.13.json", JsonArray.class);
+        final int[] value = new int[states.size()];
+        int i = 0;
+        for (final JsonElement stateElement : states) {
+            final String state = stateElement.getAsString();
+            final int id = statesMap.getInt(state);
+            if (id == -1) {
+                throw new IllegalArgumentException("Invalid occluding state " + state);
+            }
+            value[i++] = id;
+        }
+        tag.put("occluding-states", new IntArrayTag(value));
     }
 
     private static byte connectionTypeToId(final String type) {
