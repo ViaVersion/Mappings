@@ -18,15 +18,10 @@
  */
 package com.viaversion.mappingsgenerator.extra;
 
-import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.github.steveice10.opennbt.tag.builtin.ListTag;
-import com.github.steveice10.opennbt.tag.builtin.StringTag;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.viaversion.mappingsgenerator.MappingsLoader;
 import com.viaversion.mappingsgenerator.MappingsOptimizer;
-
+import com.viaversion.nbt.tag.CompoundTag;
 import java.io.IOException;
 
 import static com.viaversion.mappingsgenerator.util.JsonConverter.collectStringList;

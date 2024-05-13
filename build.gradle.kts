@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     api("com.google.code.gson:gson:2.10.1")
-    api("com.viaversion:nbt:4.4.0")
+    api("com.viaversion:nbt:5.0.0-SNAPSHOT")
     api("it.unimi.dsi:fastutil:8.5.12")
     api("ch.qos.logback:logback-classic:1.4.14")
     compileOnly("org.jetbrains:annotations:24.0.1")
@@ -22,7 +22,7 @@ dependencies {
 }
 
 group = "com.viaversion"
-version = "4.0.0"
+version = "4.1.0"
 description = "MappingsGenerator"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
@@ -46,7 +46,6 @@ tasks {
         archiveFileName.set("MappingsGenerator-${project.version}.jar")
 
         relocate("com.google.gson", "com.viaversion.viaversion.libs.gson")
-        relocate("com.github.steveice10.opennbt", "com.viaversion.viaversion.libs.opennbt")
         relocate("it.unimi.dsi.fastutil", "com.viaversion.viaversion.libs.fastutil")
 
         // FastUtil - we only want object and int maps
