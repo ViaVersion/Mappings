@@ -32,6 +32,9 @@ import com.viaversion.nbt.tag.Tag;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -41,8 +44,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Optimizes mapping files as nbt files with only the necessary data (mostly int to int mappings in form of int arrays).
@@ -467,7 +468,7 @@ public final class MappingsOptimizer {
             final String typeKey = switch (type) {
                 case "block" -> "blocks";
                 case "item" -> "items";
-                case "entity_types" -> "entities";
+                case "entity_type" -> "entities";
                 default -> throw new IllegalArgumentException("Registry type not supported: " + type);
             };
             final JsonArray typeElements = mappedObject.get(typeKey).getAsJsonArray();

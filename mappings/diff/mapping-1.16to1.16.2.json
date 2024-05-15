@@ -6,5 +6,32 @@
     "14887": "lantern[hanging=false,waterlogged=false]",
     "14888": "soul_lantern[hanging=true,waterlogged=false]",
     "14889": "soul_lantern[hanging=false,waterlogged=false]"
+  },
+  "tags": {
+    "item": {
+      "stone_crafting_materials": [
+        "blackstone",
+        "cobblestone"
+      ]
+    },
+    "block": {
+      "base_stone_nether": [
+        "basalt",
+        "blackstone",
+        "netherrack"
+      ],
+      "base_stone_overworld": [
+        "andesite",
+        "diorite",
+        "granite",
+        "stone"
+      ],
+      "mushroom_grow_block": [
+        "crimson_nylium",
+        "mycelium",
+        "podzol",
+        "warped_nylium"
+      ]
+    }
   }
 }

@@ -3,5 +3,50 @@
     "item_enchantment": "resource",
     "mob_effect": "resource",
     "entity_summon": "resource"
+  },
+  "tags": {
+    "item": {
+      "creeper_igniters": [
+        "fire_charge",
+        "flint_and_steel"
+      ],
+      "fence_gates": [
+        "acacia_fence_gate",
+        "birch_fence_gate",
+        "crimson_fence_gate",
+        "dark_oak_fence_gate",
+        "jungle_fence_gate",
+        "mangrove_fence_gate",
+        "oak_fence_gate",
+        "spruce_fence_gate",
+        "warped_fence_gate"
+      ]
+    },
+    "block": {
+      "all_signs": [
+        "acacia_sign",
+        "acacia_wall_sign",
+        "birch_sign",
+        "birch_wall_sign",
+        "crimson_sign",
+        "crimson_wall_sign",
+        "dark_oak_sign",
+        "dark_oak_wall_sign",
+        "jungle_sign",
+        "jungle_wall_sign",
+        "mangrove_sign",
+        "mangrove_wall_sign",
+        "oak_sign",
+        "oak_wall_sign",
+        "spruce_sign",
+        "spruce_wall_sign",
+        "warped_sign",
+        "warped_wall_sign"
+      ],
+      "invalid_spawn_inside": [
+        "end_gateway",
+        "end_portal"
+      ]
+    }
   }
 }

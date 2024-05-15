@@ -915,5 +915,238 @@
     "11275": "jigsaw[orientation=west_up]",
     "11276": "jigsaw[orientation=up_east]",
     "11277": "jigsaw[orientation=down_east]"
+  },
+  "tags": {
+    "item": {
+      "beacon_payment_items": [
+        "diamond",
+        "emerald",
+        "gold_ingot",
+        "iron_ingot"
+      ],
+      "creeper_drop_music_discs": [
+        "music_disc_11",
+        "music_disc_13",
+        "music_disc_blocks",
+        "music_disc_cat",
+        "music_disc_chirp",
+        "music_disc_far",
+        "music_disc_mall",
+        "music_disc_mellohi",
+        "music_disc_stal",
+        "music_disc_strad",
+        "music_disc_wait",
+        "music_disc_ward"
+      ],
+      "furnace_materials": [
+        "cobblestone"
+      ],
+      "gold_ores": [
+        "gold_ore"
+      ],
+      "logs_that_burn": [
+        "acacia_log",
+        "acacia_wood",
+        "birch_log",
+        "birch_wood",
+        "dark_oak_log",
+        "dark_oak_wood",
+        "jungle_log",
+        "jungle_wood",
+        "oak_log",
+        "oak_wood",
+        "spruce_log",
+        "spruce_wood",
+        "stripped_acacia_log",
+        "stripped_acacia_wood",
+        "stripped_birch_log",
+        "stripped_birch_wood",
+        "stripped_dark_oak_log",
+        "stripped_dark_oak_wood",
+        "stripped_jungle_log",
+        "stripped_jungle_wood",
+        "stripped_oak_log",
+        "stripped_oak_wood",
+        "stripped_spruce_log",
+        "stripped_spruce_wood"
+      ],
+      "stone_tool_materials": [
+        "cobblestone"
+      ]
+    },
+    "block": {
+      "beacon_base_blocks": [
+        "diamond_block",
+        "emerald_block",
+        "gold_block",
+        "iron_block"
+      ],
+      "campfires": [
+        "campfire"
+      ],
+      "climbable": [
+        "ladder",
+        "scaffolding",
+        "vine"
+      ],
+      "fence_gates": [
+        "acacia_fence_gate",
+        "birch_fence_gate",
+        "dark_oak_fence_gate",
+        "jungle_fence_gate",
+        "oak_fence_gate",
+        "spruce_fence_gate"
+      ],
+      "fire": [
+        "fire"
+      ],
+      "gold_ores": [
+        "gold_ore"
+      ],
+      "infiniburn_end": [
+        "bedrock",
+        "magma_block",
+        "netherrack"
+      ],
+      "infiniburn_nether": [
+        "magma_block",
+        "netherrack"
+      ],
+      "infiniburn_overworld": [
+        "magma_block",
+        "netherrack"
+      ],
+      "logs_that_burn": [
+        "acacia_log",
+        "acacia_wood",
+        "birch_log",
+        "birch_wood",
+        "dark_oak_log",
+        "dark_oak_wood",
+        "jungle_log",
+        "jungle_wood",
+        "oak_log",
+        "oak_wood",
+        "spruce_log",
+        "spruce_wood",
+        "stripped_acacia_log",
+        "stripped_acacia_wood",
+        "stripped_birch_log",
+        "stripped_birch_wood",
+        "stripped_dark_oak_log",
+        "stripped_dark_oak_wood",
+        "stripped_jungle_log",
+        "stripped_jungle_wood",
+        "stripped_oak_log",
+        "stripped_oak_wood",
+        "stripped_spruce_log",
+        "stripped_spruce_wood"
+      ],
+      "pressure_plates": [
+        "acacia_pressure_plate",
+        "birch_pressure_plate",
+        "dark_oak_pressure_plate",
+        "heavy_weighted_pressure_plate",
+        "jungle_pressure_plate",
+        "light_weighted_pressure_plate",
+        "oak_pressure_plate",
+        "spruce_pressure_plate",
+        "stone_pressure_plate"
+      ],
+      "prevent_mob_spawning_inside": [
+        "activator_rail",
+        "detector_rail",
+        "powered_rail",
+        "rail"
+      ],
+      "stone_pressure_plates": [
+        "stone_pressure_plate"
+      ],
+      "unstable_bottom_center": [
+        "acacia_fence_gate",
+        "birch_fence_gate",
+        "dark_oak_fence_gate",
+        "jungle_fence_gate",
+        "oak_fence_gate",
+        "spruce_fence_gate"
+      ],
+      "wall_post_override": [
+        "acacia_pressure_plate",
+        "acacia_sign",
+        "acacia_wall_sign",
+        "birch_pressure_plate",
+        "birch_sign",
+        "birch_wall_sign",
+        "black_banner",
+        "black_wall_banner",
+        "blue_banner",
+        "blue_wall_banner",
+        "brown_banner",
+        "brown_wall_banner",
+        "cyan_banner",
+        "cyan_wall_banner",
+        "dark_oak_pressure_plate",
+        "dark_oak_sign",
+        "dark_oak_wall_sign",
+        "gray_banner",
+        "gray_wall_banner",
+        "green_banner",
+        "green_wall_banner",
+        "heavy_weighted_pressure_plate",
+        "jungle_pressure_plate",
+        "jungle_sign",
+        "jungle_wall_sign",
+        "light_blue_banner",
+        "light_blue_wall_banner",
+        "light_gray_banner",
+        "light_gray_wall_banner",
+        "light_weighted_pressure_plate",
+        "lime_banner",
+        "lime_wall_banner",
+        "magenta_banner",
+        "magenta_wall_banner",
+        "oak_pressure_plate",
+        "oak_sign",
+        "oak_wall_sign",
+        "orange_banner",
+        "orange_wall_banner",
+        "pink_banner",
+        "pink_wall_banner",
+        "purple_banner",
+        "purple_wall_banner",
+        "red_banner",
+        "red_wall_banner",
+        "redstone_torch",
+        "spruce_pressure_plate",
+        "spruce_sign",
+        "spruce_wall_sign",
+        "stone_pressure_plate",
+        "torch",
+        "tripwire",
+        "white_banner",
+        "white_wall_banner",
+        "yellow_banner",
+        "yellow_wall_banner"
+      ],
+      "wart_blocks": [
+        "nether_wart_block"
+      ],
+      "wither_summon_base_blocks": [
+        "soul_sand"
+      ]
+    },
+    "entity_type": {
+      "impact_projectiles": [
+        "arrow",
+        "dragon_fireball",
+        "egg",
+        "fireball",
+        "small_fireball",
+        "snowball",
+        "spectral_arrow",
+        "trident",
+        "wither_skull"
+      ]
+    }
   }
 }

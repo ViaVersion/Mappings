@@ -1,0 +1,122 @@
+{
+  "tags": {
+    "item": {
+      "axes": [
+        "diamond_axe",
+        "golden_axe",
+        "iron_axe",
+        "netherite_axe",
+        "stone_axe",
+        "wooden_axe"
+      ],
+      "hoes": [
+        "diamond_hoe",
+        "golden_hoe",
+        "iron_hoe",
+        "netherite_hoe",
+        "stone_hoe",
+        "wooden_hoe"
+      ],
+      "pickaxes": [
+        "diamond_pickaxe",
+        "golden_pickaxe",
+        "iron_pickaxe",
+        "netherite_pickaxe",
+        "stone_pickaxe",
+        "wooden_pickaxe"
+      ],
+      "shovels": [
+        "diamond_shovel",
+        "golden_shovel",
+        "iron_shovel",
+        "netherite_shovel",
+        "stone_shovel",
+        "wooden_shovel"
+      ],
+      "smelts_to_glass": [
+        "red_sand",
+        "sand"
+      ],
+      "swords": [
+        "diamond_sword",
+        "golden_sword",
+        "iron_sword",
+        "netherite_sword",
+        "stone_sword",
+        "wooden_sword"
+      ],
+      "tools": [
+        "diamond_axe",
+        "diamond_hoe",
+        "diamond_pickaxe",
+        "diamond_shovel",
+        "diamond_sword",
+        "golden_axe",
+        "golden_hoe",
+        "golden_pickaxe",
+        "golden_shovel",
+        "golden_sword",
+        "iron_axe",
+        "iron_hoe",
+        "iron_pickaxe",
+        "iron_shovel",
+        "iron_sword",
+        "netherite_axe",
+        "netherite_hoe",
+        "netherite_pickaxe",
+        "netherite_shovel",
+        "netherite_sword",
+        "stone_axe",
+        "stone_hoe",
+        "stone_pickaxe",
+        "stone_shovel",
+        "stone_sword",
+        "trident",
+        "wooden_axe",
+        "wooden_hoe",
+        "wooden_pickaxe",
+        "wooden_shovel",
+        "wooden_sword"
+      ]
+    },
+    "block": {
+      "smelts_to_glass": [
+        "red_sand",
+        "sand"
+      ]
+    },
+    "entity_type": {
+      "dismounts_underwater": [
+        "camel",
+        "chicken",
+        "donkey",
+        "horse",
+        "llama",
+        "mule",
+        "pig",
+        "ravager",
+        "spider",
+        "strider",
+        "trader_llama",
+        "zombie_horse"
+      ],
+      "fall_damage_immune": [
+        "allay",
+        "bat",
+        "bee",
+        "blaze",
+        "cat",
+        "chicken",
+        "ghast",
+        "iron_golem",
+        "magma_cube",
+        "ocelot",
+        "parrot",
+        "phantom",
+        "shulker",
+        "snow_golem",
+        "wither"
+      ]
+    }
+  }
+}

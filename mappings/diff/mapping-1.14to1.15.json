@@ -23,5 +23,99 @@
     "entity.parrot.imitate.polar_bear": "",
     "entity.parrot.imitate.wolf": "",
     "entity.parrot.imitate.zombie_pigman": ""
+  },
+  "tags": {
+    "item": {
+      "flowers": [
+        "allium",
+        "azure_bluet",
+        "blue_orchid",
+        "cornflower",
+        "dandelion",
+        "lilac",
+        "lily_of_the_valley",
+        "orange_tulip",
+        "oxeye_daisy",
+        "peony",
+        "pink_tulip",
+        "poppy",
+        "red_tulip",
+        "rose_bush",
+        "sunflower",
+        "white_tulip",
+        "wither_rose"
+      ],
+      "tall_flowers": [
+        "lilac",
+        "peony",
+        "rose_bush",
+        "sunflower"
+      ]
+    },
+    "block": {
+      "crops": [
+        "beetroots",
+        "carrots",
+        "melon_stem",
+        "potatoes",
+        "pumpkin_stem",
+        "wheat"
+      ],
+      "flowers": [
+        "allium",
+        "azure_bluet",
+        "blue_orchid",
+        "cornflower",
+        "dandelion",
+        "lilac",
+        "lily_of_the_valley",
+        "orange_tulip",
+        "oxeye_daisy",
+        "peony",
+        "pink_tulip",
+        "poppy",
+        "red_tulip",
+        "rose_bush",
+        "sunflower",
+        "white_tulip",
+        "wither_rose"
+      ],
+      "portals": [
+        "end_gateway",
+        "end_portal",
+        "nether_portal"
+      ],
+      "shulker_boxes": [
+        "black_shulker_box",
+        "blue_shulker_box",
+        "brown_shulker_box",
+        "cyan_shulker_box",
+        "gray_shulker_box",
+        "green_shulker_box",
+        "light_blue_shulker_box",
+        "light_gray_shulker_box",
+        "lime_shulker_box",
+        "magenta_shulker_box",
+        "orange_shulker_box",
+        "pink_shulker_box",
+        "purple_shulker_box",
+        "red_shulker_box",
+        "shulker_box",
+        "white_shulker_box",
+        "yellow_shulker_box"
+      ],
+      "tall_flowers": [
+        "lilac",
+        "peony",
+        "rose_bush",
+        "sunflower"
+      ]
+    },
+    "entity_type": {
+      "arrows": [
+        "arrow",
+        "spectral_arrow"
+      ]
+    }
   }
 }
