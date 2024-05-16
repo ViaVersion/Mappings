@@ -1,0 +1,193 @@
+{
+  "tags": {
+    "item": {
+      "arrows": [
+        "arrow",
+        "spectral_arrow",
+        "tipped_arrow"
+      ],
+      "beds": [
+        "gray_bed",
+        "green_bed",
+        "purple_bed",
+        "blue_bed",
+        "red_bed",
+        "black_bed",
+        "light_gray_bed",
+        "yellow_bed",
+        "orange_bed",
+        "cyan_bed",
+        "light_blue_bed",
+        "brown_bed",
+        "magenta_bed",
+        "white_bed",
+        "pink_bed",
+        "lime_bed"
+      ],
+      "coals": [
+        "coal",
+        "charcoal"
+      ],
+      "fences": [
+        "birch_fence",
+        "dark_oak_fence",
+        "jungle_fence",
+        "oak_fence",
+        "nether_brick_fence",
+        "acacia_fence",
+        "spruce_fence"
+      ],
+      "music_discs": [
+        "music_disc_mall",
+        "music_disc_11",
+        "music_disc_wait",
+        "music_disc_cat",
+        "music_disc_stal",
+        "music_disc_chirp",
+        "music_disc_strad",
+        "music_disc_blocks",
+        "music_disc_13",
+        "music_disc_far",
+        "music_disc_mellohi",
+        "music_disc_ward"
+      ],
+      "signs": [
+        "oak_sign"
+      ],
+      "small_flowers": [
+        "red_tulip",
+        "azure_bluet",
+        "allium",
+        "dandelion",
+        "pink_tulip",
+        "blue_orchid",
+        "white_tulip",
+        "poppy",
+        "orange_tulip",
+        "oxeye_daisy"
+      ],
+      "walls": [
+        "cobblestone_wall",
+        "mossy_cobblestone_wall"
+      ],
+      "wooden_fences": [
+        "birch_fence",
+        "dark_oak_fence",
+        "jungle_fence",
+        "oak_fence",
+        "acacia_fence",
+        "spruce_fence"
+      ]
+    },
+    "block": {
+      "beds": [
+        "black_bed",
+        "gray_bed",
+        "blue_bed",
+        "brown_bed",
+        "red_bed",
+        "orange_bed",
+        "magenta_bed",
+        "white_bed",
+        "pink_bed",
+        "green_bed",
+        "cyan_bed",
+        "yellow_bed",
+        "light_blue_bed",
+        "light_gray_bed",
+        "lime_bed",
+        "purple_bed"
+      ],
+      "dirt_like": [
+        "grass_block",
+        "mycelium",
+        "dirt",
+        "podzol",
+        "coarse_dirt"
+      ],
+      "dragon_immune": [
+        "bedrock",
+        "structure_block",
+        "end_portal_frame",
+        "iron_bars",
+        "end_stone",
+        "barrier",
+        "end_gateway",
+        "command_block",
+        "obsidian",
+        "moving_piston",
+        "chain_command_block",
+        "end_portal",
+        "repeating_command_block"
+      ],
+      "fences": [
+        "acacia_fence",
+        "birch_fence",
+        "dark_oak_fence",
+        "jungle_fence",
+        "nether_brick_fence",
+        "oak_fence",
+        "spruce_fence"
+      ],
+      "signs": [
+        "oak_sign",
+        "oak_wall_sign"
+      ],
+      "small_flowers": [
+        "allium",
+        "azure_bluet",
+        "blue_orchid",
+        "dandelion",
+        "orange_tulip",
+        "oxeye_daisy",
+        "pink_tulip",
+        "poppy",
+        "red_tulip",
+        "white_tulip"
+      ],
+      "standing_signs": [
+        "oak_sign"
+      ],
+      "wall_signs": [
+        "oak_wall_sign"
+      ],
+      "walls": [
+        "cobblestone_wall",
+        "mossy_cobblestone_wall"
+      ],
+      "wither_immune": [
+        "barrier",
+        "bedrock",
+        "chain_command_block",
+        "command_block",
+        "end_gateway",
+        "end_portal",
+        "end_portal_frame",
+        "moving_piston",
+        "repeating_command_block",
+        "structure_block"
+      ],
+      "wooden_fences": [
+        "acacia_fence",
+        "birch_fence",
+        "dark_oak_fence",
+        "jungle_fence",
+        "oak_fence",
+        "spruce_fence"
+      ]
+    },
+    "entity_type": {
+      "raiders": [
+        "vindicator",
+        "evoker",
+        "illusioner",
+        "witch"
+      ],
+      "skeletons": [
+        "skeleton",
+        "wither_skeleton",
+        "stray"
+      ]
+    }
+  }
+}

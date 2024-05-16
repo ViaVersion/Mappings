@@ -7,5 +7,61 @@
   },
   "items": {
     "grass": "short_grass"
+  },
+  "tags": {
+    "entity_type": {
+      "can_breathe_under_water": [
+        "armor_stand",
+        "axolotl",
+        "cod",
+        "drowned",
+        "elder_guardian",
+        "frog",
+        "glow_squid",
+        "guardian",
+        "husk",
+        "phantom",
+        "pufferfish",
+        "salmon",
+        "skeleton",
+        "skeleton_horse",
+        "squid",
+        "stray",
+        "tadpole",
+        "tropical_fish",
+        "turtle",
+        "wither",
+        "wither_skeleton",
+        "zoglin",
+        "zombie",
+        "zombie_horse",
+        "zombie_villager",
+        "zombified_piglin"
+      ],
+      "undead": [
+        "drowned",
+        "husk",
+        "phantom",
+        "skeleton",
+        "skeleton_horse",
+        "stray",
+        "wither",
+        "wither_skeleton",
+        "zoglin",
+        "zombie",
+        "zombie_horse",
+        "zombie_villager",
+        "zombified_piglin"
+      ],
+      "zombies": [
+        "drowned",
+        "husk",
+        "zoglin",
+        "zombie",
+        "zombie_horse",
+        "zombie_villager",
+        "zombified_piglin"
+      ]
+    }
   }
 }
