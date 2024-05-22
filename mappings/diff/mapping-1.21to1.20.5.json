@@ -14,7 +14,8 @@
     "block.trial_spawner.ambient_ominous": "block.trial_spawner.ambient_charged",
     "music_disc.creator": "",
     "music_disc.creator_music_box": "",
-    "music_disc.precipice": ""
+    "music_disc.precipice": "",
+    "block.vault.reject_rewarded_player": ""
   },
   "attributes": {
     "generic.burning_time": "",
@@ -26,5 +27,8 @@
     "player.submerged_mining_speed": "",
     "player.sweeping_damage_ratio": "",
     "generic.water_movement_efficiency": ""
+  },
+  "data_component_type": {
+    "jukebox_playable": ""
   }
 }

@@ -1749,6 +1749,7 @@
     "block_state",
     "bees",
     "lock",
-    "container_loot"
+    "container_loot",
+    "jukebox_playable"
   ]
 }
