@@ -469,8 +469,13 @@ public final class MappingsOptimizer {
                 case "block" -> "blocks";
                 case "item" -> "items";
                 case "entity_type" -> "entities";
+                case "enchantment" -> "enchantments";
                 default -> throw new IllegalArgumentException("Registry type not supported: " + type);
             };
+            if (!mappedObject.has(typeKey)) {
+                throw new IllegalArgumentException("Could not find mapped object for " + typeKey);
+            }
+
             final JsonArray typeElements = mappedObject.get(typeKey).getAsJsonArray();
             final Object2IntMap<String> typeMap = MappingsLoader.arrayToMap(typeElements);
 

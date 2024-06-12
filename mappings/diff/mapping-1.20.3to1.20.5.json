@@ -25,6 +25,52 @@
     "trial_spawner[trial_spawner_state=cooldown]": "trial_spawner[ominous=false,trial_spawner_state=cooldown]"
   },
   "tags": {
+    "enchantment": {
+      "tooltip_order": [
+        "binding_curse",
+        "vanishing_curse",
+        "riptide",
+        "channeling",
+        "wind_burst",
+        "frost_walker",
+        "sharpness",
+        "smite",
+        "bane_of_arthropods",
+        "impaling",
+        "power",
+        "density",
+        "breach",
+        "piercing",
+        "sweeping_edge",
+        "multishot",
+        "fire_aspect",
+        "flame",
+        "knockback",
+        "punch",
+        "protection",
+        "blast_protection",
+        "fire_protection",
+        "projectile_protection",
+        "feather_falling",
+        "fortune",
+        "looting",
+        "silk_touch",
+        "luck_of_the_sea",
+        "efficiency",
+        "quick_charge",
+        "lure",
+        "respiration",
+        "aqua_affinity",
+        "soul_speed",
+        "swift_sneak",
+        "depth_strider",
+        "thorns",
+        "loyalty",
+        "unbreaking",
+        "infinity",
+        "mending"
+      ]
+    },
     "item": {
       "armadillo_food": [
         "spider_eye"
