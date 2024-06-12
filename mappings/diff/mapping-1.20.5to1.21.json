@@ -2,5 +2,27 @@
   "sounds": {
     "block.trial_spawner.charge_activate": "block.trial_spawner.ominous_activate",
     "block.trial_spawner.ambient_charged": "block.trial_spawner.ambient_ominous"
+  },
+  "tags": {
+    "block": {
+      "air": [
+        "air",
+        "cave_air",
+        "void_air"
+      ],
+      "mob_interactable_doors": [
+        "acacia_door",
+        "bamboo_door",
+        "birch_door",
+        "cherry_door",
+        "crimson_door",
+        "dark_oak_door",
+        "jungle_door",
+        "mangrove_door",
+        "oak_door",
+        "spruce_door",
+        "warped_door"
+      ]
+    }
   }
 }
