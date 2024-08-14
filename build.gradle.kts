@@ -11,7 +11,7 @@ repositories {
 dependencies {
     api("com.google.code.gson:gson:2.11.0")
     api("com.viaversion:nbt:5.0.0")
-    api("it.unimi.dsi:fastutil:8.5.12")
+    api("it.unimi.dsi:fastutil:8.5.14")
     api("ch.qos.logback:logback-classic:1.5.6")
     compileOnly("org.jetbrains:annotations:24.1.0")
     // Uncomment to manually run mappings gen in ide
