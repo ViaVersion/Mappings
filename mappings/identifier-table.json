@@ -1355,7 +1355,9 @@
     "3d",
     "music_disc_creator",
     "music_disc_creator_music_box",
-    "music_disc_precipice"
+    "music_disc_precipice",
+    "field_masoned_banner_pattern",
+    "bordure_indented_banner_pattern"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1750,6 +1752,8 @@
     "bees",
     "lock",
     "container_loot",
-    "jukebox_playable"
+    "jukebox_playable",
+    "enchantable",
+    "repairable"
   ]
 }
