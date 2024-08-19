@@ -281,6 +281,7 @@ public final class MappingsOptimizer {
         storeIdentifierIndexes(identifiers, object, "items");
         storeIdentifierIndexes(identifiers, object, "particles");
         storeIdentifierIndexes(identifiers, object, "argumenttypes");
+        storeIdentifierIndexes(identifiers, object, "attributes");
         storeIdentifierIndexes(identifiers, object, "recipe_serializers");
         storeIdentifierIndexes(identifiers, object, "data_component_type");
 
