@@ -47,6 +47,9 @@
   },
   "data_component_type": {
     "enchantable": "",
-    "repairable": ""
+    "repairable": "",
+    "consumable": "",
+    "use_remainder": "",
+    "use_cooldown": ""
   }
 }
