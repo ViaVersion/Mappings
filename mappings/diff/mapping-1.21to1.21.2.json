@@ -34,5 +34,9 @@
   },
   "recipe_serializers": {
     "crafting_special_suspiciousstew": ""
+  },
+  "sounds": {
+    "item.goat_horn.play": "",
+    "entity.goat.screaming.horn_break": ""
   }
 }

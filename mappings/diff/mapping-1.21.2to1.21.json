@@ -50,6 +50,10 @@
     "repairable": "",
     "consumable": "",
     "use_remainder": "",
-    "use_cooldown": ""
+    "use_cooldown": "",
+    "item_model": "",
+    "equippable": "",
+    "glider": "",
+    "tooltip_style": ""
   }
 }
