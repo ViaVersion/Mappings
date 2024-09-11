@@ -1761,7 +1761,9 @@
     "item_model",
     "equippable",
     "glider",
-    "tooltip_style"
+    "tooltip_style",
+    "damage_resistant",
+    "death_protection"
   ],
   "attributes": [
     "generic.armor",
