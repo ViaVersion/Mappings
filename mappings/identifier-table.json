@@ -1357,7 +1357,23 @@
     "music_disc_creator_music_box",
     "music_disc_precipice",
     "field_masoned_banner_pattern",
-    "bordure_indented_banner_pattern"
+    "bordure_indented_banner_pattern",
+    "white_bundle",
+    "orange_bundle",
+    "magenta_bundle",
+    "light_blue_bundle",
+    "yellow_bundle",
+    "lime_bundle",
+    "pink_bundle",
+    "gray_bundle",
+    "light_gray_bundle",
+    "cyan_bundle",
+    "purple_bundle",
+    "blue_bundle",
+    "brown_bundle",
+    "green_bundle",
+    "red_bundle",
+    "black_bundle"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1693,7 +1709,8 @@
     "stonecutting",
     "smithing_transform",
     "smithing_trim",
-    "crafting_decorated_pot"
+    "crafting_decorated_pot",
+    "crafting_transmute"
   ],
   "data_component_type": [
     "custom_data",

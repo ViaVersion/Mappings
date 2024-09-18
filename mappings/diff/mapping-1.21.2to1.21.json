@@ -1,7 +1,23 @@
 {
   "items": {
     "field_masoned_banner_pattern": "guster_banner_pattern",
-    "bordure_indented_banner_pattern": "guster_banner_pattern"
+    "bordure_indented_banner_pattern": "guster_banner_pattern",
+    "white_bundle": "",
+    "orange_bundle": "",
+    "magenta_bundle": "",
+    "light_blue_bundle": "",
+    "yellow_bundle": "",
+    "lime_bundle": "",
+    "pink_bundle": "",
+    "gray_bundle": "",
+    "light_gray_bundle": "",
+    "cyan_bundle": "",
+    "purple_bundle": "",
+    "blue_bundle": "",
+    "brown_bundle": "",
+    "green_bundle": "",
+    "red_bundle": "",
+    "black_bundle": ""
   },
   "sounds": {
     "item.bundle.insert_fail": "",
@@ -57,5 +73,8 @@
     "tooltip_style": "",
     "damage_resistant": "",
     "death_protection": ""
+  },
+  "recipe_serializers": {
+    "crafting_transmute": ""
   }
 }

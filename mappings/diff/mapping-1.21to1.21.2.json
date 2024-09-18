@@ -33,7 +33,8 @@
     "generic.water_movement_efficiency": "water_movement_efficiency"
   },
   "recipe_serializers": {
-    "crafting_special_suspiciousstew": ""
+    "crafting_special_suspiciousstew": "",
+    "crafting_special_shulkerboxcoloring": ""
   },
   "sounds": {
     "item.goat_horn.play": "",
