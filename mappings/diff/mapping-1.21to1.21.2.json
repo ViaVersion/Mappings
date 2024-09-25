@@ -42,5 +42,9 @@
   },
   "data_component_type": {
     "fire_resistant": ""
+  },
+  "entities": {
+    "boat": "",
+    "chest_boat": ""
   }
 }
