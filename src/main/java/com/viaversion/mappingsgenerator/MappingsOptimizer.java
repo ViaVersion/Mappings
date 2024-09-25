@@ -32,9 +32,6 @@ import com.viaversion.nbt.tag.Tag;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -44,6 +41,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Optimizes mapping files as nbt files with only the necessary data (mostly int to int mappings in form of int arrays).
@@ -82,6 +81,7 @@ public final class MappingsOptimizer {
             "tags",
             "attributes"
     );
+    private static final int[] storageStrategyCounts = new int[IDENTITY_ID + 1];
     private static final Set<String> savedIdentifierFiles = new HashSet<>();
     private static JsonObject globalIdentifiersObject;
     private static JsonObject fileHashesObject;
@@ -590,6 +590,7 @@ public final class MappingsOptimizer {
         if (!hasChanges) {
             tag.putByte("id", IDENTITY_ID);
             tag.putInt("size", mappings.length);
+            storageStrategyCounts[IDENTITY_ID]++;
             return;
         }
 
@@ -598,12 +599,14 @@ public final class MappingsOptimizer {
         final int plainFormatSize = mappings.length;
         if (changedFormatSize < plainFormatSize && changedFormatSize < shiftFormatSize) {
             writeChangedFormat(tag, result, key, numberOfChanges);
+            storageStrategyCounts[CHANGES_ID]++;
         } else if (shiftFormatSize < changedFormatSize && shiftFormatSize < plainFormatSize) {
             writeShiftFormat(tag, result, key);
+            storageStrategyCounts[SHIFTS_ID]++;
         } else {
-            LOGGER.debug("{}: Storing as direct values", key);
             tag.putByte("id", DIRECT_ID);
             tag.put("val", new IntArrayTag(mappings));
+            storageStrategyCounts[DIRECT_ID]++;
         }
     }
 
@@ -681,6 +684,10 @@ public final class MappingsOptimizer {
 
         tag.put("at", new IntArrayTag(shiftsAt));
         tag.put("to", new IntArrayTag(shiftsTo));
+    }
+
+    public static void printStats() {
+        LOGGER.info("Storage format counts: direct={}, shifts={}, changes={}, identity={}", storageStrategyCounts[DIRECT_ID], storageStrategyCounts[SHIFTS_ID], storageStrategyCounts[CHANGES_ID], storageStrategyCounts[IDENTITY_ID]);
     }
 
     public static void write(final CompoundTag tag, final Path path) throws IOException {

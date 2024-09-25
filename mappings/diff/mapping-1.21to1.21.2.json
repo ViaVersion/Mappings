@@ -44,7 +44,7 @@
     "fire_resistant": ""
   },
   "entities": {
-    "boat": "",
-    "chest_boat": ""
+    "boat": "oak_boat",
+    "chest_boat": "oak_chest_boat"
   }
 }

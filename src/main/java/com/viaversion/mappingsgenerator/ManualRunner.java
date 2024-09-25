@@ -44,6 +44,7 @@ public final class ManualRunner {
     public static void main(final String[] args) throws IOException {
         if (ALL) {
             runAll(ErrorStrategy.WARN);
+            MappingsOptimizer.printStats();
             return;
         }
 
