@@ -1373,7 +1373,31 @@
     "brown_bundle",
     "green_bundle",
     "red_bundle",
-    "black_bundle"
+    "black_bundle",
+    "pale_oak_planks",
+    "pale_oak_sapling",
+    "pale_oak_log",
+    "stripped_pale_oak_log",
+    "stripped_pale_oak_wood",
+    "pale_oak_wood",
+    "pale_oak_leaves",
+    "pale_moss_carpet",
+    "pale_hanging_moss",
+    "pale_moss_block",
+    "pale_oak_slab",
+    "creaking_heart",
+    "pale_oak_fence",
+    "pale_oak_stairs",
+    "pale_oak_button",
+    "pale_oak_pressure_plate",
+    "pale_oak_door",
+    "pale_oak_trapdoor",
+    "pale_oak_fence_gate",
+    "pale_oak_boat",
+    "pale_oak_chest_boat",
+    "pale_oak_sign",
+    "pale_oak_hanging_sign",
+    "creaking_spawn_egg"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1492,7 +1516,9 @@
     "dust_pillar",
     "ominous_spawning",
     "raid_omen",
-    "trial_omen"
+    "trial_omen",
+    "trail",
+    "block_crumble"
   ],
   "entities": [
     "area_effect_cloud",
@@ -1643,7 +1669,11 @@
     "oak_boat",
     "oak_chest_boat",
     "spruce_boat",
-    "spruce_chest_boat"
+    "spruce_chest_boat",
+    "creaking",
+    "creaking_transient",
+    "pale_oak_boat",
+    "pale_oak_chest_boat"
   ],
   "argumenttypes": [
     "brigadier:bool",
