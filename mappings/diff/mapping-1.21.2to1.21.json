@@ -113,7 +113,8 @@
     "block.creaking_heart.idle": "",
     "block.creaking_heart.spawn": "",
     "block.pale_hanging_moss.idle": "",
-    "entity.parrot.imitate.creaking": ""
+    "entity.parrot.imitate.creaking": "",
+    "ui.hud.bubble_pop": ""
   },
   "attributes": {
     "armor": "generic.armor",

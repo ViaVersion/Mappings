@@ -29993,6 +29993,7 @@
     "block.bubble_column.upwards_inside",
     "block.bubble_column.whirlpool_ambient",
     "block.bubble_column.whirlpool_inside",
+    "ui.hud.bubble_pop",
     "item.bucket.empty",
     "item.bucket.empty_axolotl",
     "item.bucket.empty_fish",
