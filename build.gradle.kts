@@ -15,7 +15,7 @@ dependencies {
     api("ch.qos.logback:logback-classic:1.5.8")
     compileOnly("org.jetbrains:annotations:26.0.1")
     // Uncomment to manually run mappings gen in ide
-    compileOnly(files("server.jar"))
+    // compileOnly(files("server.jar"))
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

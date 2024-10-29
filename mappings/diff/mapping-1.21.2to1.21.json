@@ -390,8 +390,8 @@
     "pale_hanging_moss[tip=false]": "hanging_roots[waterlogged=false]"
   },
   "particles": {
-    "trail": "",
-    "block_crumble": ""
+    "trail": "entity_effect",
+    "block_crumble": "block"
   },
   "blockentities": {
     "creaking_heart": ""

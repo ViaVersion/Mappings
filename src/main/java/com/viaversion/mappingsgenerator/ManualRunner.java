@@ -111,15 +111,15 @@ public final class ManualRunner {
 
         try {
             // Server jar bundle since 21w39a
-            // Alternatively, java -DbundlerMainClass=net.minecraft.data.Main -jar server.jar --reports
+            // Alternatively, java -DbundlerMainClass=net.minecraft.data.Main -jar server.jar --all
             System.setProperty("bundlerMainClass", "net.minecraft.data.Main");
-            Class.forName("net.minecraft.bundler.Main").getDeclaredMethod("main", String[].class).invoke(null, (Object) new String[]{"--reports"});
+            Class.forName("net.minecraft.bundler.Main").getDeclaredMethod("main", String[].class).invoke(null, (Object) new String[]{"--all"});
             ServerJarUtil.waitForServerMain();
         } catch (final ClassNotFoundException ignored) {
             final Class<?> mainClass = Class.forName("net.minecraft.data.Main");
             mainClass.getDeclaredMethod("main", String[].class).invoke(null, (Object) new String[]{"--reports"});
         }
 
-        MappingsGenerator.collectMappings("1.20.5");
+        MappingsGenerator.collectMappings("1.21.2-pre3");
     }
 }
