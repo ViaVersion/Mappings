@@ -1,13 +1,13 @@
 {
   "blockstates": {
-    "creaking_heart[axis=x,creaking=disabled]": "",
-    "creaking_heart[axis=x,creaking=dormant]": "",
-    "creaking_heart[axis=x,creaking=active]": "",
-    "creaking_heart[axis=y,creaking=disabled]": "",
-    "creaking_heart[axis=y,creaking=dormant]": "",
-    "creaking_heart[axis=y,creaking=active]": "",
-    "creaking_heart[axis=z,creaking=disabled]": "",
-    "creaking_heart[axis=z,creaking=dormant]": "",
-    "creaking_heart[axis=z,creaking=active]": ""
+    "creaking_heart[axis=x,creaking=disabled]": "creaking_heart[active=false,axis=x,natural=false]",
+    "creaking_heart[axis=x,creaking=dormant]": "creaking_heart[active=false,axis=x,natural=true]",
+    "creaking_heart[axis=x,creaking=active]": "creaking_heart[active=true,axis=x,natural=true]",
+    "creaking_heart[axis=y,creaking=disabled]": "creaking_heart[active=false,axis=y,natural=false]",
+    "creaking_heart[axis=y,creaking=dormant]": "creaking_heart[active=false,axis=y,natural=true]",
+    "creaking_heart[axis=y,creaking=active]": "creaking_heart[active=true,axis=y,natural=true]",
+    "creaking_heart[axis=z,creaking=disabled]": "creaking_heart[active=false,axis=z,natural=false]",
+    "creaking_heart[axis=z,creaking=dormant]": "creaking_heart[active=false,axis=z,natural=true]",
+    "creaking_heart[axis=z,creaking=active]": "creaking_heart[active=true,axis=y,natural=true]"
   }
 }
