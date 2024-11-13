@@ -11,6 +11,6 @@
     "creaking_heart[axis=z,creaking=active]": "creaking_heart[active=true,axis=y,natural=true]"
   },
   "entities": {
-    "creaking_transient": ""
+    "creaking_transient": "creaking"
   }
 }
