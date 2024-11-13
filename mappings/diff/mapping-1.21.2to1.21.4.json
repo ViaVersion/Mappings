@@ -9,5 +9,8 @@
     "creaking_heart[axis=z,creaking=disabled]": "creaking_heart[active=false,axis=z,natural=false]",
     "creaking_heart[axis=z,creaking=dormant]": "creaking_heart[active=false,axis=z,natural=true]",
     "creaking_heart[axis=z,creaking=active]": "creaking_heart[active=true,axis=y,natural=true]"
+  },
+  "entities": {
+    "creaking_transient": ""
   }
 }
