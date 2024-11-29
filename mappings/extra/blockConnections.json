@@ -181,33 +181,7 @@
       "east": true
     }
   },
-  "grass_block[snowy=false]": {
-    "fence": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    },
-    "netherFence": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    },
-    "pane": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    },
-    "cobbleWall": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    }
-  },
-  "grass_block[snowy=true]": {
+  "grass_block": {
     "fence": {
       "north": true,
       "south": true,
@@ -285,33 +259,7 @@
       "east": true
     }
   },
-  "podzol[snowy=false]": {
-    "fence": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    },
-    "netherFence": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    },
-    "pane": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    },
-    "cobbleWall": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    }
-  },
-  "podzol[snowy=true]": {
+  "podzol": {
     "fence": {
       "north": true,
       "south": true,
@@ -7501,33 +7449,7 @@
       "east": true
     }
   },
-  "mycelium[snowy=false]": {
-    "fence": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    },
-    "netherFence": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    },
-    "pane": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    },
-    "cobbleWall": {
-      "north": true,
-      "south": true,
-      "west": true,
-      "east": true
-    }
-  },
-  "mycelium[snowy=true]": {
+  "mycelium": {
     "fence": {
       "north": true,
       "south": true,
