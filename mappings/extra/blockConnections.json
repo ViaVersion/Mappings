@@ -181,7 +181,7 @@
       "east": true
     }
   },
-  "grass_block[snowy=false]": {
+  "grass_block": {
     "fence": {
       "north": true,
       "south": true,
@@ -259,7 +259,7 @@
       "east": true
     }
   },
-  "podzol[snowy=false]": {
+  "podzol": {
     "fence": {
       "north": true,
       "south": true,
@@ -7449,7 +7449,7 @@
       "east": true
     }
   },
-  "mycelium[snowy=false]": {
+  "mycelium": {
     "fence": {
       "north": true,
       "south": true,
