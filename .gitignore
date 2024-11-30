@@ -2,6 +2,8 @@ libraries/
 logs/
 generated/
 output/
+states.txt
+states_output.txt
 
 ### Java files ###
 *.class
