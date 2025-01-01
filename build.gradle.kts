@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     api("com.google.code.gson:gson:2.11.0")
-    api("com.viaversion:nbt:5.0.1")
+    api("com.viaversion:nbt:5.0.2")
     api("it.unimi.dsi:fastutil:8.5.15")
     api("ch.qos.logback:logback-classic:1.5.12")
     compileOnly("org.jetbrains:annotations:26.0.1")
