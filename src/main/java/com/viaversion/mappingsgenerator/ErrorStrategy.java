@@ -1,7 +1,7 @@
 /*
  * This file is part of ViaVersion Mappings - https://github.com/ViaVersion/Mappings
  * Copyright (C) 2023 Nassim Jahnke
- * Copyright (C) 2023 ViaVersion and contributors
+ * Copyright (C) 2023-2025 ViaVersion and contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
