@@ -1407,7 +1407,9 @@
     "resin_brick_slab",
     "resin_brick_wall",
     "chiseled_resin_bricks",
-    "resin_brick"
+    "resin_brick",
+    "wildflowers",
+    "leaf_litter"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1529,7 +1531,8 @@
     "trial_omen",
     "trail",
     "block_crumble",
-    "pale_oak_leaves"
+    "pale_oak_leaves",
+    "tinted_leaves"
   ],
   "entities": [
     "area_effect_cloud",
@@ -1839,7 +1842,9 @@
     "glider",
     "tooltip_style",
     "damage_resistant",
-    "death_protection"
+    "death_protection",
+    "weapon",
+    "potion_duration_scale"
   ],
   "attributes": [
     "generic.armor",

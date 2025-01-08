@@ -1,0 +1,16 @@
+{
+  "blockstates": {
+    "creaking_heart[active=true,axis=x,natural=true]": "",
+    "creaking_heart[active=true,axis=x,natural=false]": "",
+    "creaking_heart[active=true,axis=y,natural=true]": "",
+    "creaking_heart[active=true,axis=y,natural=false]": "",
+    "creaking_heart[active=true,axis=z,natural=true]": "",
+    "creaking_heart[active=true,axis=z,natural=false]": "",
+    "creaking_heart[active=false,axis=x,natural=true]": "",
+    "creaking_heart[active=false,axis=x,natural=false]": "",
+    "creaking_heart[active=false,axis=y,natural=true]": "",
+    "creaking_heart[active=false,axis=y,natural=false]": "",
+    "creaking_heart[active=false,axis=z,natural=true]": "",
+    "creaking_heart[active=false,axis=z,natural=false]": ""
+  }
+}
