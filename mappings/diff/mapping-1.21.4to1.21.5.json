@@ -1,16 +1,16 @@
 {
   "blockstates": {
-    "creaking_heart[active=true,axis=x,natural=true]": "",
-    "creaking_heart[active=true,axis=x,natural=false]": "",
-    "creaking_heart[active=true,axis=y,natural=true]": "",
-    "creaking_heart[active=true,axis=y,natural=false]": "",
-    "creaking_heart[active=true,axis=z,natural=true]": "",
-    "creaking_heart[active=true,axis=z,natural=false]": "",
-    "creaking_heart[active=false,axis=x,natural=true]": "",
-    "creaking_heart[active=false,axis=x,natural=false]": "",
-    "creaking_heart[active=false,axis=y,natural=true]": "",
-    "creaking_heart[active=false,axis=y,natural=false]": "",
-    "creaking_heart[active=false,axis=z,natural=true]": "",
-    "creaking_heart[active=false,axis=z,natural=false]": ""
+    "creaking_heart[active=true,axis=x,natural=true]": "creaking_heart[axis=x,creaking_heart_state=awake,natural=true]",
+    "creaking_heart[active=true,axis=x,natural=false]": "creaking_heart[axis=x,creaking_heart_state=awake,natural=false]",
+    "creaking_heart[active=true,axis=y,natural=true]": "creaking_heart[axis=y,creaking_heart_state=awake,natural=true]",
+    "creaking_heart[active=true,axis=y,natural=false]": "creaking_heart[axis=y,creaking_heart_state=awake,natural=false]",
+    "creaking_heart[active=true,axis=z,natural=true]": "creaking_heart[axis=z,creaking_heart_state=awake,natural=true]",
+    "creaking_heart[active=true,axis=z,natural=false]": "creaking_heart[axis=z,creaking_heart_state=awake,natural=false]",
+    "creaking_heart[active=false,axis=x,natural=true]": "creaking_heart[axis=x,creaking_heart_state=dormant,natural=true]",
+    "creaking_heart[active=false,axis=x,natural=false]": "creaking_heart[axis=x,creaking_heart_state=dormant,natural=false]",
+    "creaking_heart[active=false,axis=y,natural=true]": "creaking_heart[axis=y,creaking_heart_state=dormant,natural=true]",
+    "creaking_heart[active=false,axis=y,natural=false]": "creaking_heart[axis=y,creaking_heart_state=dormant,natural=false]",
+    "creaking_heart[active=false,axis=z,natural=true]": "creaking_heart[axis=z,creaking_heart_state=dormant,natural=true]",
+    "creaking_heart[active=false,axis=z,natural=false]": "creaking_heart[axis=z,creaking_heart_state=dormant,natural=false]"
   }
 }
