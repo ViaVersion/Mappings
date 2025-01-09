@@ -12,7 +12,7 @@ dependencies {
     api("com.google.code.gson:gson:2.11.0")
     api("com.viaversion:nbt:5.0.2")
     api("it.unimi.dsi:fastutil:8.5.15")
-    api("ch.qos.logback:logback-classic:1.5.12")
+    api("ch.qos.logback:logback-classic:1.5.15")
     compileOnly("org.jetbrains:annotations:26.0.1")
     // Uncomment to manually run mappings gen in ide
     // compileOnly(files("server.jar"))
