@@ -19,11 +19,18 @@
     "creaking_heart[axis=z,creaking_heart_state=awake,natural=true]": "creaking_heart[active=true,axis=z,natural=true]",
     "creaking_heart[axis=z,creaking_heart_state=awake,natural=false]": "creaking_heart[active=true,axis=z,natural=false]",
     "wildflowers": "glow_lichen[down=true,east=false,north=false,south=false,up=false,waterlogged=false,west=false]",
-    "leaf_litter": "glow_lichen[down=true,east=false,north=false,south=false,up=false,waterlogged=false,west=false]"
+    "leaf_litter": "glow_lichen[down=true,east=false,north=false,south=false,up=false,waterlogged=false,west=false]",
+    "test_block[test_block_mode=start]": "",
+    "test_block[test_block_mode=log]": "",
+    "test_block[test_block_mode=fail]": "",
+    "test_block[test_block_mode=accept]": "",
+    "test_instance_block": ""
   },
   "items": {
     "wildflowers": "glow_lichen",
-    "leaf_litter": "glow_lichen"
+    "leaf_litter": "glow_lichen",
+    "test_block": "",
+    "test_instance_block": ""
   },
   "itemnames": {
     "wildflowers": "1.21.5 Wildflowers",
@@ -46,6 +53,34 @@
   },
   "data_component_type": {
     "weapon": "",
-    "potion_duration_scale": ""
+    "potion_duration_scale": "",
+    "villager/variant": "",
+    "wolf/variant": "",
+    "wolf/collar": "",
+    "fox/variant": "",
+    "salmon/size": "",
+    "parrot/variant": "",
+    "tropical_fish/pattern": "",
+    "tropical_fish/base_color": "",
+    "tropical_fish/pattern_color": "",
+    "mooshroom/variant": "",
+    "rabbit/variant": "",
+    "pig/variant": "",
+    "frog/variant": "",
+    "horse/variant": "",
+    "painting/variant": "",
+    "llama/variant": "",
+    "axolotl/variant": "",
+    "cat/variant": "",
+    "cat/collar": "",
+    "sheep/color": "",
+    "shulker/color": ""
+  },
+  "blockentities": {
+    "test_block": "",
+    "test_instance_block": ""
+  },
+  "argumenttypes": {
+    "resource_selector": ""
   }
 }

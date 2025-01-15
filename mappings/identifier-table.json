@@ -1409,7 +1409,9 @@
     "chiseled_resin_bricks",
     "resin_brick",
     "wildflowers",
-    "leaf_litter"
+    "leaf_litter",
+    "test_block",
+    "test_instance_block"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1746,7 +1748,8 @@
     "item_slots",
     "loot_table",
     "loot_predicate",
-    "loot_modifier"
+    "loot_modifier",
+    "resource_selector"
   ],
   "recipe_serializers": [
     "crafting_shaped",
@@ -1844,7 +1847,28 @@
     "damage_resistant",
     "death_protection",
     "weapon",
-    "potion_duration_scale"
+    "potion_duration_scale",
+    "villager/variant",
+    "wolf/variant",
+    "wolf/collar",
+    "fox/variant",
+    "salmon/size",
+    "parrot/variant",
+    "tropical_fish/pattern",
+    "tropical_fish/base_color",
+    "tropical_fish/pattern_color",
+    "mooshroom/variant",
+    "rabbit/variant",
+    "pig/variant",
+    "frog/variant",
+    "horse/variant",
+    "painting/variant",
+    "llama/variant",
+    "axolotl/variant",
+    "cat/variant",
+    "cat/collar",
+    "sheep/color",
+    "shulker/color"
   ],
   "attributes": [
     "generic.armor",
