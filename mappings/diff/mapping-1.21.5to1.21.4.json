@@ -20,21 +20,23 @@
     "creaking_heart[axis=z,creaking_heart_state=awake,natural=false]": "creaking_heart[active=true,axis=z,natural=false]",
     "wildflowers": "glow_lichen[down=true,east=false,north=false,south=false,up=false,waterlogged=false,west=false]",
     "leaf_litter": "glow_lichen[down=true,east=false,north=false,south=false,up=false,waterlogged=false,west=false]",
-    "test_block[test_block_mode=start]": "",
-    "test_block[test_block_mode=log]": "",
-    "test_block[test_block_mode=fail]": "",
-    "test_block[test_block_mode=accept]": "",
-    "test_instance_block": ""
+    "test_block[test_block_mode=start]": "structure_block[mode=load]",
+    "test_block[test_block_mode=log]": "structure_block[mode=load]",
+    "test_block[test_block_mode=fail]": "structure_block[mode=load]",
+    "test_block[test_block_mode=accept]": "structure_block[mode=load]",
+    "test_instance_block": "structure_block[mode=data]"
   },
   "items": {
     "wildflowers": "glow_lichen",
     "leaf_litter": "glow_lichen",
-    "test_block": "",
-    "test_instance_block": ""
+    "test_block": "structure_block",
+    "test_instance_block": "structure_block"
   },
   "itemnames": {
     "wildflowers": "1.21.5 Wildflowers",
-    "leaf_litter": "1.21.5 Leaf Litter"
+    "leaf_litter": "1.21.5 Leaf Litter",
+    "test_block": "1.21.5 Test Block",
+    "test_instance_block": "1.21.5 Test Instance Block"
   },
   "sounds": {
     "block.iron.break": "",
@@ -81,6 +83,6 @@
     "test_instance_block": ""
   },
   "argumenttypes": {
-    "resource_selector": ""
+    "resource_selector": "brigadier:string"
   }
 }
