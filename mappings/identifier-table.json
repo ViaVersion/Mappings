@@ -1689,7 +1689,9 @@
     "creaking",
     "creaking_transient",
     "pale_oak_boat",
-    "pale_oak_chest_boat"
+    "pale_oak_chest_boat",
+    "splash_potion",
+    "lingering_potion"
   ],
   "argumenttypes": [
     "brigadier:bool",
@@ -1868,7 +1870,12 @@
     "cat/variant",
     "cat/collar",
     "sheep/color",
-    "shulker/color"
+    "shulker/color",
+    "tooltip_display",
+    "blocks_attacks",
+    "provides_trim_material",
+    "provides_banner_patterns",
+    "break_sound"
   ],
   "attributes": [
     "generic.armor",

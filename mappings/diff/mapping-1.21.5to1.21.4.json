@@ -24,7 +24,11 @@
     "test_block[test_block_mode=log]": "structure_block[mode=load]",
     "test_block[test_block_mode=fail]": "structure_block[mode=load]",
     "test_block[test_block_mode=accept]": "structure_block[mode=load]",
-    "test_instance_block": "structure_block[mode=data]"
+    "test_instance_block": "structure_block[mode=data]",
+    "test_block[mode=start]": "",
+    "test_block[mode=log]": "",
+    "test_block[mode=fail]": "",
+    "test_block[mode=accept]": ""
   },
   "items": {
     "wildflowers": "glow_lichen",
@@ -76,7 +80,12 @@
     "cat/variant": "",
     "cat/collar": "",
     "sheep/color": "",
-    "shulker/color": ""
+    "shulker/color": "",
+    "tooltip_display": "",
+    "blocks_attacks": "",
+    "provides_trim_material": "",
+    "provides_banner_patterns": "",
+    "break_sound": ""
   },
   "blockentities": {
     "test_block": "",
@@ -84,5 +93,9 @@
   },
   "argumenttypes": {
     "resource_selector": "brigadier:string"
+  },
+  "entities": {
+    "splash_potion": "",
+    "lingering_potion": ""
   }
 }
