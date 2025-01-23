@@ -20,15 +20,11 @@
     "creaking_heart[axis=z,creaking_heart_state=awake,natural=false]": "creaking_heart[active=true,axis=z,natural=false]",
     "wildflowers": "glow_lichen[down=true,east=false,north=false,south=false,up=false,waterlogged=false,west=false]",
     "leaf_litter": "glow_lichen[down=true,east=false,north=false,south=false,up=false,waterlogged=false,west=false]",
-    "test_block[test_block_mode=start]": "structure_block[mode=load]",
-    "test_block[test_block_mode=log]": "structure_block[mode=load]",
-    "test_block[test_block_mode=fail]": "structure_block[mode=load]",
-    "test_block[test_block_mode=accept]": "structure_block[mode=load]",
-    "test_instance_block": "structure_block[mode=data]",
-    "test_block[mode=start]": "",
-    "test_block[mode=log]": "",
-    "test_block[mode=fail]": "",
-    "test_block[mode=accept]": ""
+    "test_block[mode=start]": "structure_block[mode=load]",
+    "test_block[mode=log]": "structure_block[mode=load]",
+    "test_block[mode=fail]": "structure_block[mode=load]",
+    "test_block[mode=accept]": "structure_block[mode=load]",
+    "test_instance_block": "structure_block[mode=data]"
   },
   "items": {
     "wildflowers": "glow_lichen",
@@ -95,7 +91,7 @@
     "resource_selector": "brigadier:string"
   },
   "entities": {
-    "splash_potion": "",
-    "lingering_potion": ""
+    "splash_potion": "potion",
+    "lingering_potion": "potion"
   }
 }
