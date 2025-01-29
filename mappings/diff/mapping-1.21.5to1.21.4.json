@@ -24,13 +24,17 @@
     "test_block[mode=log]": "structure_block[mode=load]",
     "test_block[mode=fail]": "structure_block[mode=load]",
     "test_block[mode=accept]": "structure_block[mode=load]",
-    "test_instance_block": "structure_block[mode=data]"
+    "test_instance_block": "structure_block[mode=data]",
+    "bush": "",
+    "firefly_bush": ""
   },
   "items": {
     "wildflowers": "glow_lichen",
     "leaf_litter": "glow_lichen",
     "test_block": "structure_block",
-    "test_instance_block": "structure_block"
+    "test_instance_block": "structure_block",
+    "bush": "",
+    "firefly_bush": ""
   },
   "itemnames": {
     "wildflowers": "1.21.5 Wildflowers",
@@ -48,10 +52,14 @@
     "block.leaf_litter.step": "",
     "block.leaf_litter.place": "",
     "block.leaf_litter.hit": "",
-    "block.leaf_litter.fall": ""
+    "block.leaf_litter.fall": "",
+    "block.deadbush.idle": "",
+    "block.sand.idle": "",
+    "block.sand.wind": ""
   },
   "particles": {
-    "tinted_leaves": "composter"
+    "tinted_leaves": "composter",
+    "firefly": ""
   },
   "data_component_type": {
     "weapon": "",
@@ -81,7 +89,8 @@
     "blocks_attacks": "",
     "provides_trim_material": "",
     "provides_banner_patterns": "",
-    "break_sound": ""
+    "break_sound": "",
+    "cow/variant": ""
   },
   "blockentities": {
     "test_block": "",

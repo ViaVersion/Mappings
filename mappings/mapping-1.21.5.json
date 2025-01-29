@@ -2051,6 +2051,7 @@
     "short_grass",
     "fern",
     "dead_bush",
+    "bush",
     "seagrass",
     "tall_seagrass[half=upper]",
     "tall_seagrass[half=lower]",
@@ -27908,7 +27909,8 @@
     "open_eyeblossom",
     "closed_eyeblossom",
     "potted_open_eyeblossom",
-    "potted_closed_eyeblossom"
+    "potted_closed_eyeblossom",
+    "firefly_bush"
   ],
   "blocks": [
     "air",
@@ -28044,6 +28046,7 @@
     "short_grass",
     "fern",
     "dead_bush",
+    "bush",
     "seagrass",
     "tall_seagrass",
     "piston",
@@ -29009,7 +29012,8 @@
     "open_eyeblossom",
     "closed_eyeblossom",
     "potted_open_eyeblossom",
-    "potted_closed_eyeblossom"
+    "potted_closed_eyeblossom",
+    "firefly_bush"
   ],
   "items": [
     "air",
@@ -29216,9 +29220,11 @@
     "cobweb",
     "short_grass",
     "fern",
+    "bush",
     "azalea",
     "flowering_azalea",
     "dead_bush",
+    "firefly_bush",
     "seagrass",
     "sea_pickle",
     "white_wool",
@@ -30809,6 +30815,7 @@
     "item.crossbow.quick_charge_2",
     "item.crossbow.quick_charge_3",
     "item.crossbow.shoot",
+    "block.deadbush.idle",
     "block.decorated_pot.break",
     "block.decorated_pot.fall",
     "block.decorated_pot.hit",
@@ -31629,6 +31636,8 @@
     "block.sand.hit",
     "block.sand.place",
     "block.sand.step",
+    "block.sand.idle",
+    "block.sand.wind",
     "block.scaffolding.break",
     "block.scaffolding.fall",
     "block.scaffolding.hit",
@@ -32178,7 +32187,8 @@
     "ominous_spawning",
     "raid_omen",
     "trial_omen",
-    "block_crumble"
+    "block_crumble",
+    "firefly"
   ],
   "blockentities": [
     "furnace",
@@ -32608,6 +32618,7 @@
     "mooshroom/variant",
     "rabbit/variant",
     "pig/variant",
+    "cow/variant",
     "frog/variant",
     "horse/variant",
     "painting/variant",

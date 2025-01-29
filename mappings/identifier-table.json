@@ -1411,7 +1411,9 @@
     "wildflowers",
     "leaf_litter",
     "test_block",
-    "test_instance_block"
+    "test_instance_block",
+    "bush",
+    "firefly_bush"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1534,7 +1536,8 @@
     "trail",
     "block_crumble",
     "pale_oak_leaves",
-    "tinted_leaves"
+    "tinted_leaves",
+    "firefly"
   ],
   "entities": [
     "area_effect_cloud",
@@ -1875,7 +1878,8 @@
     "blocks_attacks",
     "provides_trim_material",
     "provides_banner_patterns",
-    "break_sound"
+    "break_sound",
+    "cow/variant"
   ],
   "attributes": [
     "generic.armor",
