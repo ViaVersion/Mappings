@@ -25,22 +25,24 @@
     "test_block[mode=fail]": "structure_block[mode=load]",
     "test_block[mode=accept]": "structure_block[mode=load]",
     "test_instance_block": "structure_block[mode=data]",
-    "bush": "",
-    "firefly_bush": ""
+    "bush": "short_grass",
+    "firefly_bush": "short_grass"
   },
   "items": {
     "wildflowers": "glow_lichen",
     "leaf_litter": "glow_lichen",
     "test_block": "structure_block",
     "test_instance_block": "structure_block",
-    "bush": "",
-    "firefly_bush": ""
+    "bush": "short_grass",
+    "firefly_bush": "short_grass"
   },
   "itemnames": {
     "wildflowers": "1.21.5 Wildflowers",
     "leaf_litter": "1.21.5 Leaf Litter",
     "test_block": "1.21.5 Test Block",
-    "test_instance_block": "1.21.5 Test Instance Block"
+    "test_instance_block": "1.21.5 Test Instance Block",
+    "bush": "1.21.5 Bush",
+    "firefly_bush": "1.21.5 Firefly Bush"
   },
   "sounds": {
     "block.iron.break": "",
@@ -59,7 +61,7 @@
   },
   "particles": {
     "tinted_leaves": "composter",
-    "firefly": ""
+    "firefly": "ash"
   },
   "data_component_type": {
     "weapon": "",
