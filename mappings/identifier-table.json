@@ -1413,7 +1413,12 @@
     "test_block",
     "test_instance_block",
     "bush",
-    "firefly_bush"
+    "firefly_bush",
+    "short_dry_grass",
+    "tall_dry_grass",
+    "cactus_flower",
+    "blue_egg",
+    "brown_egg"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1879,7 +1884,8 @@
     "provides_trim_material",
     "provides_banner_patterns",
     "break_sound",
-    "cow/variant"
+    "cow/variant",
+    "chicken/variant"
   ],
   "attributes": [
     "generic.armor",

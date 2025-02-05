@@ -26,7 +26,10 @@
     "test_block[mode=accept]": "structure_block[mode=load]",
     "test_instance_block": "structure_block[mode=data]",
     "bush": "short_grass",
-    "firefly_bush": "short_grass"
+    "firefly_bush": "short_grass",
+    "short_dry_grass": "",
+    "tall_dry_grass": "",
+    "cactus_flower": ""
   },
   "items": {
     "wildflowers": "glow_lichen",
@@ -34,7 +37,12 @@
     "test_block": "structure_block",
     "test_instance_block": "structure_block",
     "bush": "short_grass",
-    "firefly_bush": "short_grass"
+    "firefly_bush": "short_grass",
+    "short_dry_grass": "",
+    "tall_dry_grass": "",
+    "cactus_flower": "",
+    "blue_egg": "",
+    "brown_egg": ""
   },
   "itemnames": {
     "wildflowers": "1.21.5 Wildflowers",
@@ -57,7 +65,10 @@
     "block.leaf_litter.fall": "",
     "block.deadbush.idle": "",
     "block.sand.idle": "",
-    "block.sand.wind": ""
+    "block.sand.wind": "",
+    "block.cactus_flower.break": "",
+    "block.cactus_flower.place": "",
+    "block.firefly_bush.idle": ""
   },
   "particles": {
     "tinted_leaves": "composter",
@@ -92,7 +103,8 @@
     "provides_trim_material": "",
     "provides_banner_patterns": "",
     "break_sound": "",
-    "cow/variant": ""
+    "cow/variant": "",
+    "chicken/variant": ""
   },
   "blockentities": {
     "test_block": "",
