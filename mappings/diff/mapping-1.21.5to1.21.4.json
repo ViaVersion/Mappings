@@ -27,9 +27,9 @@
     "test_instance_block": "structure_block[mode=data]",
     "bush": "short_grass",
     "firefly_bush": "short_grass",
-    "short_dry_grass": "",
-    "tall_dry_grass": "",
-    "cactus_flower": ""
+    "short_dry_grass": "short_grass",
+    "tall_dry_grass": "short_grass",
+    "cactus_flower": "brain_coral_fan[waterlogged=false]"
   },
   "items": {
     "wildflowers": "glow_lichen",
@@ -38,11 +38,11 @@
     "test_instance_block": "structure_block",
     "bush": "short_grass",
     "firefly_bush": "short_grass",
-    "short_dry_grass": "",
-    "tall_dry_grass": "",
-    "cactus_flower": "",
-    "blue_egg": "",
-    "brown_egg": ""
+    "short_dry_grass": "short_grass",
+    "tall_dry_grass": "tall_grass",
+    "cactus_flower": "brain_coral_fan",
+    "blue_egg": "egg",
+    "brown_egg": "egg"
   },
   "itemnames": {
     "wildflowers": "1.21.5 Wildflowers",
@@ -50,7 +50,12 @@
     "test_block": "1.21.5 Test Block",
     "test_instance_block": "1.21.5 Test Instance Block",
     "bush": "1.21.5 Bush",
-    "firefly_bush": "1.21.5 Firefly Bush"
+    "firefly_bush": "1.21.5 Firefly Bush",
+    "short_dry_grass": "1.21.5 Short Dry Grass",
+    "tall_dry_grass": "1.21.5 Tall Dry Grass",
+    "cactus_flower": "1.21.5 Cactus Flower",
+    "blue_egg": "1.21.5 Blue Egg",
+    "brown_egg": "1.21.5 Brown Egg"
   },
   "sounds": {
     "block.iron.break": "",
