@@ -102,7 +102,7 @@
     "waxed_exposed_copper_trapdoor": "iron_trapdoor[",
     "waxed_oxidized_copper_trapdoor": "iron_trapdoor[",
     "waxed_weathered_copper_trapdoor": "iron_trapdoor[",
-    "copper_grate": "glass",
+    "copper_grate": "smooth_red_sandstone",
     "exposed_copper_grate": "smooth_red_sandstone",
     "weathered_copper_grate": "smooth_red_sandstone",
     "oxidized_copper_grate": "smooth_red_sandstone",

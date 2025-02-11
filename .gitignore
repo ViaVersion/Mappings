@@ -9,7 +9,8 @@ states_output.txt
 *.class
 
 # Package Files
-*.jar
+server.jar
+server-1.21.4.jar
 *.war
 *.ear
 
