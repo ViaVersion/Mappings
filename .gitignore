@@ -4,10 +4,12 @@ generated/
 output/
 states.txt
 states_output.txt
-
+run.sh
+updated-mappings.zip
 ### Java files ###
 *.class
-
+jars/
+RemappedJars/
 # Package Files
 server.jar
 server-1.21.4.jar
