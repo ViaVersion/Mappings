@@ -146,7 +146,9 @@
     "wind_burst": "Wind Burst"
   },
   "blockstates": {
-    "vault": "spawner",
+    "vault[ominous=true]": "blue_ice",
+    "vault[ominous=false]": "red_mushroom_block",
+    "vault": "red_mushroom_block",
     "heavy_core": "wither_skeleton_skull[powered=false,rotation=0]",
     "trial_spawner[ominous=true,trial_spawner_state=inactive]": "trial_spawner[trial_spawner_state=inactive]",
     "trial_spawner[ominous=true,trial_spawner_state=waiting_for_players]": "trial_spawner[trial_spawner_state=waiting_for_players]",
