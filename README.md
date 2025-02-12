@@ -1,6 +1,6 @@
 # Mappings
 
-These are mappings made for 1.21.4 to 1.8, your players will get the best performance using these mappings.
+These are mappings made for 1.21.4 to 1.8, your players will get the best performance/usability using these mappings.
 
 Generates and compiles mapping files for Via*. Current mapping files can be found in the `mappings/` directory.
 
