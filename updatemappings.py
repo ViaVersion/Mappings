@@ -50,11 +50,8 @@ for file in os.listdir("output/backwards/"):
         rewind += 1
         shutil.copy2(f"output/backwards/{file}",f"jars/ViaRewind/assets/viarewind/data/{file}")
 
-os.system(f"{d}zip -r ViaVersion.jar ViaVersion/*")
-os.system(f"{d}zip -r ViaBackwards.jar ViaBackwards/*")
-os.system(f"{d}zip -r ViaRewind.jar ViaRewind/*")
+os.system(f"{d}cd ViaVersion && zip -r ../../RemappedJars/ViaVersion.jar *")
+os.system(f"{d}cd ViaBackwards && zip -r ../../RemappedJars/ViaBackwards.jar *")
+os.system(f"{d}cd ViaRewind && zip -r ../../RemappedJars/ViaRewind.jar *")
 endtime = int((time.time() - starttime))
-os.system(f"{d}mv ViaVersion.jar ../RemappedJars*")
-os.system(f"{d}mv ViaRewind.jar ../RemappedJars*")
-os.system(f"{d}mv ViaBackwards.jar ../RemappedJars*")
 print(f"Updated {forward} Mappings for ViaVersion\nUpdated {backward} Mappings for ViaBackwards\nUpdated {rewind} Mappings for ViaRewind\nFinished in {endtime} Seconds")
