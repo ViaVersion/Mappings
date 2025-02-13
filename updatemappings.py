@@ -10,7 +10,7 @@ d = "cd jars && "
 forward = 0
 backward = 0
 rewind = 0
-os.system("java -jar MappingsGenerator-4.1.0.jar server.jar 1.21.4")
+# os.system("java -jar MappingsGenerator-4.1.0.jar server.jar 1.21.4")
 os.system("rm -rf jars/")
 os.system("rm -rf RemappedJars/")
 try:
@@ -48,6 +48,7 @@ for file in os.listdir("output/backwards/"):
 
     if os.path.isfile(f"jars/ViaRewind/assets/viarewind/data/{file}"):
         rewind += 1
+        
         shutil.copy2(f"output/backwards/{file}",f"jars/ViaRewind/assets/viarewind/data/{file}")
 
 os.system(f"{d}cd ViaVersion && zip -r ../../RemappedJars/ViaVersion.jar *")
