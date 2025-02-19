@@ -1885,7 +1885,8 @@
     "provides_banner_patterns",
     "break_sound",
     "cow/variant",
-    "chicken/variant"
+    "chicken/variant",
+    "wolf/sound_variant"
   ],
   "attributes": [
     "generic.armor",

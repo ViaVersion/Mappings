@@ -19,5 +19,8 @@
   "data_component_type": {
     "hide_additional_tooltip": "",
     "hide_tooltip": ""
+  },
+  "sounds": {
+    "entity.wolf.howl": ""
   }
 }
