@@ -21,6 +21,23 @@
     "hide_tooltip": ""
   },
   "sounds": {
-    "entity.wolf.howl": ""
+    "entity.wolf.howl": "entity.wolf_angry.ambient"
+  },
+  "tags": {
+    "entity_type": {
+      "can_equip_saddle": [
+        "horse",
+        "skeleton_horse",
+        "zombie_horse",
+        "donkey",
+        "mule",
+        "pig",
+        "strider",
+        "camel"
+      ],
+      "can_wear_horse_armor": [
+        "horse"
+      ]
+    }
   }
 }
