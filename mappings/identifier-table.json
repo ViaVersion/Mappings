@@ -1418,7 +1418,25 @@
     "tall_dry_grass",
     "cactus_flower",
     "blue_egg",
-    "brown_egg"
+    "brown_egg",
+    "sky_box",
+    "mob_trophy",
+    "shazboots",
+    "exit_eye",
+    "fire_wand",
+    "wind_wand",
+    "teleportation_wand",
+    "music_disc_and_action",
+    "mine_crafter",
+    "mine_revisitor",
+    "dimension_control",
+    "sky",
+    "shimmering_door",
+    "shimmering_key",
+    "mine_ingredient",
+    "mine",
+    "grave_advancement",
+    "trophy"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1542,7 +1560,8 @@
     "block_crumble",
     "pale_oak_leaves",
     "tinted_leaves",
-    "firefly"
+    "firefly",
+    "mine_travel"
   ],
   "entities": [
     "area_effect_cloud",
@@ -1699,7 +1718,22 @@
     "pale_oak_boat",
     "pale_oak_chest_boat",
     "splash_potion",
-    "lingering_potion"
+    "lingering_potion",
+    "pet_armadillo",
+    "pet_axolotl",
+    "pet_bee",
+    "pet_cat",
+    "pet_fox",
+    "angry_ghast",
+    "pet_turtle",
+    "pet_polar_bear",
+    "pet_slime",
+    "pet_wolf",
+    "pet_creeper",
+    "pet_chicken",
+    "pet_frog",
+    "pet_cow",
+    "pet_mooshroom"
   ],
   "argumenttypes": [
     "brigadier:bool",
@@ -1886,7 +1920,19 @@
     "break_sound",
     "cow/variant",
     "chicken/variant",
-    "wolf/sound_variant"
+    "wolf/sound_variant",
+    "exchange_value",
+    "world_effect_unlock",
+    "world_effect_uhint",
+    "mine_active",
+    "special_mine",
+    "mine_completed",
+    "world_modifiers",
+    "dimension_id",
+    "instant_room",
+    "sky",
+    "trophy/type",
+    "mob_trophy/type"
   ],
   "attributes": [
     "generic.armor",
@@ -1952,6 +1998,9 @@
     "submerged_mining_speed",
     "sweeping_damage_ratio",
     "tempt_range",
-    "water_movement_efficiency"
+    "water_movement_efficiency",
+    "experience_gain_modifier",
+    "pickup_area_size",
+    "max_jumps"
   ]
 }
