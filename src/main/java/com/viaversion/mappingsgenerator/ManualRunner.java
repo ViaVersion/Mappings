@@ -32,13 +32,18 @@ public final class ManualRunner {
 
     private static final Set<String> SPECIAL_BACKWARDS_ONLY = Set.of("1.9.4", "1.10", "1.11");
 
-    // April Fool version -> Release version. Linked map to keep order during mapping writing
-    private static final Map<String, String> SPECIAL_VERSIONS = new LinkedHashMap<>();
     private static final boolean ALL = true;
 
+    private static final boolean ALL_SPECIAL = false; // This will also update the identifier-table
+    private static final Map<String, String> SPECIAL_VERSIONS = new LinkedHashMap<>();
+    private static final Map<String, String> SPECIAL_BACKWARDS_VERSIONS = new LinkedHashMap<>();
+
     static {
-        SPECIAL_VERSIONS.put("3D_Shareware", "1.14");
-        SPECIAL_VERSIONS.put("20w14infinite", "1.16");
+        SPECIAL_VERSIONS.put("1.21.5", "25w14craftmine");
+
+        SPECIAL_BACKWARDS_VERSIONS.put("3D_Shareware", "1.14");
+        SPECIAL_BACKWARDS_VERSIONS.put("20w14infinite", "1.16");
+        SPECIAL_BACKWARDS_VERSIONS.put("25w14craftmine", "1.21.5");
     }
 
     public static void main(final String[] args) throws IOException {
@@ -99,10 +104,18 @@ public final class ManualRunner {
             backwardsOptimizer.optimizeAndWrite();
         }
 
-        for (Map.Entry<String, String> entry : SPECIAL_VERSIONS.entrySet()) {
-            final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), true);
-            mappingsOptimizer.setErrorStrategy(errorStrategy);
-            mappingsOptimizer.optimizeAndWrite();
+        if (ALL_SPECIAL) {
+            for (Map.Entry<String, String> entry : SPECIAL_VERSIONS.entrySet()) {
+                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), false, true);
+                mappingsOptimizer.setErrorStrategy(errorStrategy);
+                mappingsOptimizer.optimizeAndWrite();
+            }
+
+            for (Map.Entry<String, String> entry : SPECIAL_BACKWARDS_VERSIONS.entrySet()) {
+                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), true, false);
+                mappingsOptimizer.setErrorStrategy(errorStrategy);
+                mappingsOptimizer.optimizeAndWrite();
+            }
         }
     }
 
