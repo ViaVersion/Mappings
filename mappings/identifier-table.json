@@ -1418,7 +1418,25 @@
     "tall_dry_grass",
     "cactus_flower",
     "blue_egg",
-    "brown_egg"
+    "brown_egg",
+    "dried_ghast",
+    "white_harness",
+    "orange_harness",
+    "magenta_harness",
+    "light_blue_harness",
+    "yellow_harness",
+    "lime_harness",
+    "pink_harness",
+    "gray_harness",
+    "light_gray_harness",
+    "cyan_harness",
+    "purple_harness",
+    "blue_harness",
+    "brown_harness",
+    "green_harness",
+    "red_harness",
+    "black_harness",
+    "happy_ghast_spawn_egg"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1699,7 +1717,8 @@
     "pale_oak_boat",
     "pale_oak_chest_boat",
     "splash_potion",
-    "lingering_potion"
+    "lingering_potion",
+    "happy_ghast"
   ],
   "argumenttypes": [
     "brigadier:bool",
@@ -1759,7 +1778,8 @@
     "loot_table",
     "loot_predicate",
     "loot_modifier",
-    "resource_selector"
+    "resource_selector",
+    "hex_color"
   ],
   "recipe_serializers": [
     "crafting_shaped",
@@ -1952,6 +1972,9 @@
     "submerged_mining_speed",
     "sweeping_damage_ratio",
     "tempt_range",
-    "water_movement_efficiency"
+    "water_movement_efficiency",
+    "camera_distance",
+    "waypoint_transmit_range",
+    "waypoint_receive_range"
   ]
 }
