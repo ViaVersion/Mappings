@@ -1,57 +1,45 @@
 {
   "blockstates": {
-    "dried_ghast[facing=north,hydration=0,waterlogged=true]": "",
-    "dried_ghast[facing=north,hydration=0,waterlogged=false]": "",
-    "dried_ghast[facing=north,hydration=1,waterlogged=true]": "",
-    "dried_ghast[facing=north,hydration=1,waterlogged=false]": "",
-    "dried_ghast[facing=north,hydration=2,waterlogged=true]": "",
-    "dried_ghast[facing=north,hydration=2,waterlogged=false]": "",
-    "dried_ghast[facing=north,hydration=3,waterlogged=true]": "",
-    "dried_ghast[facing=north,hydration=3,waterlogged=false]": "",
-    "dried_ghast[facing=south,hydration=0,waterlogged=true]": "",
-    "dried_ghast[facing=south,hydration=0,waterlogged=false]": "",
-    "dried_ghast[facing=south,hydration=1,waterlogged=true]": "",
-    "dried_ghast[facing=south,hydration=1,waterlogged=false]": "",
-    "dried_ghast[facing=south,hydration=2,waterlogged=true]": "",
-    "dried_ghast[facing=south,hydration=2,waterlogged=false]": "",
-    "dried_ghast[facing=south,hydration=3,waterlogged=true]": "",
-    "dried_ghast[facing=south,hydration=3,waterlogged=false]": "",
-    "dried_ghast[facing=west,hydration=0,waterlogged=true]": "",
-    "dried_ghast[facing=west,hydration=0,waterlogged=false]": "",
-    "dried_ghast[facing=west,hydration=1,waterlogged=true]": "",
-    "dried_ghast[facing=west,hydration=1,waterlogged=false]": "",
-    "dried_ghast[facing=west,hydration=2,waterlogged=true]": "",
-    "dried_ghast[facing=west,hydration=2,waterlogged=false]": "",
-    "dried_ghast[facing=west,hydration=3,waterlogged=true]": "",
-    "dried_ghast[facing=west,hydration=3,waterlogged=false]": "",
-    "dried_ghast[facing=east,hydration=0,waterlogged=true]": "",
-    "dried_ghast[facing=east,hydration=0,waterlogged=false]": "",
-    "dried_ghast[facing=east,hydration=1,waterlogged=true]": "",
-    "dried_ghast[facing=east,hydration=1,waterlogged=false]": "",
-    "dried_ghast[facing=east,hydration=2,waterlogged=true]": "",
-    "dried_ghast[facing=east,hydration=2,waterlogged=false]": "",
-    "dried_ghast[facing=east,hydration=3,waterlogged=true]": "",
-    "dried_ghast[facing=east,hydration=3,waterlogged=false]": ""
+    "dried_ghast": "chorus_plant[down=true,east=false,north=false,south=false,up=false,west=false]"
   },
   "items": {
-    "dried_ghast": "",
-    "white_harness": "",
-    "orange_harness": "",
-    "magenta_harness": "",
-    "light_blue_harness": "",
-    "yellow_harness": "",
-    "lime_harness": "",
-    "pink_harness": "",
-    "gray_harness": "",
-    "light_gray_harness": "",
-    "cyan_harness": "",
-    "purple_harness": "",
-    "blue_harness": "",
-    "brown_harness": "",
-    "green_harness": "",
-    "red_harness": "",
-    "black_harness": "",
-    "happy_ghast_spawn_egg": ""
+    "dried_ghast": "skeleton_skull",
+    "white_harness": "wolf_armor",
+    "orange_harness": "wolf_armor",
+    "magenta_harness": "wolf_armor",
+    "light_blue_harness": "wolf_armor",
+    "yellow_harness": "wolf_armor",
+    "lime_harness": "wolf_armor",
+    "pink_harness": "wolf_armor",
+    "gray_harness": "wolf_armor",
+    "light_gray_harness": "wolf_armor",
+    "cyan_harness": "wolf_armor",
+    "purple_harness": "wolf_armor",
+    "blue_harness": "wolf_armor",
+    "brown_harness": "wolf_armor",
+    "green_harness": "wolf_armor",
+    "red_harness": "wolf_armor",
+    "black_harness": "wolf_armor",
+    "happy_ghast_spawn_egg": "ghast_spawn_egg"
+  },
+  "itemnames": {
+    "dried_ghast": "1.22 Dried Ghast",
+    "white_harness": "1.22 White Harness",
+    "orange_harness": "1.22 Orange Harness",
+    "magenta_harness": "1.22 Magenta Harness",
+    "light_blue_harness": "1.22 Light Blue Harness",
+    "yellow_harness": "1.22 Yellow Harness",
+    "lime_harness": "1.22 Lime Harness",
+    "pink_harness": "1.22 Pink Harness",
+    "gray_harness": "1.22 Gray Harness",
+    "light_gray_harness": "1.22 Light Gray Harness",
+    "cyan_harness": "1.22 Cyan Harness",
+    "purple_harness": "1.22 Purple Harness",
+    "blue_harness": "1.22 Blue Harness",
+    "brown_harness": "1.22 Brown Harness",
+    "green_harness": "1.22 Green Harness",
+    "red_harness": "1.22 Red Harness",
+    "black_harness": "1.22 Black Harness"
   },
   "sounds": {
     "block.dried_ghast.break": "",
@@ -78,10 +66,13 @@
     "entity.happy_ghast.harness_goggles_down": ""
   },
   "argumenttypes": {
-    "hex_color": ""
+    "hex_color": "brigadier:string"
   },
   "entities": {
-    "happy_ghast": ""
+    "happy_ghast": "ghast"
+  },
+  "entitynames": {
+    "happy_ghast": "Happy Ghast"
   },
   "attributes": {
     "camera_distance": "",
