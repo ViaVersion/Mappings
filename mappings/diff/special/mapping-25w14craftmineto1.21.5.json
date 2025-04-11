@@ -93,9 +93,26 @@
     "pet_cow": "cow",
     "pet_mooshroom": "mooshroom"
   },
+  "entitynames": {
+    "pet_armadillo": "Pet Armadillo",
+    "pet_axolotl": "Pet Axolotl",
+    "pet_bee": "Pet Bee",
+    "pet_cat": "Pet Cat",
+    "pet_fox": "Pet Fox",
+    "angry_ghast": "Angry Ghast",
+    "pet_turtle": "Pet Turtle",
+    "pet_polar_bear": "Pet Polar Bear",
+    "pet_slime": "Pet Slime",
+    "pet_wolf": "Pet Wolf",
+    "pet_creeper": "Pet Creeper",
+    "pet_chicken": "Pet Chicken",
+    "pet_frog": "Pet Frog",
+    "pet_cow": "Pet Cow",
+    "pet_mooshroom": "Pet Mooshroom"
+  },
   "menus": {
-    "dimension_control": "",
-    "map_making": ""
+    "dimension_control": "generic_9x3",
+    "map_making": "generic_9x6"
   },
   "attributes": {
     "experience_gain_modifier": "",
