@@ -1,0 +1,20 @@
+{
+  "blockstates": {
+    "end_portal": "structure_void",
+    "end_portal_frame[eye=true,facing=north]": "sculk_shrieker[can_summon=true,shrieking=true,waterlogged=false]",
+    "end_portal_frame[eye=true,facing=south]": "sculk_shrieker[can_summon=true,shrieking=true,waterlogged=false]",
+    "end_portal_frame[eye=true,facing=west]": "sculk_shrieker[can_summon=true,shrieking=false,waterlogged=false]",
+    "end_portal_frame[eye=true,facing=east]": "sculk_shrieker[can_summon=true,shrieking=false,waterlogged=false]",
+    "end_portal_frame[eye=false,facing=north]": "sculk_shrieker[can_summon=false,shrieking=true,waterlogged=false]",
+    "end_portal_frame[eye=false,facing=south]": "sculk_shrieker[can_summon=false,shrieking=true,waterlogged=false]",
+    "end_portal_frame[eye=false,facing=west]": "sculk_shrieker[can_summon=false,shrieking=false,waterlogged=false]",
+    "end_portal_frame[eye=false,facing=east]": "sculk_shrieker[can_summon=false,shrieking=false,waterlogged=false]"
+  },
+  "items": {
+    "end_portal_frame": "sculk_shrieker",
+    "ender_eye": "exit_eye"
+  },
+  "blockentities": {
+    "end_portal": ""
+  }
+}
