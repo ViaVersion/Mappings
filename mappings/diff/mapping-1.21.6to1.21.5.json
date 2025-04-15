@@ -63,7 +63,8 @@
     "entity.happy_ghast.equip": "",
     "entity.happy_ghast.unequip": "",
     "entity.happy_ghast.harness_goggles_up": "",
-    "entity.happy_ghast.harness_goggles_down": ""
+    "entity.happy_ghast.harness_goggles_down": "",
+    "item.shears.snip": ""
   },
   "argumenttypes": {
     "hex_color": "brigadier:string"

@@ -1,5 +1,6 @@
 {
   "sounds": {
-    "block.sand.wind": ""
+    "block.sand.wind": "",
+    "entity.puffer_fish.ambient": ""
   }
 }
