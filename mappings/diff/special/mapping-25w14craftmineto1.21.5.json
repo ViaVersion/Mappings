@@ -21,7 +21,7 @@
     "mob_trophy": "air"
   },
   "items": {
-    "sky_box": "air",
+    "sky_box": "barrier",
     "mob_trophy": "bell",
     "shazboots": "leather_boots",
     "exit_eye": "ender_eye",
