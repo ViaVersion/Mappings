@@ -70,7 +70,7 @@
   },
   "argumenttypes": {
     "hex_color": "brigadier:string",
-    "dialog": ""
+    "dialog": "brigadier:string"
   },
   "entities": {
     "happy_ghast": "ghast"
