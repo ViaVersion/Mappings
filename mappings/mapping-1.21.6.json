@@ -30323,6 +30323,7 @@
     "music_disc_5",
     "music_disc_pigstep",
     "music_disc_precipice",
+    "music_disc_tears",
     "disc_fragment_5",
     "trident",
     "nautilus_shell",
@@ -31419,6 +31420,7 @@
     "music_disc.creator",
     "music_disc.creator_music_box",
     "music_disc.precipice",
+    "music_disc.tears",
     "music.dragon",
     "music.end",
     "music.game",
@@ -32415,6 +32417,7 @@
     "loot_table",
     "loot_predicate",
     "loot_modifier",
+    "dialog",
     "uuid"
   ],
   "entities": [

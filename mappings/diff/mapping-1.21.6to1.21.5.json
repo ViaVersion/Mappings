@@ -20,7 +20,8 @@
     "green_harness": "wolf_armor",
     "red_harness": "wolf_armor",
     "black_harness": "wolf_armor",
-    "happy_ghast_spawn_egg": "ghast_spawn_egg"
+    "happy_ghast_spawn_egg": "ghast_spawn_egg",
+    "music_disc_tears": ""
   },
   "itemnames": {
     "dried_ghast": "1.22 Dried Ghast",
@@ -64,10 +65,12 @@
     "entity.happy_ghast.unequip": "",
     "entity.happy_ghast.harness_goggles_up": "",
     "entity.happy_ghast.harness_goggles_down": "",
-    "item.shears.snip": ""
+    "item.shears.snip": "",
+    "music_disc.tears": ""
   },
   "argumenttypes": {
-    "hex_color": "brigadier:string"
+    "hex_color": "brigadier:string",
+    "dialog": ""
   },
   "entities": {
     "happy_ghast": "ghast"

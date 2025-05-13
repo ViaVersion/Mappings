@@ -1436,7 +1436,8 @@
     "green_harness",
     "red_harness",
     "black_harness",
-    "happy_ghast_spawn_egg"
+    "happy_ghast_spawn_egg",
+    "music_disc_tears"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1779,7 +1780,8 @@
     "loot_predicate",
     "loot_modifier",
     "resource_selector",
-    "hex_color"
+    "hex_color",
+    "dialog"
   ],
   "recipe_serializers": [
     "crafting_shaped",
