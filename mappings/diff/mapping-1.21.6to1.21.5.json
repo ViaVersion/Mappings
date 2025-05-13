@@ -21,7 +21,7 @@
     "red_harness": "wolf_armor",
     "black_harness": "wolf_armor",
     "happy_ghast_spawn_egg": "ghast_spawn_egg",
-    "music_disc_tears": ""
+    "music_disc_tears": "music_disc_precipice"
   },
   "itemnames": {
     "dried_ghast": "1.22 Dried Ghast",
@@ -40,7 +40,9 @@
     "brown_harness": "1.22 Brown Harness",
     "green_harness": "1.22 Green Harness",
     "red_harness": "1.22 Red Harness",
-    "black_harness": "1.22 Black Harness"
+    "black_harness": "1.22 Black Harness",
+    "happy_ghast_spawn_egg": "1.22 Happy Ghast Spawn Egg",
+    "music_disc_tears": "1.22 Music Disc (Tears)"
   },
   "sounds": {
     "block.dried_ghast.break": "",
@@ -66,7 +68,7 @@
     "entity.happy_ghast.harness_goggles_up": "",
     "entity.happy_ghast.harness_goggles_down": "",
     "item.shears.snip": "",
-    "music_disc.tears": ""
+    "music_disc.tears": "music_disc.precipice"
   },
   "argumenttypes": {
     "hex_color": "brigadier:string",
