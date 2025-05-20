@@ -31238,6 +31238,7 @@
     "entity.horse.ambient",
     "entity.horse.angry",
     "entity.horse.armor",
+    "item.horse_armor.unequip",
     "entity.horse.breathe",
     "entity.horse.death",
     "entity.horse.eat",
@@ -31309,8 +31310,9 @@
     "block.leaf_litter.place",
     "block.leaf_litter.hit",
     "block.leaf_litter.fall",
-    "entity.leash_knot.break",
-    "entity.leash_knot.place",
+    "item.lead.untied",
+    "item.lead.tied",
+    "item.lead.break",
     "block.lever.click",
     "entity.lightning_bolt.impact",
     "entity.lightning_bolt.thunder",
@@ -31324,6 +31326,7 @@
     "entity.llama.spit",
     "entity.llama.step",
     "entity.llama.swag",
+    "item.llama_carpet.unequip",
     "entity.magma_cube.death_small",
     "block.lodestone.break",
     "block.lodestone.step",
@@ -32194,7 +32197,8 @@
     "entity.zombie_villager.step",
     "event.mob_effect.bad_omen",
     "event.mob_effect.trial_omen",
-    "event.mob_effect.raid_omen"
+    "event.mob_effect.raid_omen",
+    "item.saddle.unequip"
   ],
   "particles": [
     "angry_villager",

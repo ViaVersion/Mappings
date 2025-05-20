@@ -1,6 +1,8 @@
 {
   "sounds": {
     "block.sand.wind": "",
-    "entity.puffer_fish.ambient": ""
+    "entity.puffer_fish.ambient": "",
+    "entity.leash_knot.break": "",
+    "entity.leash_knot.place": ""
   }
 }

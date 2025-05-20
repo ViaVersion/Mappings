@@ -68,7 +68,13 @@
     "entity.happy_ghast.harness_goggles_up": "",
     "entity.happy_ghast.harness_goggles_down": "",
     "item.shears.snip": "",
-    "music_disc.tears": "music_disc.precipice"
+    "music_disc.tears": "music_disc.precipice",
+    "item.horse_armor.unequip": "",
+    "item.lead.untied": "",
+    "item.lead.tied": "",
+    "item.lead.break": "",
+    "item.llama_carpet.unequip": "",
+    "item.saddle.unequip": ""
   },
   "argumenttypes": {
     "hex_color": "brigadier:string",
