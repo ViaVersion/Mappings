@@ -70,9 +70,9 @@
     "item.shears.snip": "",
     "music_disc.tears": "music_disc.precipice",
     "item.horse_armor.unequip": "",
-    "item.lead.untied": "",
-    "item.lead.tied": "",
-    "item.lead.break": "",
+    "item.lead.untied": "entity.leash_knot.break",
+    "item.lead.tied": "entity.leash_knot.place",
+    "item.lead.break": "entity.leash_knot.break",
     "item.llama_carpet.unequip": "",
     "item.saddle.unequip": ""
   },
