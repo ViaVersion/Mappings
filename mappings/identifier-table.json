@@ -1437,7 +1437,8 @@
     "red_harness",
     "black_harness",
     "happy_ghast_spawn_egg",
-    "music_disc_tears"
+    "music_disc_tears",
+    "music_disc_lava_chicken"
   ],
   "particles": [
     "ambient_entity_effect",
