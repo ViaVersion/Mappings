@@ -287,6 +287,7 @@ public final class MappingsOptimizer {
         storeIdentifierIndexes(identifiers, object, "attributes");
         storeIdentifierIndexes(identifiers, object, "recipe_serializers");
         storeIdentifierIndexes(identifiers, object, "data_component_type");
+        storeIdentifierIndexes(identifiers, object, "blockentities");
 
         // No need to save the same identifiers multiple times if one version appears in multiple runs
         if (savedIdentifierFiles.add(version) && !identifiers.isEmpty()) {
