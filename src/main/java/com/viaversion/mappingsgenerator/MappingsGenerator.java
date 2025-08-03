@@ -163,6 +163,7 @@ public final class MappingsGenerator {
         addArray(viaMappings, registries, "minecraft:attribute", "attributes");
         addArray(viaMappings, registries, "minecraft:recipe_serializer", "recipe_serializers");
         addArray(viaMappings, registries, "minecraft:data_component_type", "data_component_type");
+        //addArray(viaMappings, registries, "minecraft:custom_stat", "statistics");
 
         // Save
         new File("mappings").mkdir();
