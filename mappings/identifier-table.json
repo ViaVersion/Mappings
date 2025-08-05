@@ -1485,7 +1485,32 @@
     "waxed_copper_golem_statue",
     "waxed_exposed_copper_golem_statue",
     "waxed_weathered_copper_golem_statue",
-    "waxed_oxidized_copper_golem_statue"
+    "waxed_oxidized_copper_golem_statue",
+    "copper_torch",
+    "copper_bars",
+    "exposed_copper_bars",
+    "weathered_copper_bars",
+    "oxidized_copper_bars",
+    "waxed_copper_bars",
+    "waxed_exposed_copper_bars",
+    "waxed_weathered_copper_bars",
+    "waxed_oxidized_copper_bars",
+    "copper_chain",
+    "exposed_copper_chain",
+    "weathered_copper_chain",
+    "oxidized_copper_chain",
+    "waxed_copper_chain",
+    "waxed_exposed_copper_chain",
+    "waxed_weathered_copper_chain",
+    "waxed_oxidized_copper_chain",
+    "copper_lantern",
+    "exposed_copper_lantern",
+    "weathered_copper_lantern",
+    "oxidized_copper_lantern",
+    "waxed_copper_lantern",
+    "waxed_exposed_copper_lantern",
+    "waxed_weathered_copper_lantern",
+    "waxed_oxidized_copper_lantern"
   ],
   "particles": [
     "ambient_entity_effect",
@@ -1609,7 +1634,8 @@
     "block_crumble",
     "pale_oak_leaves",
     "tinted_leaves",
-    "firefly"
+    "firefly",
+    "copper_fire_flame"
   ],
   "entities": [
     "area_effect_cloud",
