@@ -250,7 +250,9 @@
     "block.shelf.place": "",
     "block.shelf.place_item": "",
     "block.shelf.single_swap": "",
-    "block.shelf.step": ""
+    "block.shelf.step": "",
+    "entity.copper_golem.shear": "",
+    "weather.end_flash": ""
   },
   "blockentities": {
     "shelf": "",
