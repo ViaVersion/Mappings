@@ -60,7 +60,13 @@
     "waxed_copper_lantern": "soul_lantern[",
     "waxed_exposed_copper_lantern": "soul_lantern[",
     "waxed_weathered_copper_lantern": "soul_lantern[",
-    "waxed_oxidized_copper_lantern": "soul_lantern["
+    "waxed_oxidized_copper_lantern": "soul_lantern[",
+    "iron_chain[axis=x,waterlogged=true]": "",
+    "iron_chain[axis=x,waterlogged=false]": "",
+    "iron_chain[axis=y,waterlogged=true]": "",
+    "iron_chain[axis=y,waterlogged=false]": "",
+    "iron_chain[axis=z,waterlogged=true]": "",
+    "iron_chain[axis=z,waterlogged=false]": ""
   },
   "items": {
     "acacia_shelf": "acacia_planks",
@@ -134,7 +140,8 @@
     "waxed_copper_lantern": "soul_lantern",
     "waxed_exposed_copper_lantern": "soul_lantern",
     "waxed_weathered_copper_lantern": "soul_lantern",
-    "waxed_oxidized_copper_lantern": "soul_lantern"
+    "waxed_oxidized_copper_lantern": "soul_lantern",
+    "iron_chain": ""
   },
   "itemnames": {
     "acacia_shelf": "1.21.9 Acacia Shelf",
@@ -252,7 +259,8 @@
     "block.shelf.single_swap": "",
     "block.shelf.step": "",
     "entity.copper_golem.shear": "",
-    "weather.end_flash": ""
+    "weather.end_flash": "",
+    "block.shelf.take_item": ""
   },
   "blockentities": {
     "shelf": "",

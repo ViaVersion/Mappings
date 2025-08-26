@@ -1510,7 +1510,8 @@
     "waxed_copper_lantern",
     "waxed_exposed_copper_lantern",
     "waxed_weathered_copper_lantern",
-    "waxed_oxidized_copper_lantern"
+    "waxed_oxidized_copper_lantern",
+    "iron_chain"
   ],
   "particles": [
     "ambient_entity_effect",
