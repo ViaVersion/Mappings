@@ -61,12 +61,7 @@
     "waxed_exposed_copper_lantern": "soul_lantern[",
     "waxed_weathered_copper_lantern": "soul_lantern[",
     "waxed_oxidized_copper_lantern": "soul_lantern[",
-    "iron_chain[axis=x,waterlogged=true]": "",
-    "iron_chain[axis=x,waterlogged=false]": "",
-    "iron_chain[axis=y,waterlogged=true]": "",
-    "iron_chain[axis=y,waterlogged=false]": "",
-    "iron_chain[axis=z,waterlogged=true]": "",
-    "iron_chain[axis=z,waterlogged=false]": ""
+    "iron_chain": "chain["
   },
   "items": {
     "acacia_shelf": "acacia_planks",
@@ -141,7 +136,7 @@
     "waxed_exposed_copper_lantern": "soul_lantern",
     "waxed_weathered_copper_lantern": "soul_lantern",
     "waxed_oxidized_copper_lantern": "soul_lantern",
-    "iron_chain": ""
+    "iron_chain": "chain"
   },
   "itemnames": {
     "acacia_shelf": "1.21.9 Acacia Shelf",
@@ -216,6 +211,9 @@
     "waxed_exposed_copper_lantern": "1.21.9 Waxed Exposed Copper Lantern",
     "waxed_weathered_copper_lantern": "1.21.9 Waxed Weathered Copper Lantern",
     "waxed_oxidized_copper_lantern": "1.21.9 Waxed Oxidized Copper Lantern"
+  },
+  "blocks": {
+    "iron_chain": "chain"
   },
   "sounds": {
     "item.armor.equip_copper": "",
