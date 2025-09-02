@@ -15,5 +15,5 @@ ij_java_generate_final_parameters = true
 [{*.json,*.yml}]
 indent_size = 2
 
-[*.txt]
+[{*.txt,*.json}]
 insert_final_newline = false

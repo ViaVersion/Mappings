@@ -266,7 +266,7 @@
   },
   "entities": {
     "copper_golem": "frog",
-    "mannequin": ""
+    "mannequin": "player"
   },
   "entitynames": {
     "copper_golem": "Copper Golem"
