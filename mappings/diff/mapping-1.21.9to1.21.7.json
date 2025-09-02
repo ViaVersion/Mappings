@@ -265,7 +265,8 @@
     "copper_golem_statue": ""
   },
   "entities": {
-    "copper_golem": "frog"
+    "copper_golem": "frog",
+    "mannequin": ""
   },
   "entitynames": {
     "copper_golem": "Copper Golem"

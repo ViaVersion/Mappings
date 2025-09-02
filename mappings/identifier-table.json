@@ -1795,7 +1795,8 @@
     "splash_potion",
     "lingering_potion",
     "happy_ghast",
-    "copper_golem"
+    "copper_golem",
+    "mannequin"
   ],
   "argumenttypes": [
     "brigadier:bool",
