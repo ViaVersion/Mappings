@@ -100,7 +100,7 @@ public final class MappingsLoader {
 
             // Check the first entry/if the mapped id is equal to the expected sequential id
             if (id == 0 && mappedId != 0
-                    || id != 0 && mappedId != output[id - 1] + 1) {
+                || id != 0 && mappedId != output[id - 1] + 1) {
                 shiftChanges++;
             }
         }
@@ -140,48 +140,41 @@ public final class MappingsLoader {
      */
     private static int mapEntry(final int id, final String value, final Object2IntMap<String> mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final ErrorStrategy errorStrategy) {
         int mappedId = mappedIdentifiers.getInt(value);
-        if (mappedId != -1) {
-            return mappedId;
-        }
+        if (diffIdentifiers != null) {
+            // Always check diff mappings to allow overrides for already existing entries
+            JsonElement diffElement = diffIdentifiers.get(value);
+            final int dataIndex;
+            if (diffElement != null || (diffElement = diffIdentifiers.get(Integer.toString(id))) != null) {
+                // Direct match by id or value
+                final String mappedName = diffElement.getAsString();
+                if (mappedName.isEmpty()) {
+                    return -1; // "empty" remaps without warnings
+                }
+                if (mappedName.startsWith("id:")) {
+                    // Special case for cursed mappings
+                    return Integer.parseInt(mappedName.substring("id:".length()));
+                }
 
-        final int dataIndex;
-        if (diffIdentifiers == null) {
-            errorStrategy.apply("No direct mapping or diff file for " + value + " :( ");
-            return -1;
-        }
 
-        // Search in diff mappings
-        JsonElement diffElement = diffIdentifiers.get(value);
-        if (diffElement != null || (diffElement = diffIdentifiers.get(Integer.toString(id))) != null) {
-            // Direct match by id or value
-            final String mappedName = diffElement.getAsString();
-            if (mappedName.isEmpty()) {
-                return -1; // "empty" remaps without warnings
+                mappedId = mappedIdentifiers.getInt(mappedName);
+            } else if ((dataIndex = value.indexOf('[')) != -1 && (diffElement = diffIdentifiers.getAsJsonPrimitive(value.substring(0, dataIndex))) != null) {
+                // Check for wildcard mappings
+                String mappedName = diffElement.getAsString();
+                if (mappedName.isEmpty()) {
+                    return -1;
+                }
+
+                // Keep original properties if value ends with [
+                if (mappedName.endsWith("[")) {
+                    mappedName += value.substring(dataIndex + 1);
+                }
+
+                mappedId = mappedIdentifiers.getInt(mappedName);
             }
-            if (mappedName.startsWith("id:")) {
-                // Special case for cursed mappings
-                return Integer.parseInt(mappedName.substring("id:".length()));
-            }
-
-
-            mappedId = mappedIdentifiers.getInt(mappedName);
-        } else if ((dataIndex = value.indexOf('[')) != -1 && (diffElement = diffIdentifiers.getAsJsonPrimitive(value.substring(0, dataIndex))) != null) {
-            // Check for wildcard mappings
-            String mappedName = diffElement.getAsString();
-            if (mappedName.isEmpty()) {
-                return -1;
-            }
-
-            // Keep original properties if value ends with [
-            if (mappedName.endsWith("[")) {
-                mappedName += value.substring(dataIndex + 1);
-            }
-
-            mappedId = mappedIdentifiers.getInt(mappedName);
         }
 
         if (mappedId == -1) {
-            errorStrategy.apply("No mapping for " + value + " :( ");
+            errorStrategy.apply(diffIdentifiers == null ? "No direct mapping or diff file for " + value + " :( " : "No mapping for " + value + " :( ");
         }
         return mappedId;
     }
@@ -196,10 +189,10 @@ public final class MappingsLoader {
      * @return diff object stub, or null if no diff is needed
      */
     public static @Nullable JsonObject getDiffObjectStub(
-            final JsonObject unmappedObject,
-            final JsonObject mappedObject,
-            @Nullable final JsonObject existingDiffObject,
-            final Set<String> toIgnore
+        final JsonObject unmappedObject,
+        final JsonObject mappedObject,
+        @Nullable final JsonObject existingDiffObject,
+        final Set<String> toIgnore
     ) {
         final JsonObject diffObject = new JsonObject();
         for (final Map.Entry<String, JsonElement> entry : unmappedObject.entrySet()) {
