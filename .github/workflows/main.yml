@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
 
       - name: Check for snapshot
         run: pip install -r requirements.txt && python download_server.py
