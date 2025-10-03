@@ -66,25 +66,25 @@ public final class MappingsOptimizer {
     private static final Logger LOGGER = LoggerFactory.getLogger(MappingsOptimizer.class.getSimpleName());
     private static final TagWriter TAG_WRITER = NBTIO.writer().named();
     private static final Set<String> STANDARD_FIELDS = Set.of(
-            "blockstates",
-            "blocks",
-            "items",
-            "menus",
-            "sounds",
-            "blockentities",
-            "enchantments",
-            "paintings",
-            "entities",
-            "particles",
-            "argumenttypes",
-            "statistics",
-            "tags",
-            "attributes"
+        "blockstates",
+        "blocks",
+        "items",
+        "menus",
+        "sounds",
+        "blockentities",
+        "enchantments",
+        "paintings",
+        "entities",
+        "particles",
+        "argumenttypes",
+        "statistics",
+        "tags",
+        "attributes"
     );
     private static final int[] storageStrategyCounts = new int[IDENTITY_ID + 1];
     private static final Set<String> savedIdentifierFiles = new HashSet<>();
-    private static JsonObject globalIdentifiersObject;
-    private static JsonObject fileHashesObject;
+    static JsonObject globalIdentifiersObject;
+    static JsonObject fileHashesObject;
 
     private final Set<String> ignoreMissing = new HashSet<>(Arrays.asList("blocks", "statistics"));
     private final CompoundTag output = new CompoundTag();
@@ -123,7 +123,7 @@ public final class MappingsOptimizer {
         optimizer.optimizeAndWrite();
     }
 
-    private void loadGlobalFiles() throws IOException {
+    static void loadGlobalFiles() throws IOException {
         // Load and reuse identifiers file, being a global table across all versions
         if (globalIdentifiersObject == null) {
             globalIdentifiersObject = MappingsLoader.load(MAPPINGS_DIR, "identifier-table.json");
@@ -282,6 +282,7 @@ public final class MappingsOptimizer {
         final CompoundTag identifiers = new CompoundTag();
         storeIdentifierIndexes(identifiers, object, "entities");
         storeIdentifierIndexes(identifiers, object, "items");
+        storeIdentifierIndexes(identifiers, object, "sounds");
         storeIdentifierIndexes(identifiers, object, "particles");
         storeIdentifierIndexes(identifiers, object, "argumenttypes");
         storeIdentifierIndexes(identifiers, object, "attributes");
@@ -309,6 +310,7 @@ public final class MappingsOptimizer {
         final Path outputPath = OUTPUT_DIR.resolve(OUTPUT_GLOBAL_IDENTIFIERS_FILE);
         final CompoundTag globalIdentifiersTag = (CompoundTag) JsonConverter.toTag(globalIdentifiersObject);
         write(globalIdentifiersTag, outputPath);
+        addFileData("identifier-table", globalIdentifiersTag.hashCode(), outputPath);
         updatedGlobalIdentifiers = false;
     }
 
@@ -326,7 +328,7 @@ public final class MappingsOptimizer {
         writeJson(fileHashesObject, Path.of("output_hashes.json"));
     }
 
-    private static void writeJson(final JsonObject object, final Path path) throws IOException {
+    static void writeJson(final JsonObject object, final Path path) throws IOException {
         try (final BufferedWriter writer = Files.newBufferedWriter(path)) {
             MappingsGenerator.GSON.toJson(object, writer);
         }
@@ -356,7 +358,7 @@ public final class MappingsOptimizer {
      */
     public void mappings(final boolean alwaysWriteIdentity, final String key) {
         if (!unmappedObject.has(key) || !mappedObject.has(key)
-                || !unmappedObject.get(key).isJsonArray() || !mappedObject.get(key).isJsonArray()) {
+            || !unmappedObject.get(key).isJsonArray() || !mappedObject.get(key).isJsonArray()) {
             return;
         }
 
@@ -383,17 +385,17 @@ public final class MappingsOptimizer {
     }
 
     public void cursedMappings(
-            final String unmappedKey,
-            final String mappedKey,
-            final String outputKey,
-            final int size
+        final String unmappedKey,
+        final String mappedKey,
+        final String outputKey,
+        final int size
     ) {
         final JsonObject mappedIdentifiers = JsonConverter.toJsonObject(mappedObject.get(mappedKey));
         final Int2IntMap map = MappingsLoader.map(
-                JsonConverter.toJsonObject(unmappedObject.get(unmappedKey)),
-                mappedIdentifiers,
-                diffObject != null ? diffObject.getAsJsonObject(unmappedKey) : null,
-                errorStrategy
+            JsonConverter.toJsonObject(unmappedObject.get(unmappedKey)),
+            mappedIdentifiers,
+            diffObject != null ? diffObject.getAsJsonObject(unmappedKey) : null,
+            errorStrategy
         );
 
         final CompoundTag changedTag = new CompoundTag();
@@ -516,9 +518,9 @@ public final class MappingsOptimizer {
      * @param key    to read from and write to
      */
     private void storeIdentifierIndexes(
-            final CompoundTag tag,
-            final JsonObject object,
-            final String key
+        final CompoundTag tag,
+        final JsonObject object,
+        final String key
     ) {
         final JsonElement identifiersElement = object.get(key);
         if (identifiersElement == null) {
@@ -589,7 +591,9 @@ public final class MappingsOptimizer {
 
         final CompoundTag tag = new CompoundTag();
         parent.put(key, tag);
-        tag.putInt("mappedSize", result.mappedSize());
+        if (result.mappedSize() != -1) {
+            tag.putInt("mappedSize", result.mappedSize());
+        }
 
         if (!hasChanges) {
             tag.putByte("id", IDENTITY_ID);

@@ -18,6 +18,8 @@
  */
 package com.viaversion.mappingsgenerator;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import com.viaversion.mappingsgenerator.util.ServerJarUtil;
 import com.viaversion.mappingsgenerator.util.Version;
 import java.io.File;
@@ -27,8 +29,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ManualRunner {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MappingsOptimizer.class.getSimpleName());
 
     private static final Set<String> SPECIAL_BACKWARDS_ONLY = Set.of("1.9.4", "1.10", "1.11");
 
@@ -68,6 +74,55 @@ public final class ManualRunner {
      * Runs the optimizer for all mapping files present in the 'mappings' directory.
      */
     public static void runAll(final ErrorStrategy errorStrategy) throws IOException {
+        // Going backwards wil result in less index shifts in the versions that matter most/have the most entries
+        final List<String> versions = allVersions();
+        for (int i = versions.size() - 1; i > 0; i--) {
+            final String from = versions.get(i - 1);
+            final String to = versions.get(i);
+            if (from.equals("1.12") && to.equals("1.13")) {
+                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBTBackwards();
+                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBT();
+                continue;
+            }
+
+            final boolean special = SPECIAL_BACKWARDS_ONLY.contains(from);
+
+            final MappingsOptimizer backwardsOptimizer = new MappingsOptimizer(to, from);
+            backwardsOptimizer.setErrorStrategy(errorStrategy);
+            if (special) {
+                backwardsOptimizer.ignoreMissingMappingsFor("sounds");
+            }
+            backwardsOptimizer.optimizeAndWrite();
+
+            if (!special) {
+                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to);
+                mappingsOptimizer.setErrorStrategy(errorStrategy);
+                mappingsOptimizer.optimizeAndWrite();
+            }
+        }
+
+        if (ALL_SPECIAL) {
+            for (Map.Entry<String, String> entry : SPECIAL_BACKWARDS_VERSIONS.entrySet()) {
+                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), true, false);
+                mappingsOptimizer.setErrorStrategy(errorStrategy);
+                mappingsOptimizer.optimizeAndWrite();
+            }
+            for (Map.Entry<String, String> entry : SPECIAL_VERSIONS.entrySet()) {
+                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), false, true);
+                mappingsOptimizer.setErrorStrategy(errorStrategy);
+                mappingsOptimizer.optimizeAndWrite();
+            }
+        }
+
+        int totalSize = 0;
+        for (final Map.Entry<String, JsonElement> entry : MappingsOptimizer.fileHashesObject.entrySet()) {
+            final JsonPrimitive size = entry.getValue().getAsJsonObject().getAsJsonPrimitive("size");
+            totalSize += size.getAsInt();
+        }
+        LOGGER.info("Total size of all mapping and identifier files: {}kb", totalSize / 1024);
+    }
+
+    private static List<String> allVersions() {
         final List<String> versions = new ArrayList<>();
         for (final File file : MappingsOptimizer.MAPPINGS_DIR.toFile().listFiles()) {
             final String name = file.getName();
@@ -76,47 +131,8 @@ public final class ManualRunner {
                 versions.add(version);
             }
         }
-
         versions.sort(Version::compare);
-
-        for (int i = 0; i < versions.size() - 1; i++) {
-            final String from = versions.get(i);
-            final String to = versions.get(i + 1);
-            if (from.equals("1.12") && to.equals("1.13")) {
-                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBT();
-                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBTBackwards();
-                continue;
-            }
-
-            final boolean special = SPECIAL_BACKWARDS_ONLY.contains(from);
-            if (!special) {
-                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to);
-                mappingsOptimizer.setErrorStrategy(errorStrategy);
-                mappingsOptimizer.optimizeAndWrite();
-            }
-
-            final MappingsOptimizer backwardsOptimizer = new MappingsOptimizer(to, from);
-            backwardsOptimizer.setErrorStrategy(errorStrategy);
-            if (special) {
-                backwardsOptimizer.ignoreMissingMappingsFor("sounds");
-            }
-
-            backwardsOptimizer.optimizeAndWrite();
-        }
-
-        if (ALL_SPECIAL) {
-            for (Map.Entry<String, String> entry : SPECIAL_VERSIONS.entrySet()) {
-                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), false, true);
-                mappingsOptimizer.setErrorStrategy(errorStrategy);
-                mappingsOptimizer.optimizeAndWrite();
-            }
-
-            for (Map.Entry<String, String> entry : SPECIAL_BACKWARDS_VERSIONS.entrySet()) {
-                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), true, false);
-                mappingsOptimizer.setErrorStrategy(errorStrategy);
-                mappingsOptimizer.optimizeAndWrite();
-            }
-        }
+        return versions;
     }
 
     private static void runMappingsGen() throws Exception {
