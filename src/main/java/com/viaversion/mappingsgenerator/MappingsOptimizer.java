@@ -30,6 +30,10 @@ import com.viaversion.nbt.tag.CompoundTag;
 import com.viaversion.nbt.tag.IntArrayTag;
 import com.viaversion.nbt.tag.Tag;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import java.io.BufferedReader;
@@ -151,8 +155,8 @@ public final class MappingsOptimizer {
     /**
      * Creates a new MappingsOptimizer instance.
      *
-     * @param from    version to map from
-     * @param to      version to map to
+     * @param from        version to map from
+     * @param to          version to map to
      * @param specialFrom If true, the special folders will be used for input
      * @param specialTo   If true, the special folders will be used for output
      * @see #optimizeAndWrite()
@@ -210,13 +214,12 @@ public final class MappingsOptimizer {
             names("items", "itemnames");
             names("enchantments", "enchantmentnames");
             fullNames("entitynames", "entitynames");
-            if (backwards) {
-                // No need to put sounds into the identifier files, so just use full names
-                fullNames("sounds", "soundnames");
-            }
 
             if (diffObject.has("tags")) {
                 tags();
+            }
+            if (diffObject.has("blockstates")) {
+                changedBlockStateProperties();
             }
         }
 
@@ -283,6 +286,7 @@ public final class MappingsOptimizer {
         storeIdentifierIndexes(identifiers, object, "entities");
         storeIdentifierIndexes(identifiers, object, "items");
         storeIdentifierIndexes(identifiers, object, "sounds");
+        storeIdentifierIndexes(identifiers, object, "blocks");
         storeIdentifierIndexes(identifiers, object, "particles");
         storeIdentifierIndexes(identifiers, object, "argumenttypes");
         storeIdentifierIndexes(identifiers, object, "attributes");
@@ -461,9 +465,42 @@ public final class MappingsOptimizer {
     }
 
     /**
+     * Collects changed block states, used for the debug stick.
+     * This checks for any change whether it's the base type or a property, but does not list changed properties,
+     * as that would increase file size by a lot for no real value.
+     */
+    private void changedBlockStateProperties() throws IOException {
+        if (fromVersion.equals("1.13.2") && toVersion.equals("1.13")
+            || fromVersion.equals("1.13") && toVersion.equals("1.13.2")) {
+            return;
+        }
+
+        final IntSet changedProperties = new IntOpenHashSet();
+        for (final Map.Entry<String, JsonElement> entry : diffObject.getAsJsonObject("blockstates").entrySet()) {
+            final String block = entry.getKey().split("\\[", 2)[0];
+            changedProperties.add(idOf("blocks", block, false));
+        }
+
+        if (!changedProperties.isEmpty()) {
+            output.put("changed_blocks", new IntArrayTag(changedProperties.toIntArray()));
+        }
+    }
+
+    private int idOf(final String key, final String value, final boolean mapped) {
+        final JsonArray array = (mapped ? mappedObject : unmappedObject).getAsJsonArray(key);
+        for (int i = 0; i < array.size(); i++) {
+            final JsonElement element = array.get(i);
+            if (element.getAsString().equals(value)) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException("Could not find id for " + key + ": " + value);
+    }
+
+    /**
      * Writes mapped tag ids to the given tag.
      */
-    public void tags() {
+    private void tags() {
         final JsonObject tagsObject = diffObject.getAsJsonObject("tags");
         final CompoundTag tagsTag = new CompoundTag();
         for (final Map.Entry<String, JsonElement> entry : tagsObject.entrySet()) {

@@ -1,67 +1,67 @@
 {
   "identifier-table": {
-    "object-hash": -1626877628,
-    "size": 87476
+    "object-hash": 1023994876,
+    "size": 108195
   },
   "1.13": {
-    "object-hash": -1062784578,
-    "size": 3557
+    "object-hash": 1033462708,
+    "size": 4338
   },
   "1.13.2": {
-    "object-hash": -1345676024,
-    "size": 3949
+    "object-hash": 1146177462,
+    "size": 4722
   },
   "1.14": {
-    "object-hash": -704330502,
-    "size": 3593
+    "object-hash": 296828497,
+    "size": 4254
   },
   "1.15": {
-    "object-hash": 1288106831,
-    "size": 3533
+    "object-hash": -572599975,
+    "size": 4202
   },
   "1.16": {
-    "object-hash": -341249695,
-    "size": 3445
+    "object-hash": 2027341042,
+    "size": 4090
   },
   "1.16.2": {
-    "object-hash": -886540481,
-    "size": 3177
+    "object-hash": 1482050256,
+    "size": 3822
   },
   "1.17": {
-    "object-hash": 1319238154,
-    "size": 2324
+    "object-hash": 1576275349,
+    "size": 2969
   },
   "1.18": {
-    "object-hash": -45480721,
-    "size": 2508
+    "object-hash": 211556474,
+    "size": 3153
   },
   "1.19": {
-    "object-hash": 1889535372,
-    "size": 2364
+    "object-hash": -395239472,
+    "size": 3065
   },
   "1.19.3": {
-    "object-hash": 578299879,
-    "size": 2156
+    "object-hash": 1392770089,
+    "size": 2777
   },
   "1.19.4": {
-    "object-hash": -357495871,
-    "size": 1828
+    "object-hash": 908208588,
+    "size": 2265
   },
   "1.20": {
-    "object-hash": 935842635,
-    "size": 1732
+    "object-hash": -1944330537,
+    "size": 2145
   },
   "1.20.2": {
-    "object-hash": -1543872830,
-    "size": 1732
+    "object-hash": -129078706,
+    "size": 2145
   },
   "1.20.3": {
-    "object-hash": -1576740877,
-    "size": 1989
+    "object-hash": -234666380,
+    "size": 2306
   },
   "1.20.5": {
-    "object-hash": -1785793021,
-    "size": 1744
+    "object-hash": -443718510,
+    "size": 2061
   },
   "3D_Shareware": {
     "object-hash": -1416940880,
@@ -72,16 +72,16 @@
     "size": 3718
   },
   "1.10:1.9.4": {
-    "object-hash": 31287637,
-    "size": 1165
+    "object-hash": -1550115567,
+    "size": 272
   },
   "1.11:1.10": {
-    "object-hash": -1578970102,
-    "size": 2050
+    "object-hash": -230004148,
+    "size": 491
   },
   "1.12:1.11": {
-    "object-hash": 1247217955,
-    "size": 4441
+    "object-hash": 178646269,
+    "size": 1743
   },
   "1.13:1.13.2": {
     "object-hash": -1354203704,
@@ -96,104 +96,104 @@
     "size": 3170
   },
   "1.14:1.13.2": {
-    "object-hash": -641840917,
-    "size": 15311
+    "object-hash": -553420859,
+    "size": 9308
   },
   "1.14:1.15": {
-    "object-hash": 776599809,
-    "size": 973
+    "object-hash": -63917874,
+    "size": 998
   },
   "1.15:1.14": {
-    "object-hash": -524596908,
-    "size": 5373
+    "object-hash": 624968698,
+    "size": 4501
   },
   "1.15:1.16": {
-    "object-hash": -1738533204,
-    "size": 10135
+    "object-hash": 1381778741,
+    "size": 10216
   },
   "1.16:1.15": {
-    "object-hash": 1512123090,
-    "size": 60099
+    "object-hash": -1018324296,
+    "size": 52569
   },
   "1.16:1.16.2": {
-    "object-hash": 92578951,
-    "size": 817
+    "object-hash": -747580270,
+    "size": 850
   },
   "1.16.2:1.16": {
-    "object-hash": 638667506,
-    "size": 1159
+    "object-hash": -841515291,
+    "size": 783
   },
   "1.16.2:1.17": {
-    "object-hash": -248427569,
-    "size": 5334
+    "object-hash": 98692819,
+    "size": 5379
   },
   "1.17:1.16.2": {
-    "object-hash": -1247506606,
-    "size": 23104
+    "object-hash": -1392755668,
+    "size": 14334
   },
   "1.17:1.18": {
     "object-hash": -1074228299,
     "size": 1549
   },
   "1.18:1.17": {
-    "object-hash": 1191025590,
-    "size": 1086
+    "object-hash": -606286457,
+    "size": 502
   },
   "1.18:1.19": {
-    "object-hash": 1379985981,
-    "size": 3253
+    "object-hash": -2099051193,
+    "size": 3322
   },
   "1.19:1.18": {
-    "object-hash": -527846779,
-    "size": 12214
+    "object-hash": 951358044,
+    "size": 6634
   },
   "1.19:1.19.3": {
     "object-hash": -703804191,
     "size": 1257
   },
   "1.19.3:1.19": {
-    "object-hash": 524516470,
-    "size": 9220
+    "object-hash": -1383605215,
+    "size": 5560
   },
   "1.19.3:1.19.4": {
     "object-hash": -996304676,
     "size": 2197
   },
   "1.19.4:1.19.3": {
-    "object-hash": -1507041123,
-    "size": 7639
+    "object-hash": 418443684,
+    "size": 4472
   },
   "1.19.4:1.20": {
-    "object-hash": -651478431,
-    "size": 2962
+    "object-hash": -1491979039,
+    "size": 2991
   },
   "1.20:1.19.4": {
-    "object-hash": -308457178,
-    "size": 3726
+    "object-hash": 495091563,
+    "size": 2394
   },
   "1.20:1.20.2": {
-    "object-hash": 1400627260,
-    "size": 716
+    "object-hash": 848265909,
+    "size": 797
   },
   "1.20.2:1.20": {
-    "object-hash": 446121302,
-    "size": 819
+    "object-hash": -966921883,
+    "size": 620
   },
   "1.20.2:1.20.3": {
-    "object-hash": 1372288871,
-    "size": 1161
+    "object-hash": 531770706,
+    "size": 1186
   },
   "1.20.3:1.20.2": {
-    "object-hash": 280433401,
-    "size": 7630
+    "object-hash": 287824808,
+    "size": 5690
   },
   "1.20.3:1.20.5": {
-    "object-hash": 1487323654,
-    "size": 5609
+    "object-hash": 646804279,
+    "size": 5634
   },
   "1.20.5:1.20.3": {
-    "object-hash": 1855931855,
-    "size": 10411
+    "object-hash": 1525400476,
+    "size": 7314
   },
   "3D_Shareware:1.14": {
     "object-hash": -224826872,
@@ -208,8 +208,8 @@
     "size": 1045
   },
   "1.9.4:1.8": {
-    "object-hash": 1077342180,
-    "size": 18646
+    "object-hash": 448692316,
+    "size": 1904
   },
   "1.7.10:1.8": {
     "object-hash": 351608025,
@@ -220,88 +220,88 @@
     "size": 94
   },
   "1.21": {
-    "object-hash": -619838179,
-    "size": 1640
+    "object-hash": 722236332,
+    "size": 1957
   },
   "1.20.5:1.21": {
     "object-hash": -771366942,
     "size": 539
   },
   "1.21:1.20.5": {
-    "object-hash": -887775357,
-    "size": 1066
+    "object-hash": 972501738,
+    "size": 781
   },
   "1.21.2": {
-    "object-hash": 869119359,
-    "size": 1070
+    "object-hash": 1757992097,
+    "size": 1227
   },
   "1.21:1.21.2": {
     "object-hash": -1751926337,
     "size": 1732
   },
   "1.21.2:1.21": {
-    "object-hash": 1028298998,
-    "size": 6387
+    "object-hash": 867940486,
+    "size": 5660
   },
   "1.21.4": {
-    "object-hash": 702438015,
-    "size": 1006
+    "object-hash": 1228727528,
+    "size": 1147
   },
   "1.21.2:1.21.4": {
-    "object-hash": 947532624,
-    "size": 575
+    "object-hash": 107014391,
+    "size": 600
   },
   "1.21.4:1.21.2": {
-    "object-hash": -1364956631,
-    "size": 1709
+    "object-hash": 1852053137,
+    "size": 1348
   },
   "1.21.5": {
-    "object-hash": 376232385,
-    "size": 780
+    "object-hash": 1309918996,
+    "size": 889
   },
   "1.21.4:1.21.5": {
-    "object-hash": -1528946605,
-    "size": 1004
+    "object-hash": 1925502458,
+    "size": 1029
   },
   "1.21.5:1.21.4": {
-    "object-hash": -1773185759,
-    "size": 4006
+    "object-hash": -161038233,
+    "size": 2674
   },
   "1.21.6": {
-    "object-hash": 1145453280,
-    "size": 568
+    "object-hash": 158630950,
+    "size": 669
   },
   "1.21.5:1.21.6": {
     "object-hash": 772048698,
     "size": 751
   },
   "1.21.6:1.21.5": {
-    "object-hash": -1383045584,
-    "size": 2944
+    "object-hash": -955413460,
+    "size": 2008
   },
   "1.21.7": {
-    "object-hash": -1353527667,
-    "size": 552
+    "object-hash": 1954617299,
+    "size": 653
   },
   "1.21.6:1.21.7": {
     "object-hash": 1450988443,
     "size": 206
   },
   "1.21.7:1.21.6": {
-    "object-hash": 271927949,
-    "size": 334
+    "object-hash": -1325942442,
+    "size": 274
   },
   "1.21.9": {
-    "object-hash": 1989906157,
-    "size": 294
+    "object-hash": 602983182,
+    "size": 321
   },
   "1.21.7:1.21.9": {
-    "object-hash": -2098714733,
-    "size": 748
+    "object-hash": 1355733930,
+    "size": 773
   },
   "1.21.9:1.21.7": {
-    "object-hash": 1939680662,
-    "size": 14521
+    "object-hash": 65148868,
+    "size": 13404
   },
   "1.12": {
     "object-hash": 236235673,

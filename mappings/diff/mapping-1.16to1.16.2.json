@@ -1,11 +1,11 @@
 {
   "blockstates": {
-    "4729": "chain[axis=y,waterlogged=true]",
-    "4730": "chain[axis=y,waterlogged=false]",
-    "14886": "lantern[hanging=true,waterlogged=false]",
-    "14887": "lantern[hanging=false,waterlogged=false]",
-    "14888": "soul_lantern[hanging=true,waterlogged=false]",
-    "14889": "soul_lantern[hanging=false,waterlogged=false]"
+    "chain[waterlogged=true]": "chain[axis=y,waterlogged=true]",
+    "chain[waterlogged=false]": "chain[axis=y,waterlogged=false]",
+    "lantern[hanging=true]": "lantern[hanging=true,waterlogged=false]",
+    "lantern[hanging=false]": "lantern[hanging=false,waterlogged=false]",
+    "soul_lantern[hanging=true]": "soul_lantern[hanging=true,waterlogged=false]",
+    "soul_lantern[hanging=false]": "soul_lantern[hanging=false,waterlogged=false]"
   },
   "tags": {
     "item": {
