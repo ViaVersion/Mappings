@@ -40,7 +40,7 @@ public final class ManualRunner {
 
     private static final boolean ALL = true;
 
-    private static final boolean ALL_SPECIAL = false; // This will also update the identifier-table
+    private static final boolean ALL_SPECIAL = true; // This will also update the identifier-table
     private static final Map<String, String> SPECIAL_VERSIONS = new LinkedHashMap<>();
     private static final Map<String, String> SPECIAL_BACKWARDS_VERSIONS = new LinkedHashMap<>();
 

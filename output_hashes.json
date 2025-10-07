@@ -1,7 +1,7 @@
 {
   "identifier-table": {
-    "object-hash": 2030231034,
-    "size": 108195
+    "object-hash": -270486533,
+    "size": 108430
   },
   "1.13": {
     "object-hash": 1033462708,
@@ -64,12 +64,12 @@
     "size": 2061
   },
   "3D_Shareware": {
-    "object-hash": -1416940880,
-    "size": 3791
+    "object-hash": -415781881,
+    "size": 4452
   },
   "20w14infinite": {
-    "object-hash": 1550457324,
-    "size": 3718
+    "object-hash": 281625718,
+    "size": 6732
   },
   "1.10:1.9.4": {
     "object-hash": -1550115567,
@@ -196,12 +196,12 @@
     "size": 7314
   },
   "3D_Shareware:1.14": {
-    "object-hash": -224826872,
-    "size": 7046
+    "object-hash": -201149112,
+    "size": 6984
   },
   "20w14infinite:1.16": {
-    "object-hash": -1719298584,
-    "size": 10107
+    "object-hash": -1748079214,
+    "size": 10059
   },
   "1.8:1.9.4": {
     "object-hash": 2002027499,
@@ -322,5 +322,17 @@
   "1.8": {
     "object-hash": -916865703,
     "size": 81
+  },
+  "25w14craftmine": {
+    "object-hash": -1962769201,
+    "size": 1475
+  },
+  "25w14craftmine:1.21.5": {
+    "object-hash": -147359589,
+    "size": 2845
+  },
+  "1.21.5:25w14craftmine": {
+    "object-hash": -808396734,
+    "size": 1139
   }
 }
