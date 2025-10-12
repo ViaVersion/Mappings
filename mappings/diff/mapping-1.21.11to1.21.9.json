@@ -1,19 +1,35 @@
 {
   "items": {
-    "nautilus_spawn_egg": "",
-    "zombie_nautilus_spawn_egg": "",
-    "wooden_spear": "",
-    "stone_spear": "",
-    "copper_spear": "",
-    "iron_spear": "",
-    "golden_spear": "",
-    "diamond_spear": "",
-    "netherite_spear": "",
-    "iron_nautilus_armor": "",
-    "golden_nautilus_armor": "",
-    "diamond_nautilus_armor": "",
-    "netherite_nautilus_armor": "",
-    "copper_nautilus_armor": ""
+    "nautilus_spawn_egg": "squid_spawn_egg",
+    "zombie_nautilus_spawn_egg": "glow_squid_spawn_egg",
+    "wooden_spear": "wooden_sword",
+    "stone_spear": "stone_sword",
+    "copper_spear": "copper_sword",
+    "iron_spear": "iron_sword",
+    "golden_spear": "golden_sword",
+    "diamond_spear": "diamond_sword",
+    "netherite_spear": "netherite_sword",
+    "iron_nautilus_armor": "iron_horse_armor",
+    "golden_nautilus_armor": "golden_horse_armor",
+    "diamond_nautilus_armor": "diamond_horse_armor",
+    "netherite_nautilus_armor": "leather_horse_armor",
+    "copper_nautilus_armor": "copper_horse_armor"
+  },
+  "itemnames": {
+    "nautilus_spawn_egg": "1.21.11 Nautilus Spawn Egg",
+    "zombie_nautilus_spawn_egg": "1.21.11 Zombie Nautilus Spawn Egg",
+    "wooden_spear": "1.21.11 Wooden Spear",
+    "stone_spear": "1.21.11 Stone Spear",
+    "copper_spear": "1.21.11 Copper Spear",
+    "iron_spear": "1.21.11 Iron Spear",
+    "golden_spear": "1.21.11 Golden Spear",
+    "diamond_spear": "1.21.11 Diamond Spear",
+    "netherite_spear": "1.21.11 Netherite Spear",
+    "iron_nautilus_armor": "1.21.11 Iron Nautilus Armor",
+    "golden_nautilus_armor": "1.21.11 Golden Nautilus Armor",
+    "diamond_nautilus_armor": "1.21.11 Diamond Nautilus Armor",
+    "netherite_nautilus_armor": "1.21.11 Netherite Nautilus Armor",
+    "copper_nautilus_armor": "1.21.11 Copper Nautilus Armor"
   },
   "sounds": {
     "item.armor.equip_nautilus": "",
@@ -50,8 +66,12 @@
     "entity.nautilus.riding": ""
   },
   "entities": {
-    "nautilus": "",
-    "zombie_nautilus": ""
+    "nautilus": "squid",
+    "zombie_nautilus": "glow_squid"
+  },
+  "entitynames": {
+    "nautilus": "Nautilus",
+    "zombie_nautilus": "Zombie Nautilus"
   },
   "data_component_type": {
     "use_effects": "",
