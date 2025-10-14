@@ -1,7 +1,7 @@
 {
   "identifier-table": {
-    "object-hash": 1041386059,
-    "size": 109592
+    "object-hash": -1879092120,
+    "size": 109616
   },
   "1.13": {
     "object-hash": 1033462708,
@@ -336,15 +336,15 @@
     "size": 1139
   },
   "1.21.11": {
-    "object-hash": 1434508165,
-    "size": 665
+    "object-hash": 395377747,
+    "size": 681
   },
   "1.21.9:1.21.11": {
-    "object-hash": -2030014835,
+    "object-hash": -1467245298,
     "size": 473
   },
   "1.21.11:1.21.9": {
-    "object-hash": 746408675,
-    "size": 897
+    "object-hash": 1433781130,
+    "size": 905
   }
 }

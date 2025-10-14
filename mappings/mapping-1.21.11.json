@@ -32457,6 +32457,7 @@
     "entity.baby_nautilus.death",
     "entity.baby_nautilus.eat",
     "entity.baby_nautilus.hurt",
+    "entity.nautilus.riding",
     "entity.baby_nautilus.swim",
     "block.bamboo.break",
     "block.bamboo.fall",
