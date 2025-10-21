@@ -34147,7 +34147,8 @@
     "event.mob_effect.bad_omen",
     "event.mob_effect.trial_omen",
     "event.mob_effect.raid_omen",
-    "item.saddle.unequip"
+    "item.saddle.unequip",
+    "item.underwater_saddle.equip"
   ],
   "statistics": [
     "leave_game",

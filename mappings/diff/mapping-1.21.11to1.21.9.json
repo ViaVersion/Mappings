@@ -63,7 +63,8 @@
     "entity.zombie_nautilus.eat": "",
     "entity.zombie_nautilus.hurt": "",
     "entity.zombie_nautilus.swim": "",
-    "entity.nautilus.riding": ""
+    "entity.nautilus.riding": "",
+    "item.underwater_saddle.equip": ""
   },
   "entities": {
     "nautilus": "squid",
