@@ -174,7 +174,9 @@
     "pet_cow",
     "pet_mooshroom",
     "nautilus",
-    "zombie_nautilus"
+    "zombie_nautilus",
+    "camel_husk",
+    "parched"
   ],
   "items": [
     "air",
@@ -1720,7 +1722,9 @@
     "golden_nautilus_armor",
     "diamond_nautilus_armor",
     "netherite_nautilus_armor",
-    "copper_nautilus_armor"
+    "copper_nautilus_armor",
+    "camel_husk_spawn_egg",
+    "parched_spawn_egg"
   ],
   "sounds": [
     "entity.allay.ambient_with_item",
@@ -3919,7 +3923,28 @@
     "entity.zombie_nautilus.hurt",
     "entity.zombie_nautilus.swim",
     "entity.nautilus.riding",
-    "item.underwater_saddle.equip"
+    "item.underwater_saddle.equip",
+    "entity.camel_husk.ambient",
+    "entity.camel_husk.dash",
+    "entity.camel_husk.dash_ready",
+    "entity.camel_husk.death",
+    "entity.camel_husk.eat",
+    "entity.camel_husk.hurt",
+    "entity.camel_husk.saddle",
+    "entity.camel_husk.sit",
+    "entity.camel_husk.stand",
+    "entity.camel_husk.step",
+    "entity.camel_husk.step_sand",
+    "entity.parched.ambient",
+    "entity.parched.death",
+    "entity.parched.hurt",
+    "entity.parched.step",
+    "entity.parrot.imitate.camel_husk",
+    "entity.parrot.imitate.parched",
+    "entity.parrot.imitate.zombie_horse",
+    "entity.parrot.imitate.zombie_nautilus",
+    "item.nautilus_saddle_underwater_equip",
+    "item.nautilus_saddle_equip"
   ],
   "blocks": [
     "air",

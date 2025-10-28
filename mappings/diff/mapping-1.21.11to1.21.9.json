@@ -13,7 +13,9 @@
     "golden_nautilus_armor": "golden_horse_armor",
     "diamond_nautilus_armor": "diamond_horse_armor",
     "netherite_nautilus_armor": "leather_horse_armor",
-    "copper_nautilus_armor": "copper_horse_armor"
+    "copper_nautilus_armor": "copper_horse_armor",
+    "camel_husk_spawn_egg": "",
+    "parched_spawn_egg": ""
   },
   "itemnames": {
     "nautilus_spawn_egg": "1.21.11 Nautilus Spawn Egg",
@@ -64,11 +66,34 @@
     "entity.zombie_nautilus.hurt": "",
     "entity.zombie_nautilus.swim": "",
     "entity.nautilus.riding": "",
-    "item.underwater_saddle.equip": ""
+    "item.underwater_saddle.equip": "",
+    "entity.camel_husk.ambient": "",
+    "entity.camel_husk.dash": "",
+    "entity.camel_husk.dash_ready": "",
+    "entity.camel_husk.death": "",
+    "entity.camel_husk.eat": "",
+    "entity.camel_husk.hurt": "",
+    "entity.camel_husk.saddle": "",
+    "entity.camel_husk.sit": "",
+    "entity.camel_husk.stand": "",
+    "entity.camel_husk.step": "",
+    "entity.camel_husk.step_sand": "",
+    "entity.parched.ambient": "",
+    "entity.parched.death": "",
+    "entity.parched.hurt": "",
+    "entity.parched.step": "",
+    "entity.parrot.imitate.camel_husk": "",
+    "entity.parrot.imitate.parched": "",
+    "entity.parrot.imitate.zombie_horse": "",
+    "entity.parrot.imitate.zombie_nautilus": "",
+    "item.nautilus_saddle_underwater_equip": "",
+    "item.nautilus_saddle_equip": ""
   },
   "entities": {
     "nautilus": "squid",
-    "zombie_nautilus": "glow_squid"
+    "zombie_nautilus": "glow_squid",
+    "camel_husk": "",
+    "parched": ""
   },
   "entitynames": {
     "nautilus": "Nautilus",
