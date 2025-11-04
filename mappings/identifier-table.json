@@ -1724,7 +1724,8 @@
     "netherite_nautilus_armor",
     "copper_nautilus_armor",
     "camel_husk_spawn_egg",
-    "parched_spawn_egg"
+    "parched_spawn_egg",
+    "netherite_horse_armor"
   ],
   "sounds": [
     "entity.allay.ambient_with_item",
@@ -5537,7 +5538,8 @@
     "damage_type",
     "piercing_weapon",
     "kinetic_weapon",
-    "swing_animation"
+    "swing_animation",
+    "zombie_nautilus/variant"
   ],
   "blockentities": [
     "furnace",

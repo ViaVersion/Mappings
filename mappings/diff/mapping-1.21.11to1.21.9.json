@@ -15,7 +15,8 @@
     "netherite_nautilus_armor": "leather_horse_armor",
     "copper_nautilus_armor": "copper_horse_armor",
     "camel_husk_spawn_egg": "",
-    "parched_spawn_egg": ""
+    "parched_spawn_egg": "",
+    "netherite_horse_armor": ""
   },
   "itemnames": {
     "nautilus_spawn_egg": "1.21.11 Nautilus Spawn Egg",
@@ -105,6 +106,7 @@
     "damage_type": "",
     "piercing_weapon": "",
     "kinetic_weapon": "",
-    "swing_animation": ""
+    "swing_animation": "",
+    "zombie_nautilus/variant": ""
   }
 }
