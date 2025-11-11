@@ -3945,7 +3945,8 @@
     "entity.parrot.imitate.zombie_horse",
     "entity.parrot.imitate.zombie_nautilus",
     "item.nautilus_saddle_underwater_equip",
-    "item.nautilus_saddle_equip"
+    "item.nautilus_saddle_equip",
+    "entity.zombie_horse.eat"
   ],
   "blocks": [
     "air",
