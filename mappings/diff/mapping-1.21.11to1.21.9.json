@@ -92,7 +92,20 @@
     "entity.parrot.imitate.zombie_nautilus": "",
     "item.nautilus_saddle_underwater_equip": "",
     "item.nautilus_saddle_equip": "",
-    "entity.zombie_horse.eat": ""
+    "entity.zombie_horse.eat": "",
+    "entity.baby_nautilus.ambient_land": "",
+    "entity.baby_nautilus.death_land": "",
+    "entity.baby_nautilus.hurt_land": "",
+    "entity.nautilus.ambient_land": "",
+    "entity.nautilus.dash_land": "",
+    "entity.nautilus.dash_ready_land": "",
+    "entity.nautilus.death_land": "",
+    "entity.nautilus.hurt_land": "",
+    "entity.zombie_nautilus.ambient_land": "",
+    "entity.zombie_nautilus.dash_land": "",
+    "entity.zombie_nautilus.dash_ready_land": "",
+    "entity.zombie_nautilus.death_land": "",
+    "entity.zombie_nautilus.hurt_land": ""
   },
   "entities": {
     "nautilus": "squid",
@@ -113,6 +126,7 @@
     "piercing_weapon": "",
     "kinetic_weapon": "",
     "swing_animation": "",
-    "zombie_nautilus/variant": ""
+    "zombie_nautilus/variant": "",
+    "attack_range": ""
   }
 }
