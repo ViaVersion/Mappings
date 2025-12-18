@@ -5554,7 +5554,8 @@
     "kinetic_weapon",
     "swing_animation",
     "zombie_nautilus/variant",
-    "attack_range"
+    "attack_range",
+    "additional_trade_cost"
   ],
   "blockentities": [
     "furnace",
