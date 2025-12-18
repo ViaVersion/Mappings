@@ -28,8 +28,8 @@ final class TranslationMapper {
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
 
     public static void main(final String[] args) throws IOException {
-        final String oldVer = "1.21.8";
-        final String newVer = "1.21.9";
+        final String oldVer = "1.21.9";
+        final String newVer = "1.21.11";
 
         final Map<String, String> oldTranslations = load(oldVer);
         final Set<String> oldValues = new HashSet<>(oldTranslations.values());
