@@ -5,45 +5,52 @@ on:
     - cron: '10 * * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
-  run:
-    runs-on: ubuntu-latest
+  check:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout Repository
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # 6.0.0
         with:
           persist-credentials: false
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Set up Python
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # 6.1.0
+        with:
+          python-version: '3.14.x'
 
       - name: Check for snapshot
         run: pip install -r requirements.txt && python download_server.py
 
-      - name: Setup Java JDK
-        uses: actions/setup-java@v5
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # 5.0.0
+  
+      - name: Set up JDK 25
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # 5.0.0
         with:
           distribution: 'temurin'
           java-version: 25
           check-latest: true
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v5
-
       # Wooyeah
       - name: Read last snapshot
         id: last_snapshot
-        uses: juliangruber/read-file-action@v1
+        uses: juliangruber/read-file-action@b549046febe0fe86f8cb4f93c24e284433f9ab58 # 1.1.7
         with:
           path: ./last_snapshot.txt
       - name: Read last release
         id: last_release
-        uses: juliangruber/read-file-action@v1
+        uses: juliangruber/read-file-action@b549046febe0fe86f8cb4f93c24e284433f9ab58 # 1.1.7
         with:
           path: ./last_release.txt
       - name: Read next release
         id: next_release
-        uses: juliangruber/read-file-action@v1
+        uses: juliangruber/read-file-action@b549046febe0fe86f8cb4f93c24e284433f9ab58 # 1.1.7
         with:
           path: ./next_release.txt
 
@@ -64,7 +71,7 @@ jobs:
           git commit -am "Update: ${{ steps.last_snapshot.outputs.content }}"
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@77c5b412c50b723d2a4fbc6d71fb5723bcd439aa # 1.0.0
         with:
           github_token: ${{ secrets.TOKEN }}
           branch: ${{ github.ref }}
