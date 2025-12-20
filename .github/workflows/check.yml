@@ -1,0 +1,87 @@
+name: Check for new Minecraft snapshot
+
+on:
+  schedule:
+    - cron: '10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # 6.0.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # 6.1.0
+        with:
+          python-version: '3.14.x'
+
+      - name: Check for snapshot
+        run: pip install -r requirements.txt && python download_server.py
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # 5.0.0
+  
+      - name: Set up JDK 25
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # 5.0.0
+        with:
+          distribution: 'temurin'
+          java-version: 25
+          check-latest: true
+
+      # Wooyeah
+      - name: Read last snapshot
+        id: last_snapshot
+        uses: juliangruber/read-file-action@b549046febe0fe86f8cb4f93c24e284433f9ab58 # 1.1.7
+        with:
+          path: ./last_snapshot.txt
+      - name: Read last release
+        id: last_release
+        uses: juliangruber/read-file-action@b549046febe0fe86f8cb4f93c24e284433f9ab58 # 1.1.7
+        with:
+          path: ./last_release.txt
+      - name: Read next release
+        id: next_release
+        uses: juliangruber/read-file-action@b549046febe0fe86f8cb4f93c24e284433f9ab58 # 1.1.7
+        with:
+          path: ./next_release.txt
+
+      - name: Compile MappingsGenerator jar
+        run: ./gradlew build && mv build/libs/MappingsGenerator-*.jar ./MappingsGenerator.jar
+      - name: Run MappingsGenerator
+        run: java -jar MappingsGenerator.jar server.jar ${STEPS_NEXT_RELEASE_OUTPUTS_CONTENT}
+        env:
+          STEPS_NEXT_RELEASE_OUTPUTS_CONTENT: ${{ steps.next_release.outputs.content }}
+      - name: Pack mappings
+        run: java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimizer ${STEPS_LAST_RELEASE_OUTPUTS_CONTENT} ${STEPS_NEXT_RELEASE_OUTPUTS_CONTENT} --generateDiffStubs
+        env:
+          STEPS_LAST_RELEASE_OUTPUTS_CONTENT: ${{ steps.last_release.outputs.content }}
+          STEPS_NEXT_RELEASE_OUTPUTS_CONTENT: ${{ steps.next_release.outputs.content }}
+      - name: Pack backwards mappings
+        run: java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimizer ${STEPS_NEXT_RELEASE_OUTPUTS_CONTENT} ${STEPS_LAST_RELEASE_OUTPUTS_CONTENT} --generateDiffStubs
+        env:
+          STEPS_NEXT_RELEASE_OUTPUTS_CONTENT: ${{ steps.next_release.outputs.content }}
+          STEPS_LAST_RELEASE_OUTPUTS_CONTENT: ${{ steps.last_release.outputs.content }}
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "automation"
+          git add .
+          git commit -am "Update: ${STEPS_LAST_SNAPSHOT_OUTPUTS_CONTENT}"
+        env:
+          STEPS_LAST_SNAPSHOT_OUTPUTS_CONTENT: ${{ steps.last_snapshot.outputs.content }}
+
+      - name: Push changes
+        uses: ad-m/github-push-action@77c5b412c50b723d2a4fbc6d71fb5723bcd439aa # 1.0.0
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          branch: ${{ github.ref }}
