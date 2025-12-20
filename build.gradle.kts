@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("com.gradleup.shadow") version "9.2.2"
+    id("com.gradleup.shadow") version "9.3.0"
 }
 
 repositories {
@@ -11,13 +11,13 @@ repositories {
 dependencies {
     api("com.google.code.gson:gson:2.13.2")
     api("com.viaversion:nbt:5.1.2")
-    api("it.unimi.dsi:fastutil:8.5.16")
-    api("ch.qos.logback:logback-classic:1.5.19")
+    api("it.unimi.dsi:fastutil:8.5.18")
+    api("ch.qos.logback:logback-classic:1.5.22")
     compileOnly("org.jetbrains:annotations:26.0.2")
     // Uncomment to manually run mappings gen in ide
     // compileOnly(files("server.jar"))
 
-    testImplementation("org.junit.jupiter:junit-jupiter:6.0.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.0.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
