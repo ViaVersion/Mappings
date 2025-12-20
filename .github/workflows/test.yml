@@ -1,10 +1,10 @@
-name: Build
+name: Test
 on: [push, pull_request]
 permissions:
   contents: read
 
 jobs:
-  build:
+  test:
     if: ${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}
     runs-on: ubuntu-24.04
     timeout-minutes: 30
