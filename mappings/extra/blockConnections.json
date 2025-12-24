@@ -11199,7 +11199,7 @@
       "east": true
     }
   },
-  "cobblestone_wall[east=false,north=false,south=false,up=true,waterlogged=false,west=false]": {
+  "cobblestone_wall": {
     "cobbleWall": {
       "north": true,
       "south": true,
@@ -11207,7 +11207,7 @@
       "east": true
     }
   },
-  "mossy_cobblestone_wall[east=false,north=false,south=false,up=true,waterlogged=false,west=false]": {
+  "mossy_cobblestone_wall": {
     "cobbleWall": {
       "north": true,
       "south": true,
