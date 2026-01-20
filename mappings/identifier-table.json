@@ -3979,7 +3979,15 @@
     "entity.baby_wolf.hurt",
     "entity.baby_wolf.pant",
     "entity.baby_wolf.step",
-    "entity.baby_wolf.whine"
+    "entity.baby_wolf.whine",
+    "entity.baby_horse.ambient",
+    "entity.baby_horse.angry",
+    "entity.baby_horse.breathe",
+    "entity.baby_horse.death",
+    "entity.baby_horse.eat",
+    "entity.baby_horse.hurt",
+    "entity.baby_horse.land",
+    "entity.baby_horse.step"
   ],
   "blocks": [
     "air",
