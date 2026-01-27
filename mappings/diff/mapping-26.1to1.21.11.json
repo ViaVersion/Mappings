@@ -1,6 +1,7 @@
 {
   "data_component_type": {
-    "additional_trade_cost": ""
+    "additional_trade_cost": "",
+    "dye": ""
   },
   "sounds": {
     "entity.baby_cat.ambient": "",
@@ -30,6 +31,22 @@
     "entity.baby_horse.eat": "",
     "entity.baby_horse.hurt": "",
     "entity.baby_horse.land": "",
-    "entity.baby_horse.step": ""
+    "entity.baby_horse.step": "",
+    "entity.baby_chicken.ambient": "",
+    "entity.baby_chicken.death": "",
+    "entity.baby_chicken.hurt": "",
+    "item.golden_dandelion.use": "",
+    "item.golden_dandelion.unuse": ""
+  },
+  "blockstates": {
+    "golden_dandelion": "",
+    "potted_golden_dandelion": ""
+  },
+  "items": {
+    "golden_dandelion": ""
+  },
+  "recipe_serializers": {
+    "crafting_dye": "",
+    "crafting_imbue": ""
   }
 }

@@ -1725,7 +1725,8 @@
     "copper_nautilus_armor",
     "camel_husk_spawn_egg",
     "parched_spawn_egg",
-    "netherite_horse_armor"
+    "netherite_horse_armor",
+    "golden_dandelion"
   ],
   "sounds": [
     "entity.allay.ambient_with_item",
@@ -3987,7 +3988,12 @@
     "entity.baby_horse.eat",
     "entity.baby_horse.hurt",
     "entity.baby_horse.land",
-    "entity.baby_horse.step"
+    "entity.baby_horse.step",
+    "entity.baby_chicken.ambient",
+    "entity.baby_chicken.death",
+    "entity.baby_chicken.hurt",
+    "item.golden_dandelion.use",
+    "item.golden_dandelion.unuse"
   ],
   "blocks": [
     "air",
@@ -5175,7 +5181,9 @@
     "sky",
     "shimmering_door",
     "trophy",
-    "mob_trophy"
+    "mob_trophy",
+    "golden_dandelion",
+    "potted_golden_dandelion"
   ],
   "particles": [
     "angry_villager",
@@ -5461,7 +5469,9 @@
     "smithing_trim",
     "crafting_decorated_pot",
     "crafting_special_shulkerboxcoloring",
-    "crafting_special_suspiciousstew"
+    "crafting_special_suspiciousstew",
+    "crafting_dye",
+    "crafting_imbue"
   ],
   "data_component_type": [
     "custom_data",
@@ -5583,7 +5593,8 @@
     "swing_animation",
     "zombie_nautilus/variant",
     "attack_range",
-    "additional_trade_cost"
+    "additional_trade_cost",
+    "dye"
   ],
   "blockentities": [
     "furnace",
