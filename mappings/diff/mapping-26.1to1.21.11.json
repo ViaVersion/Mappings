@@ -39,14 +39,22 @@
     "item.golden_dandelion.unuse": ""
   },
   "blockstates": {
-    "golden_dandelion": "",
-    "potted_golden_dandelion": ""
+    "golden_dandelion": "dandelion",
+    "potted_golden_dandelion": "potted_dandelion"
   },
   "items": {
-    "golden_dandelion": ""
+    "golden_dandelion": "dandelion"
+  },
+  "itemnames": {
+    "golden_dandelion": "26.1 Golden Dandelion"
   },
   "recipe_serializers": {
     "crafting_dye": "",
     "crafting_imbue": ""
+  },
+  "slot_displays": {
+    "with_any_potion": "",
+    "only_with_component": "",
+    "dyed": ""
   }
 }
