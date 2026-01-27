@@ -208,6 +208,7 @@ public final class MappingsOptimizer {
         mappings(false, "menus");
         mappings(false, "attributes");
         mappings(false, "recipe_serializers");
+        mappings(false, "slot_displays");
         mappings(false, "data_component_type");
 
         if (diffObject != null) {
@@ -291,6 +292,7 @@ public final class MappingsOptimizer {
         storeIdentifierIndexes(identifiers, object, "argumenttypes");
         storeIdentifierIndexes(identifiers, object, "attributes");
         storeIdentifierIndexes(identifiers, object, "recipe_serializers");
+        storeIdentifierIndexes(identifiers, object, "slot_displays");
         storeIdentifierIndexes(identifiers, object, "data_component_type");
         storeIdentifierIndexes(identifiers, object, "blockentities");
 
