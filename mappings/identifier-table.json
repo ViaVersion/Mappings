@@ -5651,5 +5651,18 @@
     "mine_travelling_block",
     "mine_crafter",
     "mob_trophy"
+  ],
+  "slot_displays": [
+    "empty",
+    "any_fuel",
+    "with_any_potion",
+    "only_with_component",
+    "item",
+    "item_stack",
+    "tag",
+    "dyed",
+    "smithing_trim",
+    "with_remainder",
+    "composite"
   ]
 }

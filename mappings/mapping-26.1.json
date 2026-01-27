@@ -34777,6 +34777,19 @@
     "smithing_transform",
     "smithing_trim"
   ],
+  "slot_displays": [
+    "empty",
+    "any_fuel",
+    "with_any_potion",
+    "only_with_component",
+    "item",
+    "item_stack",
+    "tag",
+    "dyed",
+    "smithing_trim",
+    "with_remainder",
+    "composite"
+  ],
   "data_component_type": [
     "custom_data",
     "max_stack_size",
