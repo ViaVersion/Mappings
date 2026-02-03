@@ -32700,6 +32700,7 @@
     "entity.chicken.hurt",
     "entity.baby_chicken.hurt",
     "entity.chicken.step",
+    "entity.baby_chicken.step",
     "block.chiseled_bookshelf.break",
     "block.chiseled_bookshelf.fall",
     "block.chiseled_bookshelf.hit",

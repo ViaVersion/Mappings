@@ -36,7 +36,8 @@
     "entity.baby_chicken.death": "",
     "entity.baby_chicken.hurt": "",
     "item.golden_dandelion.use": "",
-    "item.golden_dandelion.unuse": ""
+    "item.golden_dandelion.unuse": "",
+    "entity.baby_chicken.step": ""
   },
   "blockstates": {
     "golden_dandelion": "dandelion",
