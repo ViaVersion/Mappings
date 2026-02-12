@@ -17,8 +17,9 @@ import org.jetbrains.annotations.Nullable;
 final class BlockStateMapper {
 
     private static final Function<BlockState, BlockState> CONSUMER = state -> {
-        state.addProperty(5, "waterlogged", "false");
-        state.setState("glow_lichen");
+        //state.addProperty(5, "waterlogged", "false");
+        //state.setState("glow_lichen");
+        state.setProperty("instrument", "harp");
         return state;
     };
 
@@ -125,6 +126,16 @@ final class BlockStateMapper {
 
         public void addProperty(final int index, final String key, final String value) {
             properties.add(index, new Property(key, value));
+        }
+
+        public void setProperty(final String key, final String value) {
+            for (final Property property : properties) {
+                if (property.key.equals(key)) {
+                    property.setValue(value);
+                    return;
+                }
+            }
+            throw new IllegalArgumentException("No property found with key: " + key);
         }
 
         public @Nullable Property removeProperty(final String key) {
