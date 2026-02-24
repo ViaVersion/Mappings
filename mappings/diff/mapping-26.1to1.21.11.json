@@ -289,7 +289,7 @@
     "dyed": ""
   },
   "particles": {
-    "pause_mob_growth": "",
-    "reset_mob_growth": ""
+    "pause_mob_growth": "happy_villager",
+    "reset_mob_growth": "happy_villager"
   }
 }
