@@ -5336,7 +5336,9 @@
     "landing_cherry_leaves",
     "barrier",
     "light",
-    "mine_travel"
+    "mine_travel",
+    "pause_mob_growth",
+    "reset_mob_growth"
   ],
   "argumenttypes": [
     "brigadier:bool",

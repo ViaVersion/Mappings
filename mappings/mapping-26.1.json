@@ -34582,6 +34582,8 @@
     "item",
     "vibration",
     "trail",
+    "pause_mob_growth",
+    "reset_mob_growth",
     "item_slime",
     "item_cobweb",
     "item_snowball",

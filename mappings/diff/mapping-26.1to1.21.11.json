@@ -287,5 +287,9 @@
     "with_any_potion": "",
     "only_with_component": "",
     "dyed": ""
+  },
+  "particles": {
+    "pause_mob_growth": "",
+    "reset_mob_growth": ""
   }
 }
