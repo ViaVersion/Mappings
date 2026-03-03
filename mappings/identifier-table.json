@@ -4019,7 +4019,11 @@
     "entity.zombie_nautilus.hurt_land",
     "entity.zombie_nautilus.swim",
     "item.nautilus_saddle_underwater_equip",
-    "item.nautilus_saddle_equip"
+    "item.nautilus_saddle_equip",
+    "entity.baby_pig.eat",
+    "entity.pig.eat",
+    "entity.pig_mini.eat",
+    "entity.pig_big.eat"
   ],
   "blocks": [
     "air",

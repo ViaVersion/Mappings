@@ -67,7 +67,11 @@
     "entity.pig_mini.death": "",
     "entity.pig_big.ambient": "",
     "entity.pig_big.hurt": "",
-    "entity.pig_big.death": ""
+    "entity.pig_big.death": "",
+    "entity.baby_pig.eat": "",
+    "entity.pig.eat": "",
+    "entity.pig_mini.eat": "",
+    "entity.pig_big.eat": ""
   },
   "blockstates": {
     "golden_dandelion": "dandelion",
