@@ -86,7 +86,7 @@
     "entity.parched.death": "entity.skeleton.death",
     "entity.parched.hurt": "entity.skeleton.hurt",
     "entity.parched.step": "entity.skeleton.step",
-    "entity.parrot.imitate.camel_husk": "entity.parrot.imitate.camel_husk",
+    "entity.parrot.imitate.camel_husk": "entity.camel.ambient",
     "entity.parrot.imitate.zombie_horse": "entity.zombie_horse.ambient",
     "entity.parrot.imitate.zombie_nautilus": "",
     "item.nautilus_saddle_underwater_equip": "entity.horse.saddle",
