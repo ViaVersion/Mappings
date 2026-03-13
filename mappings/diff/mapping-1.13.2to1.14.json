@@ -1,4 +1,7 @@
 {
+  "argumenttypes": {
+    "nbt": "nbt_compound_tag"
+  },
   "tags": {
     "item": {
       "arrows": [
