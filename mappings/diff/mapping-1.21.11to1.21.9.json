@@ -89,6 +89,7 @@
     "entity.parrot.imitate.camel_husk": "entity.camel.ambient",
     "entity.parrot.imitate.zombie_horse": "entity.zombie_horse.ambient",
     "entity.parrot.imitate.zombie_nautilus": "",
+    "entity.parrot.imitate.parched": "entity.parrot.imitate.skeleton",
     "item.nautilus_saddle_underwater_equip": "entity.horse.saddle",
     "item.nautilus_saddle_equip": "entity.horse.saddle",
     "entity.zombie_horse.eat": "entity.horse.eat",
