@@ -49,22 +49,22 @@
     "resin_brick": "1.21.4 Resin Brick"
   },
   "sounds": {
-    "entity.creaking.twitch": "",
+    "entity.creaking.twitch": "entity.creaking.sway",
     "block.eyeblossom.open_long": "",
     "block.eyeblossom.open": "",
     "block.eyeblossom.close_long": "",
     "block.eyeblossom.close": "",
     "block.eyeblossom.idle": "",
-    "block.resin.break": "",
-    "block.resin.fall": "",
-    "block.resin.hit": "",
-    "block.resin.place": "",
-    "block.resin.step": "",
-    "block.resin_bricks.break": "",
-    "block.resin_bricks.fall": "",
-    "block.resin_bricks.hit": "",
-    "block.resin_bricks.place": "",
-    "block.resin_bricks.step": ""
+    "block.resin.break": "block.frogspawn.break",
+    "block.resin.fall": "block.nether_gold_ore.fall",
+    "block.resin.hit": "block.slime_block.hit",
+    "block.resin.place": "block.moss.place",
+    "block.resin.step": "block.slime_block.step",
+    "block.resin_bricks.break": "block.tuff_bricks.break",
+    "block.resin_bricks.fall": "block.tuff_bricks.fall",
+    "block.resin_bricks.hit": "block.deepslate_tiles.hit",
+    "block.resin_bricks.place": "block.deepslate_bricks.place",
+    "block.resin_bricks.step": "block.deepslate_tiles.step"
   },
   "particles": {
     "pale_oak_leaves": "cherry_leaves"
