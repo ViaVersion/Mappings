@@ -32834,5 +32834,15 @@
     "sky",
     "trophy/type",
     "mob_trophy/type"
+  ],
+  "slot_displays": [
+    "empty",
+    "any_fuel",
+    "item",
+    "item_stack",
+    "tag",
+    "smithing_trim",
+    "with_remainder",
+    "composite"
   ]
 }
