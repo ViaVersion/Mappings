@@ -40,17 +40,17 @@ jobs:
       # Wooyeah
       - name: Read last snapshot
         id: last_snapshot
-        uses: juliangruber/read-file-action@b549046febe0fe86f8cb4f93c24e284433f9ab58 # 1.1.7
+        uses: juliangruber/read-file-action@271ff311a4947af354c6abcd696a306553b9ec18 # 1.1.8
         with:
           path: ./last_snapshot.txt
       - name: Read last release
         id: last_release
-        uses: juliangruber/read-file-action@b549046febe0fe86f8cb4f93c24e284433f9ab58 # 1.1.7
+        uses: juliangruber/read-file-action@271ff311a4947af354c6abcd696a306553b9ec18 # 1.1.8
         with:
           path: ./last_release.txt
       - name: Read next release
         id: next_release
-        uses: juliangruber/read-file-action@b549046febe0fe86f8cb4f93c24e284433f9ab58 # 1.1.7
+        uses: juliangruber/read-file-action@271ff311a4947af354c6abcd696a306553b9ec18 # 1.1.8
         with:
           path: ./next_release.txt
 
