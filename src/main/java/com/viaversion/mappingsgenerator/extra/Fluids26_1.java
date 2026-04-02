@@ -4,15 +4,18 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.viaversion.mappingsgenerator.MappingsLoader;
+import com.viaversion.mappingsgenerator.MappingsOptimizer;
 import com.viaversion.nbt.io.NBTIO;
 import com.viaversion.nbt.tag.CompoundTag;
 import com.viaversion.nbt.tag.IntArrayTag;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.util.Set;
 
 public final class Fluids26_1 {
+
+    private static final Set<String> FLUID_BLOCKS = Set.of("water", "lava", "kelp", "seagrass", "tall_seagrass", "bubble_column", "kelp_plant");
 
     public static void main(final String[] args) throws IOException {
         final JsonObject mappings = MappingsLoader.load("mapping-26.1.json");
@@ -20,8 +23,9 @@ public final class Fluids26_1 {
         int i = 0;
         final IntList list = new IntArrayList();
         for (final JsonElement element : array) {
-            final String s = element.getAsString();
-            if (s.contains("water[") || s.contains("waterlogged=true") || s.contains("lava[")) {
+            final String blockState = element.getAsString();
+            final String block = blockState.split("\\[")[0];
+            if (FLUID_BLOCKS.contains(block) || blockState.contains("waterlogged=true")) {
                 list.add(i);
             }
             i++;
@@ -29,6 +33,6 @@ public final class Fluids26_1 {
         final IntArrayTag arrayTag = new IntArrayTag(list.toIntArray());
         final CompoundTag tag = new CompoundTag();
         tag.put("fluids", arrayTag);
-        NBTIO.writer().named().write(Path.of("fluids-26.1.nbt"), tag, false);
+        NBTIO.writer().named().write(MappingsOptimizer.OUTPUT_DIR.resolve("extra/fluids-26.1.nbt"), tag, false);
     }
 }

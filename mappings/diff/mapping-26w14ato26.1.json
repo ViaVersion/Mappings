@@ -1,0 +1,41 @@
+{
+  "blockstates": {
+    "iron_trap": "",
+    "copper_trap": "",
+    "exposed_copper_trap": "",
+    "weathered_copper_trap": "",
+    "oxidized_copper_trap": "",
+    "waxed_copper_trap": "",
+    "waxed_exposed_copper_trap": "",
+    "waxed_weathered_copper_trap": "",
+    "waxed_oxidized_copper_trap": ""
+  },
+  "items": {
+    "iron_trap": "",
+    "copper_trap": "",
+    "exposed_copper_trap": "",
+    "weathered_copper_trap": "",
+    "oxidized_copper_trap": "",
+    "waxed_copper_trap": "",
+    "waxed_exposed_copper_trap": "",
+    "waxed_weathered_copper_trap": "",
+    "waxed_oxidized_copper_trap": "",
+    "punch_action": "",
+    "follow_action": "",
+    "crafting_action": "",
+    "move_action": "",
+    "attack_action": "",
+    "build_action": "",
+    "group_action": "",
+    "highlight_action": ""
+  },
+  "entities": {
+    "living_block": "",
+    "crafting_grid": "",
+    "hovering_item": "",
+    "living_block_command": ""
+  },
+  "data_component_type": {
+    "follow": ""
+  }
+}
