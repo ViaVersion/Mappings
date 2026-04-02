@@ -46,10 +46,12 @@ public final class ManualRunner {
 
     static {
         SPECIAL_VERSIONS.put("1.21.5", "25w14craftmine");
+        SPECIAL_VERSIONS.put("26.1", "26w14a");
 
         SPECIAL_BACKWARDS_VERSIONS.put("3D_Shareware", "1.14");
         SPECIAL_BACKWARDS_VERSIONS.put("20w14infinite", "1.16");
         SPECIAL_BACKWARDS_VERSIONS.put("25w14craftmine", "1.21.5");
+        SPECIAL_BACKWARDS_VERSIONS.put("26w14a", "26.1");
     }
 
     public static void main(final String[] args) throws IOException {

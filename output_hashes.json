@@ -1,6 +1,6 @@
 {
   "identifier-table": {
-    "object-hash": -577524155,
+    "object-hash": -1652218878,
     "size": 113327
   },
   "1.13": {
@@ -200,8 +200,8 @@
     "size": 6984
   },
   "20w14infinite:1.16": {
-    "object-hash": -1748079214,
-    "size": 10059
+    "object-hash": 1025367508,
+    "size": 11361
   },
   "1.8:1.9.4": {
     "object-hash": 2002027499,
@@ -364,7 +364,7 @@
     "size": 2290
   },
   "26.1:26w14a": {
-    "object-hash": -984045120,
+    "object-hash": -983995927,
     "size": 262
   },
   "26w14a:26.1": {
