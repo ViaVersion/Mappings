@@ -176,7 +176,11 @@
     "camel_husk",
     "nautilus",
     "parched",
-    "zombie_nautilus"
+    "zombie_nautilus",
+    "living_block",
+    "crafting_grid",
+    "hovering_item",
+    "living_block_command"
   ],
   "items": [
     "air",
@@ -1726,7 +1730,24 @@
     "golden_nautilus_armor",
     "diamond_nautilus_armor",
     "netherite_nautilus_armor",
-    "copper_nautilus_armor"
+    "copper_nautilus_armor",
+    "iron_trap",
+    "copper_trap",
+    "exposed_copper_trap",
+    "weathered_copper_trap",
+    "oxidized_copper_trap",
+    "waxed_copper_trap",
+    "waxed_exposed_copper_trap",
+    "waxed_weathered_copper_trap",
+    "waxed_oxidized_copper_trap",
+    "punch_action",
+    "follow_action",
+    "crafting_action",
+    "move_action",
+    "attack_action",
+    "build_action",
+    "group_action",
+    "highlight_action"
   ],
   "sounds": [
     "entity.allay.ambient_with_item",
@@ -5213,7 +5234,16 @@
     "trophy",
     "mob_trophy",
     "golden_dandelion",
-    "potted_golden_dandelion"
+    "potted_golden_dandelion",
+    "iron_trap",
+    "copper_trap",
+    "exposed_copper_trap",
+    "weathered_copper_trap",
+    "oxidized_copper_trap",
+    "waxed_copper_trap",
+    "waxed_exposed_copper_trap",
+    "waxed_weathered_copper_trap",
+    "waxed_oxidized_copper_trap"
   ],
   "particles": [
     "angry_villager",
@@ -5630,7 +5660,8 @@
     "cow/sound_variant",
     "chicken/sound_variant",
     "zombie_nautilus/variant",
-    "cat/sound_variant"
+    "cat/sound_variant",
+    "follow"
   ],
   "blockentities": [
     "furnace",
