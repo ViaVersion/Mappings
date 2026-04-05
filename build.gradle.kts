@@ -13,7 +13,7 @@ dependencies {
     api("com.viaversion:nbt:5.1.2")
     api("it.unimi.dsi:fastutil:8.5.18")
     api("ch.qos.logback:logback-classic:1.5.26")
-    compileOnly("org.jetbrains:annotations:26.0.2-1")
+    compileOnly("org.jetbrains:annotations:26.1.0")
     // Uncomment to manually run mappings gen in ide
     // compileOnly(files("server.jar"))
 
