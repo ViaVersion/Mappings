@@ -20,6 +20,7 @@ import static com.viaversion.mappingsgenerator.MappingsOptimizer.MAPPINGS_DIR;
  * <p>
  * Directly edits the diff file.
  */
+// TODO items too
 final class AnnoyingBlockStateMapper {
 
     private static final List<Function<String, String>> MAPPERS = new ArrayList<>();
@@ -31,11 +32,11 @@ final class AnnoyingBlockStateMapper {
 
     public static void main(final String[] args) throws IOException {
         // Input examples
-        final String from = "1.21.4";
-        final String to = "1.21.2";
-        replace("resin_brick", "brick");
-        replace("tuff", "andesite");
-        contains("copper", "brick");
+        final String from = "26.2";
+        final String to = "26.1";
+        equals("sulfur", "sandstone");
+        equals("potent_sulfur", "red_sandstone");
+        equals("cinnabar", "diorite");
 
         final Path path = MAPPINGS_DIR.resolve("diff").resolve(String.format("mapping-%sto%s.json", from, to));
         final JsonObject object = GsonUtil.GSON.fromJson(Files.readString(path), JsonObject.class);
@@ -79,10 +80,12 @@ final class AnnoyingBlockStateMapper {
     }
 
     private static void contains(final String from, final String to) {
+        // Key only
         MAPPERS.add(s -> s.contains(from) ? to : s);
     }
 
     private static void replace(final String from, final String to) {
+        // Replaces the key only
         MAPPERS.add(s -> s.replace(from, to));
     }
 }
