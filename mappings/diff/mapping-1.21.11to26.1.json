@@ -3,5 +3,623 @@
     "crafting_special_armordye": "",
     "crafting_special_mapcloning": "",
     "crafting_special_tippedarrow": ""
+  },
+  "tags": {
+    "block": {
+      "supports_azalea": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland",
+        "clay"
+      ],
+      "supports_crimson_fungus": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland",
+        "crimson_nylium",
+        "warped_nylium",
+        "soul_soil"
+      ],
+      "supports_pumpkin_stem": [
+        "farmland"
+      ],
+      "grows_crops": [
+        "farmland"
+      ],
+      "huge_brown_mushroom_can_place_on": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "crimson_nylium",
+        "warped_nylium"
+      ],
+      "supports_chorus_flower": [
+        "end_stone"
+      ],
+      "supports_mangrove_propagule": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland",
+        "clay"
+      ],
+      "supports_hanging_mangrove_propagule": [
+        "mangrove_leaves"
+      ],
+      "supports_sugar_cane": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "sand",
+        "red_sand",
+        "suspicious_sand"
+      ],
+      "supports_cactus": [
+        "sand",
+        "red_sand",
+        "suspicious_sand"
+      ],
+      "supports_wither_rose": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland",
+        "netherrack",
+        "soul_sand",
+        "soul_soil"
+      ],
+      "supports_melon_stem": [
+        "farmland"
+      ],
+      "moss_blocks": [
+        "moss_block",
+        "pale_moss_block"
+      ],
+      "overrides_mushroom_light_requirement": [
+        "mycelium",
+        "podzol",
+        "crimson_nylium",
+        "warped_nylium"
+      ],
+      "supports_vegetation": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland"
+      ],
+      "supports_warped_roots": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland",
+        "crimson_nylium",
+        "warped_nylium",
+        "soul_soil"
+      ],
+      "support_override_snow_layer": [
+        "honey_block",
+        "soul_sand",
+        "mud"
+      ],
+      "supports_lily_pad": [
+        "ice",
+        "frosted_ice"
+      ],
+      "supports_melon_stem_fruit": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland"
+      ],
+      "cannot_support_seagrass": [
+        "magma_block"
+      ],
+      "cannot_support_snow_layer": [
+        "ice",
+        "packed_ice",
+        "barrier"
+      ],
+      "supports_dry_vegetation": [
+        "sand",
+        "red_sand",
+        "suspicious_sand",
+        "terracotta",
+        "white_terracotta",
+        "orange_terracotta",
+        "magenta_terracotta",
+        "light_blue_terracotta",
+        "yellow_terracotta",
+        "lime_terracotta",
+        "pink_terracotta",
+        "gray_terracotta",
+        "light_gray_terracotta",
+        "cyan_terracotta",
+        "purple_terracotta",
+        "blue_terracotta",
+        "brown_terracotta",
+        "green_terracotta",
+        "red_terracotta",
+        "black_terracotta",
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland"
+      ],
+      "supports_sugar_cane_adjacently": [
+        "frosted_ice"
+      ],
+      "forest_rock_can_place_on": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "stone",
+        "granite",
+        "diorite",
+        "andesite",
+        "tuff",
+        "deepslate"
+      ],
+      "substrate_overworld": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium"
+      ],
+      "supports_warped_fungus": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland",
+        "crimson_nylium",
+        "warped_nylium",
+        "soul_soil"
+      ],
+      "huge_red_mushroom_can_place_on": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "crimson_nylium",
+        "warped_nylium"
+      ],
+      "beneath_bamboo_podzol_replaceable": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium"
+      ],
+      "supports_big_dripleaf": [
+        "clay",
+        "moss_block",
+        "dirt",
+        "grass_block",
+        "podzol",
+        "coarse_dirt",
+        "mycelium",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "farmland"
+      ],
+      "support_override_cactus_flower": [
+        "cactus",
+        "farmland"
+      ],
+      "beneath_tree_podzol_replaceable": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium"
+      ],
+      "mud": [
+        "mud",
+        "muddy_mangrove_roots"
+      ],
+      "supports_crops": [
+        "farmland"
+      ],
+      "supports_nether_sprouts": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland",
+        "crimson_nylium",
+        "warped_nylium",
+        "soul_soil"
+      ],
+      "cannot_replace_below_tree_trunk": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "podzol"
+      ],
+      "supports_bamboo": [
+        "sand",
+        "red_sand",
+        "suspicious_sand",
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "bamboo",
+        "bamboo_sapling",
+        "gravel",
+        "suspicious_gravel"
+      ],
+      "enables_bubble_column_push_up": [
+        "soul_sand"
+      ],
+      "supports_nether_wart": [
+        "soul_sand"
+      ],
+      "supports_crimson_roots": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland",
+        "crimson_nylium",
+        "warped_nylium",
+        "soul_soil"
+      ],
+      "supports_small_dripleaf": [
+        "clay",
+        "moss_block"
+      ],
+      "enables_bubble_column_drag_down": [
+        "magma_block"
+      ],
+      "supports_stem_crops": [
+        "farmland"
+      ],
+      "supports_cocoa": [
+        "jungle_log",
+        "jungle_wood",
+        "stripped_jungle_log",
+        "stripped_jungle_wood"
+      ],
+      "prevents_nearby_leaf_decay": [
+        "dark_oak_log",
+        "dark_oak_wood",
+        "stripped_dark_oak_log",
+        "stripped_dark_oak_wood",
+        "pale_oak_log",
+        "pale_oak_wood",
+        "stripped_pale_oak_log",
+        "stripped_pale_oak_wood",
+        "oak_log",
+        "oak_wood",
+        "stripped_oak_log",
+        "stripped_oak_wood",
+        "acacia_log",
+        "acacia_wood",
+        "stripped_acacia_log",
+        "stripped_acacia_wood",
+        "birch_log",
+        "birch_wood",
+        "stripped_birch_log",
+        "stripped_birch_wood",
+        "jungle_log",
+        "jungle_wood",
+        "stripped_jungle_log",
+        "stripped_jungle_wood",
+        "spruce_log",
+        "spruce_wood",
+        "stripped_spruce_log",
+        "stripped_spruce_wood",
+        "mangrove_log",
+        "mangrove_wood",
+        "stripped_mangrove_log",
+        "stripped_mangrove_wood",
+        "cherry_log",
+        "cherry_wood",
+        "stripped_cherry_log",
+        "stripped_cherry_wood",
+        "crimson_stem",
+        "stripped_crimson_stem",
+        "crimson_hyphae",
+        "stripped_crimson_hyphae",
+        "warped_stem",
+        "stripped_warped_stem",
+        "warped_hyphae",
+        "stripped_warped_hyphae"
+      ],
+      "supports_stem_fruit": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland"
+      ],
+      "ice_spike_replaceable": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "snow_block",
+        "ice"
+      ],
+      "supports_pumpkin_stem_fruit": [
+        "dirt",
+        "coarse_dirt",
+        "rooted_dirt",
+        "mud",
+        "muddy_mangrove_roots",
+        "moss_block",
+        "pale_moss_block",
+        "grass_block",
+        "podzol",
+        "mycelium",
+        "farmland"
+      ],
+      "grass_blocks": [
+        "grass_block",
+        "podzol",
+        "mycelium"
+      ],
+      "supports_chorus_plant": [
+        "end_stone"
+      ],
+      "cannot_support_kelp": [
+        "magma_block"
+      ]
+    },
+    "item": {
+      "loom_patterns": [
+        "flower_banner_pattern",
+        "creeper_banner_pattern",
+        "skull_banner_pattern",
+        "mojang_banner_pattern",
+        "globe_banner_pattern",
+        "piglin_banner_pattern",
+        "flow_banner_pattern",
+        "guster_banner_pattern",
+        "field_masoned_banner_pattern",
+        "bordure_indented_banner_pattern"
+      ],
+      "dyes": [
+        "white_dye",
+        "orange_dye",
+        "magenta_dye",
+        "light_blue_dye",
+        "yellow_dye",
+        "lime_dye",
+        "pink_dye",
+        "gray_dye",
+        "light_gray_dye",
+        "cyan_dye",
+        "purple_dye",
+        "blue_dye",
+        "brown_dye",
+        "green_dye",
+        "red_dye",
+        "black_dye"
+      ],
+      "moss_blocks": [
+        "moss_block",
+        "pale_moss_block"
+      ],
+      "cauldron_can_remove_dye": [
+        "leather_helmet",
+        "leather_chestplate",
+        "leather_leggings",
+        "leather_boots",
+        "leather_horse_armor",
+        "wolf_armor"
+      ],
+      "cat_collar_dyes": [
+        "white_dye",
+        "orange_dye",
+        "magenta_dye",
+        "light_blue_dye",
+        "yellow_dye",
+        "lime_dye",
+        "pink_dye",
+        "gray_dye",
+        "light_gray_dye",
+        "cyan_dye",
+        "purple_dye",
+        "blue_dye",
+        "brown_dye",
+        "green_dye",
+        "red_dye",
+        "black_dye"
+      ],
+      "mud": [
+        "mud",
+        "muddy_mangrove_roots"
+      ],
+      "wolf_collar_dyes": [
+        "white_dye",
+        "orange_dye",
+        "magenta_dye",
+        "light_blue_dye",
+        "yellow_dye",
+        "lime_dye",
+        "pink_dye",
+        "gray_dye",
+        "light_gray_dye",
+        "cyan_dye",
+        "purple_dye",
+        "blue_dye",
+        "brown_dye",
+        "green_dye",
+        "red_dye",
+        "black_dye"
+      ],
+      "loom_dyes": [
+        "white_dye",
+        "orange_dye",
+        "magenta_dye",
+        "light_blue_dye",
+        "yellow_dye",
+        "lime_dye",
+        "pink_dye",
+        "gray_dye",
+        "light_gray_dye",
+        "cyan_dye",
+        "purple_dye",
+        "blue_dye",
+        "brown_dye",
+        "green_dye",
+        "red_dye",
+        "black_dye"
+      ],
+      "metal_nuggets": [
+        "copper_nugget",
+        "iron_nugget",
+        "gold_nugget"
+      ],
+      "grass_blocks": [
+        "grass_block",
+        "podzol",
+        "mycelium"
+      ]
+    }
   }
 }
