@@ -1756,7 +1756,8 @@
     "cinnabar_brick_wall",
     "chiseled_cinnabar",
     "sulfur_cube_bucket",
-    "sulfur_cube_spawn_egg"
+    "sulfur_cube_spawn_egg",
+    "sulfur_spike"
   ],
   "sounds": [
     "entity.allay.ambient_with_item",
@@ -5299,7 +5300,8 @@
     "cinnabar_brick_slab",
     "cinnabar_brick_stairs",
     "cinnabar_brick_wall",
-    "chiseled_cinnabar"
+    "chiseled_cinnabar",
+    "sulfur_spike"
   ],
   "particles": [
     "angry_villager",

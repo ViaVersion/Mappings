@@ -26,7 +26,27 @@
     "cinnabar_brick_slab": "brick_slab[",
     "cinnabar_brick_stairs": "brick_stairs[",
     "cinnabar_brick_wall": "brick_wall[",
-    "chiseled_cinnabar": "chiseled_copper"
+    "chiseled_cinnabar": "chiseled_copper",
+    "sulfur_spike[thickness=tip_merge,vertical_direction=up,waterlogged=true]": "",
+    "sulfur_spike[thickness=tip_merge,vertical_direction=up,waterlogged=false]": "",
+    "sulfur_spike[thickness=tip_merge,vertical_direction=down,waterlogged=true]": "",
+    "sulfur_spike[thickness=tip_merge,vertical_direction=down,waterlogged=false]": "",
+    "sulfur_spike[thickness=tip,vertical_direction=up,waterlogged=true]": "",
+    "sulfur_spike[thickness=tip,vertical_direction=up,waterlogged=false]": "",
+    "sulfur_spike[thickness=tip,vertical_direction=down,waterlogged=true]": "",
+    "sulfur_spike[thickness=tip,vertical_direction=down,waterlogged=false]": "",
+    "sulfur_spike[thickness=frustum,vertical_direction=up,waterlogged=true]": "",
+    "sulfur_spike[thickness=frustum,vertical_direction=up,waterlogged=false]": "",
+    "sulfur_spike[thickness=frustum,vertical_direction=down,waterlogged=true]": "",
+    "sulfur_spike[thickness=frustum,vertical_direction=down,waterlogged=false]": "",
+    "sulfur_spike[thickness=middle,vertical_direction=up,waterlogged=true]": "",
+    "sulfur_spike[thickness=middle,vertical_direction=up,waterlogged=false]": "",
+    "sulfur_spike[thickness=middle,vertical_direction=down,waterlogged=true]": "",
+    "sulfur_spike[thickness=middle,vertical_direction=down,waterlogged=false]": "",
+    "sulfur_spike[thickness=base,vertical_direction=up,waterlogged=true]": "",
+    "sulfur_spike[thickness=base,vertical_direction=up,waterlogged=false]": "",
+    "sulfur_spike[thickness=base,vertical_direction=down,waterlogged=true]": "",
+    "sulfur_spike[thickness=base,vertical_direction=down,waterlogged=false]": ""
   },
   "items": {
     "sulfur": "sandstone",
@@ -57,7 +77,8 @@
     "cinnabar_brick_wall": "brick_wall",
     "chiseled_cinnabar": "chiseled_copper",
     "sulfur_cube_bucket": "powder_snow_bucket",
-    "sulfur_cube_spawn_egg": "slime_spawn_egg"
+    "sulfur_cube_spawn_egg": "slime_spawn_egg",
+    "sulfur_spike": ""
   },
   "itemnames": {
     "sulfur": "26.2 Sulfur",
