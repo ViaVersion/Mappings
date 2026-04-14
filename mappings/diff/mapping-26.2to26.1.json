@@ -27,26 +27,7 @@
     "cinnabar_brick_stairs": "brick_stairs[",
     "cinnabar_brick_wall": "brick_wall[",
     "chiseled_cinnabar": "chiseled_copper",
-    "sulfur_spike[thickness=tip_merge,vertical_direction=up,waterlogged=true]": "",
-    "sulfur_spike[thickness=tip_merge,vertical_direction=up,waterlogged=false]": "",
-    "sulfur_spike[thickness=tip_merge,vertical_direction=down,waterlogged=true]": "",
-    "sulfur_spike[thickness=tip_merge,vertical_direction=down,waterlogged=false]": "",
-    "sulfur_spike[thickness=tip,vertical_direction=up,waterlogged=true]": "",
-    "sulfur_spike[thickness=tip,vertical_direction=up,waterlogged=false]": "",
-    "sulfur_spike[thickness=tip,vertical_direction=down,waterlogged=true]": "",
-    "sulfur_spike[thickness=tip,vertical_direction=down,waterlogged=false]": "",
-    "sulfur_spike[thickness=frustum,vertical_direction=up,waterlogged=true]": "",
-    "sulfur_spike[thickness=frustum,vertical_direction=up,waterlogged=false]": "",
-    "sulfur_spike[thickness=frustum,vertical_direction=down,waterlogged=true]": "",
-    "sulfur_spike[thickness=frustum,vertical_direction=down,waterlogged=false]": "",
-    "sulfur_spike[thickness=middle,vertical_direction=up,waterlogged=true]": "",
-    "sulfur_spike[thickness=middle,vertical_direction=up,waterlogged=false]": "",
-    "sulfur_spike[thickness=middle,vertical_direction=down,waterlogged=true]": "",
-    "sulfur_spike[thickness=middle,vertical_direction=down,waterlogged=false]": "",
-    "sulfur_spike[thickness=base,vertical_direction=up,waterlogged=true]": "",
-    "sulfur_spike[thickness=base,vertical_direction=up,waterlogged=false]": "",
-    "sulfur_spike[thickness=base,vertical_direction=down,waterlogged=true]": "",
-    "sulfur_spike[thickness=base,vertical_direction=down,waterlogged=false]": ""
+    "sulfur_spike": "pointed_dripstone["
   },
   "items": {
     "sulfur": "sandstone",
@@ -78,7 +59,7 @@
     "chiseled_cinnabar": "chiseled_copper",
     "sulfur_cube_bucket": "powder_snow_bucket",
     "sulfur_cube_spawn_egg": "slime_spawn_egg",
-    "sulfur_spike": ""
+    "sulfur_spike": "pointed_dripstone"
   },
   "itemnames": {
     "sulfur": "26.2 Sulfur",
@@ -109,7 +90,8 @@
     "cinnabar_brick_wall": "26.2 Cinnabar Brick Wall",
     "chiseled_cinnabar": "26.2 Chiseled Cinnabar",
     "sulfur_cube_bucket": "26.2 Sulfur Cube Bucket",
-    "sulfur_cube_spawn_egg": "26.2 Sulfur Cube Spawn Egg"
+    "sulfur_cube_spawn_egg": "26.2 Sulfur Cube Spawn Egg",
+    "sulfur_spike": "26.2 Sulfur Spike"
   },
   "sounds": {
     "block.sulfur.break": "",
