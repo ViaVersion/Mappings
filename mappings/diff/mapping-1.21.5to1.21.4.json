@@ -173,5 +173,17 @@
   "entities": {
     "splash_potion": "potion",
     "lingering_potion": "potion"
+  },
+  "tags": {
+    "item": {
+      "dyeable": [
+        "leather_helmet",
+        "leather_chestplate",
+        "leather_leggings",
+        "leather_boots",
+        "leather_horse_armor",
+        "wolf_armor"
+      ]
+    }
   }
 }
