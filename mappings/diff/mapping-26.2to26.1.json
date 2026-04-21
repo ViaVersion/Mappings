@@ -122,7 +122,9 @@
     "entity.small_sulfur_cube.death": "",
     "entity.small_sulfur_cube.hurt": "",
     "entity.small_sulfur_cube.jump": "",
-    "entity.small_sulfur_cube.squish": ""
+    "entity.small_sulfur_cube.squish": "",
+    "item.bucket.empty_sulfur_cube": "",
+    "item.bucket.fill_sulfur_cube": ""
   },
   "particles": {
     "sulfur_bubbles": "bubble_column_up",
@@ -142,7 +144,9 @@
   "attributes": {
     "air_drag_modifier": "",
     "bounciness": "",
-    "friction_modifier": ""
+    "friction_modifier": "",
+    "below_name_distance": "",
+    "nameplate_distance": ""
   },
   "data_component_type": {
     "sulfur_cube_content": ""

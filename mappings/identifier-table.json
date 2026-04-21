@@ -4083,7 +4083,9 @@
     "entity.small_sulfur_cube.death",
     "entity.small_sulfur_cube.hurt",
     "entity.small_sulfur_cube.jump",
-    "entity.small_sulfur_cube.squish"
+    "entity.small_sulfur_cube.squish",
+    "item.bucket.empty_sulfur_cube",
+    "item.bucket.fill_sulfur_cube"
   ],
   "blocks": [
     "air",
@@ -5570,7 +5572,9 @@
     "max_jumps",
     "air_drag_modifier",
     "bounciness",
-    "friction_modifier"
+    "friction_modifier",
+    "below_name_distance",
+    "nameplate_distance"
   ],
   "recipe_serializers": [
     "crafting_shaped",
