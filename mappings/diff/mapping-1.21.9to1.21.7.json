@@ -214,7 +214,14 @@
   },
   "blocks": {
     "iron_chain": "chain",
-    "copper_chest": "chest"
+    "copper_chest": "chest",
+    "exposed_copper_chest": "chest",
+    "weathered_copper_chest": "chest",
+    "oxidized_copper_chest": "chest",
+    "waxed_copper_chest": "chest",
+    "waxed_exposed_copper_chest": "chest",
+    "waxed_weathered_copper_chest": "chest",
+    "waxed_oxidized_copper_chest": "chest"
   },
   "sounds": {
     "item.armor.equip_copper": "item.armor.equip_iron",
