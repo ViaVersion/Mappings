@@ -5587,7 +5587,6 @@
     "bounciness",
     "friction_modifier",
     "below_name_distance",
-    "nameplate_distance",
     "name_tag_distance"
   ],
   "recipe_serializers": [

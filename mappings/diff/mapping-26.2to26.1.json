@@ -158,13 +158,12 @@
     "bounciness": "",
     "friction_modifier": "",
     "below_name_distance": "",
-    "nameplate_distance": "",
     "name_tag_distance": ""
   },
   "data_component_type": {
     "sulfur_cube_content": ""
   },
   "argumenttypes": {
-    "team_color": ""
+    "team_color": "color"
   }
 }

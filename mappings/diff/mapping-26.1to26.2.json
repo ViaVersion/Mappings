@@ -3,6 +3,6 @@
     "bed": ""
   },
   "argumenttypes": {
-    "color": ""
+    "color": "team_color"
   }
 }
