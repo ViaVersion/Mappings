@@ -4085,7 +4085,15 @@
     "entity.small_sulfur_cube.jump",
     "entity.small_sulfur_cube.squish",
     "item.bucket.empty_sulfur_cube",
-    "item.bucket.fill_sulfur_cube"
+    "item.bucket.fill_sulfur_cube",
+    "block.sulfur_spike.break",
+    "block.sulfur_spike.step",
+    "block.sulfur_spike.place",
+    "block.sulfur_spike.hit",
+    "block.sulfur_spike.fall",
+    "block.sulfur_spike.land",
+    "block.potent_sulfur.geyser_eruption",
+    "block.potent_sulfur.geyser_eruption_active"
   ],
   "blocks": [
     "air",
@@ -5435,7 +5443,11 @@
     "sulfur_bubbles",
     "noxious_gas",
     "noxious_gas_cloud",
-    "sulfur_cube_goo"
+    "sulfur_cube_goo",
+    "geyser",
+    "geyser_base",
+    "geyser_poof",
+    "geyser_plume"
   ],
   "argumenttypes": [
     "brigadier:bool",
@@ -5497,7 +5509,8 @@
     "uuid",
     "mob_effect",
     "item_enchantment",
-    "entity_summon"
+    "entity_summon",
+    "team_color"
   ],
   "attributes": [
     "armor",
@@ -5574,7 +5587,8 @@
     "bounciness",
     "friction_modifier",
     "below_name_distance",
-    "nameplate_distance"
+    "nameplate_distance",
+    "name_tag_distance"
   ],
   "recipe_serializers": [
     "crafting_shaped",

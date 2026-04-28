@@ -124,13 +124,25 @@
     "entity.small_sulfur_cube.jump": "",
     "entity.small_sulfur_cube.squish": "",
     "item.bucket.empty_sulfur_cube": "",
-    "item.bucket.fill_sulfur_cube": ""
+    "item.bucket.fill_sulfur_cube": "",
+    "block.sulfur_spike.break": "",
+    "block.sulfur_spike.step": "",
+    "block.sulfur_spike.place": "",
+    "block.sulfur_spike.hit": "",
+    "block.sulfur_spike.fall": "",
+    "block.sulfur_spike.land": "",
+    "block.potent_sulfur.geyser_eruption": "",
+    "block.potent_sulfur.geyser_eruption_active": ""
   },
   "particles": {
     "sulfur_bubbles": "bubble_column_up",
     "noxious_gas": "cloud",
     "noxious_gas_cloud": "cloud",
-    "sulfur_cube_goo": "item_slime"
+    "sulfur_cube_goo": "item_slime",
+    "geyser": "",
+    "geyser_base": "",
+    "geyser_poof": "",
+    "geyser_plume": ""
   },
   "blockentities": {
     "potent_sulfur": ""
@@ -146,9 +158,13 @@
     "bounciness": "",
     "friction_modifier": "",
     "below_name_distance": "",
-    "nameplate_distance": ""
+    "nameplate_distance": "",
+    "name_tag_distance": ""
   },
   "data_component_type": {
     "sulfur_cube_content": ""
+  },
+  "argumenttypes": {
+    "team_color": ""
   }
 }

@@ -1,5 +1,8 @@
 {
   "blockentities": {
     "bed": ""
+  },
+  "argumenttypes": {
+    "color": ""
   }
 }
