@@ -1,0 +1,1237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blockstate Mapping UI</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f7f8;
+      --panel: #ffffff;
+      --text: #182026;
+      --muted: #5f6b73;
+      --line: #d7dde2;
+      --accent: #1466c3;
+      --danger: #b42318;
+      --ok: #067647;
+      --code: #eef2f6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111417;
+        --panel: #191e23;
+        --text: #eef2f4;
+        --muted: #aab4bd;
+        --line: #303942;
+        --accent: #79b8ff;
+        --danger: #ff8a80;
+        --ok: #6ee7b7;
+        --code: #252c33;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 13px/1.4 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+    h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 650;
+    }
+    .header-controls {
+      display: grid;
+      grid-template-columns: 110px 18px 110px auto;
+      align-items: end;
+      gap: 8px;
+      min-width: 0;
+    }
+    .header-controls label {
+      margin: 0 0 3px;
+    }
+    .header-controls select {
+      padding: 5px 7px;
+    }
+    .arrow {
+      align-self: center;
+      color: var(--muted);
+      padding-top: 16px;
+      text-align: center;
+    }
+    main {
+      display: grid;
+      grid-template-columns: 330px minmax(420px, 1fr) minmax(430px, 0.9fr);
+      gap: 12px;
+      padding: 12px;
+      min-height: calc(100vh - 50px);
+    }
+    section {
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 650;
+    }
+    .body {
+      padding: 12px;
+    }
+    label {
+      display: block;
+      margin: 0 0 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    input, select, textarea, button {
+      font: inherit;
+    }
+    input, select, textarea {
+      width: 100%;
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 7px 8px;
+      outline: none;
+    }
+    textarea {
+      min-height: 74px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+    button {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: var(--panel);
+      border-radius: 4px;
+      padding: 7px 10px;
+      cursor: pointer;
+    }
+    button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: white;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .row {
+      margin-bottom: 12px;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .list {
+      display: grid;
+      gap: 5px;
+      max-height: calc(100vh - 186px);
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .entry {
+      display: grid;
+      gap: 2px;
+      padding: 6px 7px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .entry:hover {
+      border-color: var(--accent);
+    }
+    .entry code, pre, .chip {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .entry code {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 4px 6px;
+      background: var(--code);
+      font-size: 12px;
+    }
+    .chip input {
+      width: auto;
+      margin: 0;
+    }
+    .property-box {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 8px;
+      margin-bottom: 8px;
+    }
+    .property-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-weight: 650;
+    }
+    pre {
+      margin: 0;
+      white-space: pre;
+      overflow: auto;
+      max-height: calc(100vh - 245px);
+      padding: 10px;
+      background: var(--code);
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .status {
+      min-height: 20px;
+      color: var(--muted);
+    }
+    .status.error { color: var(--danger); }
+    .status.ok { color: var(--ok); }
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tabs {
+      display: flex;
+      gap: 6px;
+      padding: 10px 12px 0;
+    }
+    .tab-button.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .hidden {
+      display: none !important;
+    }
+    .compat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .compat-box {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 8px;
+      min-width: 0;
+    }
+    .compat-box strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .compat-box code {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+    .rule-list {
+      display: grid;
+      gap: 8px;
+    }
+    .rule-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 6px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+    .value-rule-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .value-rule-head, .value-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 6px;
+    }
+    .value-pairs {
+      display: grid;
+      gap: 6px;
+    }
+    .icon-button {
+      min-width: 32px;
+      padding: 6px 8px;
+      text-align: center;
+    }
+    .sub-actions {
+      margin-top: 8px;
+    }
+    @media (max-width: 1100px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+      .list, pre {
+        max-height: 360px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Blockstate Mapping UI</h1>
+    <div class="header-controls">
+      <div>
+        <label for="fromVersion">From</label>
+        <select id="fromVersion"></select>
+      </div>
+      <div class="arrow">→</div>
+      <div>
+        <label for="toVersion">To</label>
+        <select id="toVersion"></select>
+      </div>
+      <div class="muted" id="version"></div>
+    </div>
+  </header>
+  <nav class="tabs">
+    <button class="tab-button active" data-tab="blockstates" type="button">Blockstates</button>
+    <button class="tab-button" data-tab="simple" type="button">Mappings</button>
+    <button class="tab-button" data-tab="names" type="button">Names</button>
+  </nav>
+  <main>
+    <section>
+      <div class="section-head">
+        <span>Diff Entries</span>
+        <span class="muted" id="diffCount"></span>
+      </div>
+      <div class="body">
+        <div id="simpleControls" class="row hidden">
+          <label for="simpleSection">Mapping type</label>
+          <select id="simpleSection"></select>
+        </div>
+        <div id="nameControls" class="row hidden">
+          <label for="nameSection">Name type</label>
+          <select id="nameSection">
+            <option value="itemnames">Item names</option>
+            <option value="entitynames">Entity names</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="search">Search unresolved / existing</label>
+          <input id="search" placeholder="note_block, creaking_heart, pale_moss">
+        </div>
+        <div class="list" id="diffList"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">Rule</div>
+      <div class="body">
+        <div id="blockRule">
+          <div class="grid">
+            <div class="row">
+              <label for="sourceBlock">Source block</label>
+              <input id="sourceBlock" list="sourceBlocks" placeholder="note_block">
+              <datalist id="sourceBlocks"></datalist>
+              <datalist id="sourceProperties"></datalist>
+            </div>
+            <div class="row">
+              <label for="targetBlock">Target block</label>
+              <input id="targetBlock" list="targetBlocks" placeholder="note_block">
+              <datalist id="targetBlocks"></datalist>
+              <datalist id="targetProperties"></datalist>
+            </div>
+          </div>
+
+          <div class="row">
+            <label>Property compatibility</label>
+            <div id="compatibility" class="compat-grid"></div>
+          </div>
+
+          <div class="row">
+            <label for="mode">Mode</label>
+            <select id="mode">
+              <option value="transform">Transform properties</option>
+              <option value="constant">Preserve matching target properties</option>
+              <option value="compact">Compact keep-properties mapping ([)</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label>Filters</label>
+            <div id="filters"></div>
+          </div>
+
+          <div id="transformFields">
+            <div class="row">
+              <label>Keep properties</label>
+              <div class="chips" id="keepProperties"></div>
+            </div>
+            <div class="row">
+              <label>Rename properties</label>
+              <div class="rule-list" id="renameRules"></div>
+              <div class="sub-actions">
+                <button id="addRenameRule" type="button">Add rename</button>
+              </div>
+            </div>
+            <div class="row">
+              <label>Set constants</label>
+              <div class="rule-list" id="setRules"></div>
+              <div class="sub-actions">
+                <button id="addSetRule" type="button">Add constant</button>
+              </div>
+            </div>
+            <div class="row">
+              <label>Map property values</label>
+              <div class="rule-list" id="valueRules"></div>
+              <div class="sub-actions">
+                <button id="addValueRule" type="button">Add value map</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="simpleRule" class="hidden">
+          <div class="row">
+            <label for="simpleSource">Source key</label>
+            <input id="simpleSource" list="simpleSourceKeys" placeholder="source identifier">
+            <datalist id="simpleSourceKeys"></datalist>
+          </div>
+          <div class="row">
+            <label for="simpleTarget">Target key</label>
+            <input id="simpleTarget" list="simpleTargetKeys" placeholder="target identifier">
+            <datalist id="simpleTargetKeys"></datalist>
+          </div>
+        </div>
+
+        <div id="nameRule" class="hidden">
+          <div class="row">
+            <label for="nameKey">Source key</label>
+            <input id="nameKey" list="nameSourceKeys" placeholder="source identifier">
+            <datalist id="nameSourceKeys"></datalist>
+          </div>
+          <div class="row">
+            <label for="nameValue">Display name</label>
+            <input id="nameValue" placeholder="Display Name">
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="previewButton" class="primary">Preview</button>
+          <button id="clearButton">Clear</button>
+          <label class="chip"><input id="overwrite" type="checkbox" checked> overwrite existing</label>
+        </div>
+        <div id="status" class="status"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span>Preview</span>
+        <span class="muted" id="previewCount"></span>
+      </div>
+      <div class="body">
+        <div class="row actions">
+          <button id="applyButton" class="primary">Apply to diff</button>
+        </div>
+        <pre id="preview">{}</pre>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const state = {
+      activeTab: 'blockstates',
+      from: '',
+      to: '',
+      sourceStates: [],
+      targetStates: [],
+      diffEntries: [],
+      simpleMappings: {},
+      nameMappings: {},
+      previewEntries: {}
+    };
+
+    const $ = id => document.getElementById(id);
+    const sourceBlock = $('sourceBlock');
+    const targetBlock = $('targetBlock');
+    const mode = $('mode');
+    const status = $('status');
+    const simpleSection = $('simpleSection');
+    const nameSection = $('nameSection');
+    let ruleId = 0;
+
+    function blockStates(states, block) {
+      return states.filter(state => state.block === block);
+    }
+
+    function unique(values) {
+      return [...new Set(values)].sort((a, b) => a.localeCompare(b));
+    }
+
+    function propertyKeys(states) {
+      const keys = new Set();
+      for (const state of states) {
+        Object.keys(state.properties).forEach(key => keys.add(key));
+      }
+      return [...keys].sort((a, b) => a.localeCompare(b));
+    }
+
+    function propertyValues(states, key) {
+      return unique(states.map(state => state.properties[key]).filter(value => value !== undefined));
+    }
+
+    function sourceBlockStates() {
+      return blockStates(state.sourceStates, sourceBlock.value.trim());
+    }
+
+    function targetBlockStates() {
+      return blockStates(state.targetStates, targetBlock.value.trim());
+    }
+
+    function sourcePropertyKeys() {
+      return propertyKeys(sourceBlockStates());
+    }
+
+    function targetPropertyKeys() {
+      return propertyKeys(targetBlockStates());
+    }
+
+    function sourcePropertyValues(key) {
+      return propertyValues(sourceBlockStates(), key);
+    }
+
+    function targetPropertyValues(key) {
+      return propertyValues(targetBlockStates(), key);
+    }
+
+    function optionHtml(values) {
+      return values.map(value => '<option value="' + escapeHtml(value) + '"></option>').join('');
+    }
+
+    function entriesObject(entries) {
+      return Object.fromEntries(entries.map(entry => [entry.key, entry.value]));
+    }
+
+    function stateString(block, properties) {
+      const entries = Object.entries(properties);
+      if (entries.length === 0) return block;
+      return block + '[' + entries.map(([key, value]) => key + '=' + value).join(',') + ']';
+    }
+
+    function sameProperties(left, right) {
+      const leftKeys = Object.keys(left);
+      const rightKeys = Object.keys(right);
+      if (leftKeys.length !== rightKeys.length) return false;
+      return leftKeys.every(key => right[key] === left[key]);
+    }
+
+    function canonicalTargetState(block, properties) {
+      const targetStates = blockStates(state.targetStates, block);
+      if (targetStates.length === 0) {
+        throw new Error('Target block does not exist: ' + block);
+      }
+
+      const target = targetStates.find(state => sameProperties(state.properties, properties));
+      if (!target) {
+        throw new Error(targetStateError(block, properties, targetStates));
+      }
+      return target.raw;
+    }
+
+    function targetStateError(block, properties, targetStates) {
+      const requestedKeys = Object.keys(properties);
+      const targetKeys = propertyKeys(targetStates);
+      const missingProperties = targetKeys.filter(key => !(key in properties));
+      const extraProperties = requestedKeys.filter(key => !targetKeys.includes(key));
+      const invalidValues = requestedKeys
+        .filter(key => targetKeys.includes(key))
+        .filter(key => !propertyValues(targetStates, key).includes(properties[key]))
+        .map(key => key + '=' + properties[key] + ' (valid: ' + propertyValues(targetStates, key).join(', ') + ')');
+
+      const details = [];
+      if (missingProperties.length !== 0) {
+        details.push('missing target properties: ' + missingProperties.join(', '));
+      }
+      if (extraProperties.length !== 0) {
+        details.push('extra generated properties: ' + extraProperties.join(', '));
+      }
+      if (invalidValues.length !== 0) {
+        details.push('invalid values: ' + invalidValues.join('; '));
+      }
+      if (details.length === 0) {
+        details.push('property combination is not present on target block');
+      }
+
+      return 'No target state exists for ' + stateString(block, properties) + ': ' + details.join('; ');
+    }
+
+    function matchingTargetProperties(sourceProperties, targetBlock) {
+      const targetStatesForBlock = blockStates(state.targetStates, targetBlock);
+      const targetKeys = propertyKeys(targetStatesForBlock);
+      const output = {};
+      for (const key of targetKeys) {
+        if (sourceProperties[key] !== undefined) output[key] = sourceProperties[key];
+      }
+      return output;
+    }
+
+    function validateCompactMapping(sourceBlockName, targetBlockName) {
+      const sourceStatesForBlock = blockStates(state.sourceStates, sourceBlockName);
+      if (sourceStatesForBlock.length === 0) {
+        throw new Error('Source block does not exist: ' + sourceBlockName);
+      }
+      for (const blockState of sourceStatesForBlock) {
+        canonicalTargetState(targetBlockName, blockState.properties);
+      }
+    }
+
+    function selectedFilters() {
+      const filters = {};
+      document.querySelectorAll('[data-filter-key]').forEach(input => {
+        if (!input.checked) return;
+        const key = input.dataset.filterKey;
+        if (!filters[key]) filters[key] = new Set();
+        filters[key].add(input.value);
+      });
+      return filters;
+    }
+
+    function matchesFilters(blockState, filters) {
+      for (const [key, values] of Object.entries(filters)) {
+        if (!values.has(blockState.properties[key])) return false;
+      }
+      return true;
+    }
+
+    function selectedKeepProperties() {
+      return [...document.querySelectorAll('[data-keep-property]:checked')].map(input => input.value);
+    }
+
+    function renameRules() {
+      const pairs = [];
+      document.querySelectorAll('.rename-rule').forEach(row => {
+        const from = row.querySelector('.rename-from').value.trim();
+        const to = row.querySelector('.rename-to').value.trim();
+        if (!from && !to) return;
+        if (!from || !to) throw new Error('Complete or remove incomplete rename rows');
+        pairs.push([from, to]);
+      });
+      return pairs;
+    }
+
+    function setRules() {
+      const pairs = [];
+      document.querySelectorAll('.set-rule').forEach(row => {
+        const key = row.querySelector('.set-key').value.trim();
+        const value = row.querySelector('.set-value').value.trim();
+        if (!key && !value) return;
+        if (!key || !value) throw new Error('Complete or remove incomplete constant rows');
+        pairs.push([key, value]);
+      });
+      return pairs;
+    }
+
+    function valueRules() {
+      const rules = [];
+      document.querySelectorAll('.value-rule').forEach(row => {
+        const source = row.querySelector('.value-source-property').value.trim();
+        const target = row.querySelector('.value-target-property').value.trim();
+        if (!source && !target) return;
+        if (!source || !target) throw new Error('Complete or remove incomplete value map rows');
+
+        const values = new Map();
+        row.querySelectorAll('.value-pair').forEach(pair => {
+          const from = pair.querySelector('.value-source').value.trim();
+          const to = pair.querySelector('.value-target').value.trim();
+          if (!from && !to) return;
+          if (!from || !to) throw new Error('Complete or remove incomplete value pairs');
+          values.set(from, to);
+        });
+        if (values.size === 0) throw new Error('Add at least one value pair');
+        rules.push({ source, target, values });
+      });
+      return rules;
+    }
+
+    function generatePreview() {
+      if (state.activeTab === 'simple') return generateSimplePreview();
+      if (state.activeTab === 'names') return generateNamePreview();
+      return generateBlockstatePreview();
+    }
+
+    function generateSimplePreview() {
+      const source = $('simpleSource').value.trim();
+      const target = $('simpleTarget').value.trim();
+      if (!source) throw new Error('Select a source key');
+      if (!target) throw new Error('Select a target key');
+      return { [source]: target };
+    }
+
+    function generateNamePreview() {
+      const key = $('nameKey').value.trim();
+      const value = $('nameValue').value.trim();
+      if (!key) throw new Error('Select a source key');
+      if (!value) throw new Error('Enter a display name');
+      return { [key]: value };
+    }
+
+    function generateBlockstatePreview() {
+      const source = sourceBlock.value.trim();
+      const target = targetBlock.value.trim();
+      if (!source) throw new Error('Select a source block');
+      if (!target) throw new Error('Select a target block');
+
+      const entries = {};
+      if (mode.value === 'compact') {
+        validateCompactMapping(source, target);
+        entries[source] = target + '[';
+        return entries;
+      }
+
+      const filters = selectedFilters();
+      const sourceStates = blockStates(state.sourceStates, source).filter(blockState => matchesFilters(blockState, filters));
+      if (sourceStates.length === 0) throw new Error('No source states matched the selected filters');
+
+      if (mode.value === 'constant') {
+        for (const blockState of sourceStates) {
+          entries[blockState.raw] = canonicalTargetState(target, matchingTargetProperties(blockState.properties, target));
+        }
+        return entries;
+      }
+
+      const keep = selectedKeepProperties();
+      const renames = renameRules();
+      const sets = setRules();
+      const valueMaps = valueRules();
+      const transformedSources = new Set([
+        ...renames.map(([from]) => from),
+        ...valueMaps.map(rule => rule.source),
+        ...sets.map(([key]) => key)
+      ]);
+      for (const blockState of sourceStates) {
+        const output = {};
+        for (const key of keep) {
+          if (transformedSources.has(key)) continue;
+          if (blockState.properties[key] !== undefined) output[key] = blockState.properties[key];
+        }
+        for (const [from, to] of renames) {
+          if (blockState.properties[from] !== undefined) output[to] = blockState.properties[from];
+        }
+        for (const rule of valueMaps) {
+          const sourceValue = blockState.properties[rule.source];
+          if (sourceValue === undefined) continue;
+          if (!rule.values.has(sourceValue)) continue;
+          output[rule.target] = rule.values.get(sourceValue);
+        }
+        for (const [key, value] of sets) output[key] = value;
+        entries[blockState.raw] = canonicalTargetState(target, output);
+      }
+      return entries;
+    }
+
+    function renderPreview() {
+      status.className = 'status';
+      try {
+        state.previewEntries = generatePreview();
+        $('preview').textContent = JSON.stringify(state.previewEntries, null, 2);
+        $('previewCount').textContent = Object.keys(state.previewEntries).length + ' entries';
+        status.textContent = 'Preview generated';
+        status.classList.add('ok');
+      } catch (error) {
+        state.previewEntries = {};
+        $('preview').textContent = '{}';
+        $('previewCount').textContent = '';
+        status.textContent = error.message;
+        status.classList.add('error');
+      }
+    }
+
+    function clearPreview() {
+      state.previewEntries = {};
+      $('preview').textContent = '{}';
+      $('previewCount').textContent = '';
+    }
+
+    function currentPair() {
+      return {
+        from: $('fromVersion').value,
+        to: $('toVersion').value
+      };
+    }
+
+    function currentSimpleMapping() {
+      return state.simpleMappings[simpleSection.value] || { source: [], target: [], entries: [] };
+    }
+
+    function currentNameMapping() {
+      return state.nameMappings[nameSection.value] || { source: [], entries: [] };
+    }
+
+    function renderSimpleControls() {
+      const sections = Object.keys(state.simpleMappings);
+      simpleSection.innerHTML = sections.map(section => '<option value="' + escapeHtml(section) + '">' + escapeHtml(section) + '</option>').join('');
+      renderSimpleDatalists();
+    }
+
+    function renderSimpleDatalists() {
+      const mapping = currentSimpleMapping();
+      $('simpleSourceKeys').innerHTML = optionHtml(mapping.source || []);
+      $('simpleTargetKeys').innerHTML = optionHtml(mapping.target || []);
+    }
+
+    function renderNameControls() {
+      renderNameDatalist();
+    }
+
+    function renderNameDatalist() {
+      const mapping = currentNameMapping();
+      $('nameSourceKeys').innerHTML = optionHtml(mapping.source || []);
+    }
+
+    function renderBlockLists() {
+      const sourceBlocks = unique(state.sourceStates.map(state => state.block));
+      const targetBlocks = unique(state.targetStates.map(state => state.block));
+      $('sourceBlocks').innerHTML = sourceBlocks.map(block => '<option value="' + block + '"></option>').join('');
+      $('targetBlocks').innerHTML = targetBlocks.map(block => '<option value="' + block + '"></option>').join('');
+    }
+
+    function renderDiffList() {
+      if (state.activeTab === 'simple') {
+        renderSimpleDiffList();
+        return;
+      }
+      if (state.activeTab === 'names') {
+        renderNameDiffList();
+        return;
+      }
+      renderBlockstateDiffList();
+    }
+
+    function renderBlockstateDiffList() {
+      const q = $('search').value.trim().toLowerCase();
+      const groups = new Map();
+      for (const entry of state.diffEntries) {
+        const group = groups.get(entry.block) || { block: entry.block, total: 0, empty: 0, mapped: 0, fallback: null };
+        group.total++;
+        if (!entry.value) group.empty++;
+        else group.mapped++;
+        if (entry.raw === entry.block) group.fallback = entry.value || '<empty>';
+        groups.set(entry.block, group);
+      }
+
+      const entries = [...groups.values()]
+        .filter(group => !q || group.block.toLowerCase().includes(q) || String(group.fallback || '').toLowerCase().includes(q))
+        .slice(0, 500);
+      $('diffCount').textContent = groups.size + ' blocks';
+      $('diffList').innerHTML = entries.map(group => {
+        const parts = [];
+        if (group.empty) parts.push(group.empty + ' missing');
+        if (group.mapped) parts.push(group.mapped + ' mapped');
+        if (group.fallback !== null) parts.push('fallback: ' + group.fallback);
+        return '<div class="entry" data-block="' + escapeHtml(group.block) + '">' +
+          '<code>' + escapeHtml(group.block) + '</code>' +
+          '<span class="muted">' + escapeHtml(parts.join(' · ') || 'no entries') + '</span>' +
+          '</div>';
+      }).join('');
+      document.querySelectorAll('.entry[data-block]').forEach(entry => {
+        entry.addEventListener('click', () => {
+          sourceBlock.value = entry.dataset.block;
+          clearTransformRules();
+          renderRuleProperties();
+        });
+      });
+    }
+
+    function renderSimpleDiffList() {
+      const mapping = currentSimpleMapping();
+      const q = $('search').value.trim().toLowerCase();
+      const entries = (mapping.entries || [])
+        .filter(entry => !q || entry.key.toLowerCase().includes(q) || entry.value.toLowerCase().includes(q))
+        .slice(0, 500);
+      $('diffCount').textContent = (mapping.entries || []).length + ' entries';
+      $('diffList').innerHTML = entries.map(entry =>
+        '<div class="entry" data-simple-key="' + escapeHtml(entry.key) + '" data-simple-value="' + escapeHtml(entry.value) + '">' +
+          '<code>' + escapeHtml(entry.key) + '</code>' +
+          '<span class="muted">' + escapeHtml(entry.value || '<empty>') + '</span>' +
+        '</div>'
+      ).join('');
+      document.querySelectorAll('.entry[data-simple-key]').forEach(entry => {
+        entry.addEventListener('click', () => {
+          $('simpleSource').value = entry.dataset.simpleKey;
+          $('simpleTarget').value = entry.dataset.simpleValue;
+        });
+      });
+    }
+
+    function renderNameDiffList() {
+      const mapping = currentNameMapping();
+      const q = $('search').value.trim().toLowerCase();
+      const entries = (mapping.entries || [])
+        .filter(entry => !q || entry.key.toLowerCase().includes(q) || entry.value.toLowerCase().includes(q))
+        .slice(0, 500);
+      $('diffCount').textContent = (mapping.entries || []).length + ' entries';
+      $('diffList').innerHTML = entries.map(entry =>
+        '<div class="entry" data-name-key="' + escapeHtml(entry.key) + '" data-name-value="' + escapeHtml(entry.value) + '">' +
+          '<code>' + escapeHtml(entry.key) + '</code>' +
+          '<span class="muted">' + escapeHtml(entry.value || '<empty>') + '</span>' +
+        '</div>'
+      ).join('');
+      document.querySelectorAll('.entry[data-name-key]').forEach(entry => {
+        entry.addEventListener('click', () => {
+          $('nameKey').value = entry.dataset.nameKey;
+          $('nameValue').value = entry.dataset.nameValue;
+        });
+      });
+    }
+
+    function renderTransformDatalists() {
+      $('sourceProperties').innerHTML = optionHtml(sourcePropertyKeys());
+      $('targetProperties').innerHTML = optionHtml(targetPropertyKeys());
+      document.querySelectorAll('.set-rule').forEach(updateSetValueList);
+      document.querySelectorAll('.value-rule').forEach(updateValueRuleLists);
+    }
+
+    function clearTransformRules() {
+      $('renameRules').innerHTML = '';
+      $('setRules').innerHTML = '';
+      $('valueRules').innerHTML = '';
+    }
+
+    function addRenameRule(from = '', to = '') {
+      const row = document.createElement('div');
+      row.className = 'rule-row rename-rule';
+      row.innerHTML =
+        '<input class="rename-from" list="sourceProperties" placeholder="source property" value="' + escapeHtml(from) + '">' +
+        '<span class="muted">→</span>' +
+        '<input class="rename-to" list="targetProperties" placeholder="target property" value="' + escapeHtml(to) + '">' +
+        '<button class="icon-button" type="button" title="Remove">×</button>';
+      row.querySelector('button').addEventListener('click', () => row.remove());
+      $('renameRules').append(row);
+    }
+
+    function addSetRule(key = '', value = '') {
+      const valueListId = 'setValues' + ruleId++;
+      const row = document.createElement('div');
+      row.className = 'rule-row set-rule';
+      row.innerHTML =
+        '<input class="set-key" list="targetProperties" placeholder="target property" value="' + escapeHtml(key) + '">' +
+        '<span class="muted">=</span>' +
+        '<input class="set-value" list="' + valueListId + '" placeholder="target value" value="' + escapeHtml(value) + '">' +
+        '<button class="icon-button" type="button" title="Remove">×</button>' +
+        '<datalist id="' + valueListId + '"></datalist>';
+      row.querySelector('.set-key').addEventListener('input', () => updateSetValueList(row));
+      row.querySelector('button').addEventListener('click', () => row.remove());
+      $('setRules').append(row);
+      updateSetValueList(row);
+    }
+
+    function updateSetValueList(row) {
+      const key = row.querySelector('.set-key').value.trim();
+      const datalist = row.querySelector('datalist');
+      datalist.innerHTML = optionHtml(key ? targetPropertyValues(key) : []);
+    }
+
+    function addValueRule(source = '', target = '') {
+      const row = document.createElement('div');
+      row.className = 'rule-row value-rule value-rule-row';
+      row.innerHTML =
+        '<div class="value-rule-head">' +
+          '<input class="value-source-property" list="sourceProperties" placeholder="source property" value="' + escapeHtml(source) + '">' +
+          '<span class="muted">→</span>' +
+          '<input class="value-target-property" list="targetProperties" placeholder="target property" value="' + escapeHtml(target) + '">' +
+          '<button class="icon-button remove-value-rule" type="button" title="Remove">×</button>' +
+        '</div>' +
+        '<div class="value-pairs"></div>' +
+        '<div class="sub-actions"><button class="add-value-pair" type="button">Add value pair</button></div>';
+      row.querySelector('.remove-value-rule').addEventListener('click', () => row.remove());
+      row.querySelector('.add-value-pair').addEventListener('click', () => addValuePair(row));
+      row.querySelector('.value-source-property').addEventListener('input', () => updateValueRuleLists(row));
+      row.querySelector('.value-target-property').addEventListener('input', () => updateValueRuleLists(row));
+      $('valueRules').append(row);
+      addValuePair(row);
+      updateValueRuleLists(row);
+    }
+
+    function addValuePair(ruleRow, from = '', to = '') {
+      const sourceListId = 'sourceValues' + ruleId++;
+      const targetListId = 'targetValues' + ruleId++;
+      const pair = document.createElement('div');
+      pair.className = 'value-pair';
+      pair.innerHTML =
+        '<input class="value-source" list="' + sourceListId + '" placeholder="source value" value="' + escapeHtml(from) + '">' +
+        '<span class="muted">=</span>' +
+        '<input class="value-target" list="' + targetListId + '" placeholder="target value" value="' + escapeHtml(to) + '">' +
+        '<button class="icon-button" type="button" title="Remove">×</button>' +
+        '<datalist class="source-value-list" id="' + sourceListId + '"></datalist>' +
+        '<datalist class="target-value-list" id="' + targetListId + '"></datalist>';
+      pair.querySelector('button').addEventListener('click', () => pair.remove());
+      ruleRow.querySelector('.value-pairs').append(pair);
+      updateValueRuleLists(ruleRow);
+    }
+
+    function updateValueRuleLists(row) {
+      const sourceKey = row.querySelector('.value-source-property').value.trim();
+      const targetKey = row.querySelector('.value-target-property').value.trim();
+      row.querySelectorAll('.source-value-list').forEach(list => {
+        list.innerHTML = optionHtml(sourceKey ? sourcePropertyValues(sourceKey) : []);
+      });
+      row.querySelectorAll('.target-value-list').forEach(list => {
+        list.innerHTML = optionHtml(targetKey ? targetPropertyValues(targetKey) : []);
+      });
+    }
+
+    function renderCompatibility() {
+      const sourceStatesForBlock = sourceBlockStates();
+      const targetStatesForBlock = targetBlockStates();
+      if (sourceStatesForBlock.length === 0 || targetStatesForBlock.length === 0) {
+        $('compatibility').innerHTML = '<span class="muted">Select source and target blocks.</span>';
+        return;
+      }
+
+      const sourceKeys = sourcePropertyKeys();
+      const targetKeys = targetPropertyKeys();
+      const shared = sourceKeys.filter(key => targetKeys.includes(key));
+      const sourceOnly = sourceKeys.filter(key => !targetKeys.includes(key));
+      const targetOnly = targetKeys.filter(key => !sourceKeys.includes(key));
+      const incompatible = shared
+        .map(key => {
+          const sourceValues = sourcePropertyValues(key);
+          const targetValues = targetPropertyValues(key);
+          const sourceInvalid = sourceValues.filter(value => !targetValues.includes(value));
+          const targetMissing = targetValues.filter(value => !sourceValues.includes(value));
+          return { key, sourceInvalid, targetMissing };
+        })
+        .filter(item => item.sourceInvalid.length !== 0 || item.targetMissing.length !== 0);
+
+      $('compatibility').innerHTML =
+        compatibilityBox('Shared', shared) +
+        compatibilityBox('Source only', sourceOnly) +
+        compatibilityBox('Target only', targetOnly) +
+        '<div class="compat-box"><strong>Incompatible values</strong>' +
+        (incompatible.map(item =>
+          '<code>' + escapeHtml(item.key) + ': source-only [' + escapeHtml(item.sourceInvalid.join(', ') || '-') +
+          '] target-only [' + escapeHtml(item.targetMissing.join(', ') || '-') + ']</code>'
+        ).join('') || '<span class="muted">None</span>') +
+        '</div>';
+    }
+
+    function compatibilityBox(title, values) {
+      return '<div class="compat-box"><strong>' + escapeHtml(title) + '</strong>' +
+        (values.map(value => '<code>' + escapeHtml(value) + '</code>').join('') || '<span class="muted">None</span>') +
+        '</div>';
+    }
+
+    function renderRuleProperties() {
+      const source = sourceBlock.value.trim();
+      const states = blockStates(state.sourceStates, source);
+      const keys = propertyKeys(states);
+      $('filters').innerHTML = keys.map(key => {
+        const values = propertyValues(states, key);
+        return '<div class="property-box">' +
+          '<div class="property-title"><span>' + escapeHtml(key) + '</span><span class="muted">' + values.length + '</span></div>' +
+          '<div class="chips">' + values.map(value =>
+            '<label class="chip"><input type="checkbox" data-filter-key="' + escapeHtml(key) + '" value="' + escapeHtml(value) + '"> ' + escapeHtml(value) + '</label>'
+          ).join('') + '</div>' +
+        '</div>';
+      }).join('') || '<span class="muted">No properties</span>';
+
+      $('keepProperties').innerHTML = keys.map(key =>
+        '<label class="chip"><input type="checkbox" data-keep-property value="' + escapeHtml(key) + '" checked> ' + escapeHtml(key) + '</label>'
+      ).join('') || '<span class="muted">No properties</span>';
+
+      renderTransformDatalists();
+      renderCompatibility();
+    }
+
+    function renderMode() {
+      $('transformFields').style.display = mode.value === 'transform' ? '' : 'none';
+    }
+
+    function activeSection() {
+      if (state.activeTab === 'simple') return simpleSection.value;
+      if (state.activeTab === 'names') return nameSection.value;
+      return 'blockstates';
+    }
+
+    function renderTab() {
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.toggle('active', button.dataset.tab === state.activeTab);
+      });
+      $('blockRule').classList.toggle('hidden', state.activeTab !== 'blockstates');
+      $('simpleRule').classList.toggle('hidden', state.activeTab !== 'simple');
+      $('nameRule').classList.toggle('hidden', state.activeTab !== 'names');
+      $('simpleControls').classList.toggle('hidden', state.activeTab !== 'simple');
+      $('nameControls').classList.toggle('hidden', state.activeTab !== 'names');
+      clearPreview();
+      renderDiffList();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+    }
+
+    async function applyPreview() {
+      const count = Object.keys(state.previewEntries).length;
+      if (count === 0) {
+        renderPreview();
+        if (Object.keys(state.previewEntries).length === 0) return;
+      }
+      status.className = 'status';
+      status.textContent = 'Writing diff...';
+      const response = await fetch('/api/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: state.from,
+          to: state.to,
+          section: activeSection(),
+          entries: state.previewEntries,
+          overwrite: $('overwrite').checked
+        })
+      });
+      const body = await response.json();
+      if (!response.ok) {
+        status.textContent = body.error + (body.conflicts ? ': ' + body.conflicts.slice(0, 6).join(', ') : '');
+        status.classList.add('error');
+        return;
+      }
+      status.textContent = 'Wrote ' + body.written + ', skipped ' + body.skipped + ', removed ' + body.removed + ' · ' + body.path;
+      status.classList.add('ok');
+      await load();
+    }
+
+    function clearRule() {
+      targetBlock.value = '';
+      $('simpleSource').value = '';
+      $('simpleTarget').value = '';
+      $('nameKey').value = '';
+      $('nameValue').value = '';
+      clearTransformRules();
+      document.querySelectorAll('input[type=checkbox]').forEach(input => {
+        if (input.id !== 'overwrite') input.checked = false;
+      });
+      renderRuleProperties();
+      clearPreview();
+      status.textContent = '';
+    }
+
+    async function loadVersions() {
+      const response = await fetch('/api/versions');
+      const body = await response.json();
+      const options = body.versions.map(version => '<option value="' + escapeHtml(version) + '">' + escapeHtml(version) + '</option>').join('');
+      $('fromVersion').innerHTML = options;
+      $('toVersion').innerHTML = options;
+      $('fromVersion').value = body.defaultFrom;
+      $('toVersion').value = body.defaultTo;
+    }
+
+    async function load() {
+      const pair = currentPair();
+      const params = new URLSearchParams(pair);
+      const response = await fetch('/api/state?' + params.toString());
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.error || 'Failed to load mapping state');
+      state.from = body.from;
+      state.to = body.to;
+      state.sourceStates = body.sourceStates;
+      state.targetStates = body.targetStates;
+      state.diffEntries = body.diffEntries;
+      state.simpleMappings = body.simpleMappings || {};
+      state.nameMappings = body.nameMappings || {};
+      $('version').textContent = body.diffPath;
+      sourceBlock.value = '';
+      targetBlock.value = '';
+      $('simpleSource').value = '';
+      $('simpleTarget').value = '';
+      $('nameKey').value = '';
+      $('nameValue').value = '';
+      clearPreview();
+      renderBlockLists();
+      renderSimpleControls();
+      renderNameControls();
+      renderDiffList();
+      renderRuleProperties();
+      renderTab();
+    }
+
+    $('search').addEventListener('input', renderDiffList);
+    sourceBlock.addEventListener('input', () => {
+      clearTransformRules();
+      renderRuleProperties();
+    });
+    targetBlock.addEventListener('input', () => {
+      renderTransformDatalists();
+      renderCompatibility();
+    });
+    mode.addEventListener('change', renderMode);
+    $('previewButton').addEventListener('click', renderPreview);
+    $('applyButton').addEventListener('click', applyPreview);
+    $('clearButton').addEventListener('click', clearRule);
+    $('addRenameRule').addEventListener('click', () => addRenameRule());
+    $('addSetRule').addEventListener('click', () => addSetRule());
+    $('addValueRule').addEventListener('click', () => addValueRule());
+    simpleSection.addEventListener('change', () => {
+      $('simpleSource').value = '';
+      $('simpleTarget').value = '';
+      renderSimpleDatalists();
+      renderDiffList();
+      clearPreview();
+    });
+    nameSection.addEventListener('change', () => {
+      $('nameKey').value = '';
+      $('nameValue').value = '';
+      renderNameDatalist();
+      renderDiffList();
+      clearPreview();
+    });
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', () => {
+        state.activeTab = button.dataset.tab;
+        renderTab();
+      });
+    });
+    $('fromVersion').addEventListener('change', () => load().catch(showError));
+    $('toVersion').addEventListener('change', () => load().catch(showError));
+
+    renderMode();
+    function showError(error) {
+      status.textContent = error.message;
+      status.classList.add('error');
+    }
+
+    loadVersions().then(load).catch(showError);
+  </script>
+</body>
+</html>
