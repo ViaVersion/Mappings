@@ -247,14 +247,63 @@ public final class MappingsOptimizer {
      * @return true if the diff stubs were written, false if they were not written because there were no changes
      */
     public boolean writeDiffStubs() throws IOException {
-        final JsonObject diffObject = MappingsLoader.getDiffObjectStub(unmappedObject, mappedObject, this.diffObject, ignoreMissing);
-        if (diffObject != null) {
+        JsonObject diffObject = MappingsLoader.getDiffObjectStub(unmappedObject, mappedObject, this.diffObject, ignoreMissing);
+        final boolean hasStubChanges = diffObject != null;
+        boolean hasNameChanges = false;
+        if (backwards) {
+            if (diffObject == null) {
+                diffObject = this.diffObject != null ? this.diffObject : new JsonObject();
+            }
+
+            hasNameChanges |= addBackwardsNames(diffObject, "items", "itemnames", true);
+            hasNameChanges |= addBackwardsNames(diffObject, "entities", "entitynames", false);
+        }
+
+        if (hasStubChanges || hasNameChanges) {
             LOGGER.info("Writing diff stubs for versions {} → {}", fromVersion, toVersion);
             Files.writeString(getDiffDir(specialFrom || specialTo).resolve(DIFF_FILE_FORMAT.formatted(fromVersion, toVersion)), MappingsGenerator.GSON.toJson(diffObject));
             this.diffObject = diffObject;
             return true;
         }
         return false;
+    }
+
+    private boolean addBackwardsNames(final JsonObject diffObject, final String key, final String namesKey, final boolean includeVersion) {
+        if (!unmappedObject.has(key) || !mappedObject.has(key)) {
+            return false;
+        }
+
+        JsonObject nameMappings = diffObject.getAsJsonObject(namesKey);
+
+        boolean changed = false;
+        final Set<String> mappedIdentifiers = new HashSet<>();
+        for (final JsonElement element : mappedObject.getAsJsonArray(key)) {
+            mappedIdentifiers.add(element.getAsString());
+        }
+
+        for (final JsonElement element : unmappedObject.getAsJsonArray(key)) {
+            final String identifier = element.getAsString();
+            if (mappedIdentifiers.contains(identifier) || nameMappings != null && nameMappings.has(identifier)) {
+                continue;
+            }
+
+            if (nameMappings == null) {
+                nameMappings = new JsonObject();
+                diffObject.add(namesKey, nameMappings);
+            }
+            final String name = nameFromIdentifier(identifier);
+            nameMappings.addProperty(identifier, includeVersion ? fromVersion + " " + name : name);
+            changed = true;
+        }
+        return changed;
+    }
+
+    private static String nameFromIdentifier(final String identifier) {
+        final StringBuilder result = new StringBuilder();
+        for (final String split : identifier.replace("minecraft:", "").split("_")) {
+            result.append(' ').append(Character.toUpperCase(split.charAt(0))).append(split.substring(1));
+        }
+        return result.substring(1);
     }
 
     /**
