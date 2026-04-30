@@ -4,6 +4,7 @@ generated/
 output/
 states.txt
 states_output.txt
+AGENTS.override.md
 
 ### Java files ###
 *.class
