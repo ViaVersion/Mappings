@@ -24,6 +24,7 @@ import com.viaversion.mappingsgenerator.util.ServerJarUtil;
 import com.viaversion.mappingsgenerator.util.Version;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -54,8 +55,7 @@ public final class ManualRunner {
 
     public static void main(final String[] args) throws IOException {
         if (ALL) {
-            runAll(ErrorStrategy.WARN);
-            MappingsOptimizer.printStats();
+            regenerateNbtOutputFiles(ErrorStrategy.WARN);
             return;
         }
 
@@ -73,6 +73,16 @@ public final class ManualRunner {
     /**
      * Runs the optimizer for all mapping files present in the 'mappings' directory.
      */
+    public static void regenerateNbtOutputFiles(final ErrorStrategy errorStrategy) throws IOException {
+        MappingsOptimizer.resetRunState();
+        Files.createDirectories(MappingsOptimizer.OUTPUT_DIR);
+        Files.createDirectories(MappingsOptimizer.OUTPUT_BACKWARDS_DIR);
+        Files.createDirectories(MappingsOptimizer.OUTPUT_DIR.resolve("special"));
+        Files.createDirectories(MappingsOptimizer.OUTPUT_BACKWARDS_DIR.resolve("special"));
+        runAll(errorStrategy);
+        MappingsOptimizer.printStats();
+    }
+
     public static void runAll(final ErrorStrategy errorStrategy) throws IOException {
         // Going backwards wil result in less index shifts in the versions that matter most/have the most entries
         final List<String> versions = allVersions();

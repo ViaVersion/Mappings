@@ -53,7 +53,7 @@
     }
     .header-controls {
       display: grid;
-      grid-template-columns: 110px 18px 110px auto;
+      grid-template-columns: minmax(260px, 360px) repeat(4, auto) minmax(220px, 1fr);
       align-items: end;
       gap: 8px;
       min-width: 0;
@@ -64,11 +64,14 @@
     .header-controls select {
       padding: 5px 7px;
     }
-    .arrow {
-      align-self: center;
-      color: var(--muted);
-      padding-top: 16px;
-      text-align: center;
+    .header-controls button {
+      white-space: nowrap;
+    }
+    .version-path.backwards {
+      color: var(--danger);
+    }
+    .backwards-option {
+      color: var(--danger);
     }
     main {
       display: grid;
@@ -163,6 +166,12 @@
     .entry:hover {
       border-color: var(--accent);
     }
+    .entry.empty-mapping {
+      border-color: var(--danger);
+    }
+    .entry.empty-mapping code, .entry.empty-mapping .muted {
+      color: var(--danger);
+    }
     .entry code, pre, .chip {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
@@ -231,6 +240,35 @@
       padding: 10px 12px 0;
     }
     .tab-button.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .mapping-types {
+      display: grid;
+      gap: 5px;
+    }
+    .mapping-type {
+      text-align: left;
+    }
+    .mapping-type.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .mapping-type.missing {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .mode-button {
+      min-width: 0;
+      white-space: normal;
+      text-align: center;
+    }
+    .mode-button.active {
       border-color: var(--accent);
       color: var(--accent);
     }
@@ -309,15 +347,14 @@
     <h1>Blockstate Mapping UI</h1>
     <div class="header-controls">
       <div>
-        <label for="fromVersion">From</label>
-        <select id="fromVersion"></select>
+        <label for="mappingPair">Version mapping</label>
+        <select id="mappingPair"></select>
       </div>
-      <div class="arrow">→</div>
-      <div>
-        <label for="toVersion">To</label>
-        <select id="toVersion"></select>
-      </div>
-      <div class="muted" id="version"></div>
+      <label class="chip"><input id="showBackwards" type="checkbox" checked> show backwards</label>
+      <button id="regenerateNbtButton" type="button">Regenerate NBT</button>
+      <button id="moveOutputButton" type="button">Move selected NBT</button>
+      <button id="moveIdentifiersButton" type="button">Move identifiers</button>
+      <div class="muted version-path" id="version"></div>
     </div>
   </header>
   <nav class="tabs">
@@ -333,8 +370,8 @@
       </div>
       <div class="body">
         <div id="simpleControls" class="row hidden">
-          <label for="simpleSection">Mapping type</label>
-          <select id="simpleSection"></select>
+          <label>Mapping types</label>
+          <div id="simpleSections" class="mapping-types"></div>
         </div>
         <div id="nameControls" class="row hidden">
           <label for="nameSection">Name type</label>
@@ -376,12 +413,13 @@
           </div>
 
           <div class="row">
-            <label for="mode">Mode</label>
-            <select id="mode">
-              <option value="transform">Transform properties</option>
-              <option value="constant">Preserve matching target properties</option>
-              <option value="compact">Compact keep-properties mapping ([)</option>
-            </select>
+            <label>Mode</label>
+            <input id="mode" type="hidden" value="transform">
+            <div id="modeTabs" class="mode-tabs">
+              <button class="mode-button" data-mode="transform" type="button">Transform</button>
+              <button class="mode-button" data-mode="constant" type="button">Preserve</button>
+              <button class="mode-button" data-mode="compact" type="button">Compact ([)</button>
+            </div>
           </div>
 
           <div class="row">
@@ -471,10 +509,18 @@
       activeTab: 'blockstates',
       from: '',
       to: '',
+      mappingPairs: [],
       sourceStates: [],
       targetStates: [],
+      sourceStatesByBlock: new Map(),
+      targetStatesByBlock: new Map(),
+      sourceBlocks: [],
+      targetBlocks: [],
+      targetSuggestionSource: '',
+      targetSuggestions: [],
       diffEntries: [],
       simpleMappings: {},
+      simpleSection: '',
       nameMappings: {},
       previewEntries: {}
     };
@@ -484,12 +530,24 @@
     const targetBlock = $('targetBlock');
     const mode = $('mode');
     const status = $('status');
-    const simpleSection = $('simpleSection');
     const nameSection = $('nameSection');
+    const missingWarningSections = new Set(['items', 'entities', 'sounds', 'itemnames', 'entitynames']);
     let ruleId = 0;
 
     function blockStates(states, block) {
+      if (states === state.sourceStates) return state.sourceStatesByBlock.get(block) || [];
+      if (states === state.targetStates) return state.targetStatesByBlock.get(block) || [];
       return states.filter(state => state.block === block);
+    }
+
+    function blockStateIndex(states) {
+      const index = new Map();
+      for (const blockState of states) {
+        const blockStatesForBlock = index.get(blockState.block) || [];
+        blockStatesForBlock.push(blockState);
+        index.set(blockState.block, blockStatesForBlock);
+      }
+      return index;
     }
 
     function unique(values) {
@@ -506,6 +564,41 @@
 
     function propertyValues(states, key) {
       return unique(states.map(state => state.properties[key]).filter(value => value !== undefined));
+    }
+
+    function propertySignature(properties) {
+      return Object.entries(properties)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([key, value]) => key + '=' + value)
+        .join(',');
+    }
+
+    function targetSuggestion(block) {
+      const sourceStatesForBlock = sourceBlockStates();
+      if (sourceStatesForBlock.length === 0) {
+        return { block, rank: 2, score: 0, label: '' };
+      }
+
+      const targetStatesForBlock = blockStates(state.targetStates, block);
+      const targetSignatures = new Set(targetStatesForBlock.map(state => propertySignature(state.properties)));
+      const exact = sourceStatesForBlock.every(state => targetSignatures.has(propertySignature(state.properties)));
+      if (exact) {
+        return { block, rank: 0, score: sourceStatesForBlock.length, label: 'exact properties' };
+      }
+
+      const sourceKeys = propertyKeys(sourceStatesForBlock);
+      const targetKeys = propertyKeys(targetStatesForBlock);
+      const sharedKeys = sourceKeys.filter(key => targetKeys.includes(key));
+      const valueMatches = sharedKeys.reduce((matches, key) => {
+        const targetValues = targetPropertyValuesForBlock(targetStatesForBlock, key);
+        return matches + sourcePropertyValues(key).filter(value => targetValues.includes(value)).length;
+      }, 0);
+      const score = sharedKeys.length * 100 + valueMatches;
+      return { block, rank: sharedKeys.length === 0 ? 2 : 1, score, label: sharedKeys.length === 0 ? '' : sharedKeys.length + ' shared properties' };
+    }
+
+    function targetPropertyValuesForBlock(states, key) {
+      return propertyValues(states, key);
     }
 
     function sourceBlockStates() {
@@ -534,6 +627,14 @@
 
     function optionHtml(values) {
       return values.map(value => '<option value="' + escapeHtml(value) + '"></option>').join('');
+    }
+
+    function warnsOnMissing(section) {
+      return missingWarningSections.has(section);
+    }
+
+    function missingEntries(mapping) {
+      return (mapping.entries || []).filter(entry => !entry.value);
     }
 
     function entriesObject(entries) {
@@ -610,6 +711,48 @@
       }
       for (const blockState of sourceStatesForBlock) {
         canonicalTargetState(targetBlockName, blockState.properties);
+      }
+    }
+
+    function canCompactMapping(sourceBlockName, targetBlockName) {
+      try {
+        validateCompactMapping(sourceBlockName, targetBlockName);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function canConstantMapping(sourceBlockName, targetBlockName) {
+      const sourceStatesForBlock = blockStates(state.sourceStates, sourceBlockName);
+      if (sourceStatesForBlock.length === 0 || blockStates(state.targetStates, targetBlockName).length === 0) {
+        return false;
+      }
+
+      try {
+        for (const blockState of sourceStatesForBlock) {
+          canonicalTargetState(targetBlockName, matchingTargetProperties(blockState.properties, targetBlockName));
+        }
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function autoSelectMode() {
+      const source = sourceBlock.value.trim();
+      const target = targetBlock.value.trim();
+      if (!source || !target) {
+        setMode('transform');
+        return;
+      }
+
+      if (canCompactMapping(source, target)) {
+        setMode('compact');
+      } else if (canConstantMapping(source, target)) {
+        setMode('constant');
+      } else {
+        setMode('transform');
       }
     }
 
@@ -691,7 +834,7 @@
       const source = $('simpleSource').value.trim();
       const target = $('simpleTarget').value.trim();
       if (!source) throw new Error('Select a source key');
-      if (!target) throw new Error('Select a target key');
+      if (!target && warnsOnMissing(state.simpleSection)) throw new Error('Select a target key');
       return { [source]: target };
     }
 
@@ -781,14 +924,32 @@
     }
 
     function currentPair() {
-      return {
-        from: $('fromVersion').value,
-        to: $('toVersion').value
-      };
+      const key = $('mappingPair').value;
+      return state.mappingPairs.find(pair => pairKey(pair) === key) || { from: state.from, to: state.to };
+    }
+
+    function pairKey(pair) {
+      return pair.from + '|' + pair.to;
+    }
+
+    function renderMappingPairs(preferredFrom = state.from, preferredTo = state.to) {
+      const showBackwards = $('showBackwards').checked;
+      const pairs = state.mappingPairs.filter(pair => showBackwards || !pair.backwards);
+      const preferredKey = preferredFrom && preferredTo ? preferredFrom + '|' + preferredTo : '';
+      const selectedPair = pairs.find(pair => pairKey(pair) === preferredKey) || pairs[pairs.length - 1];
+
+      $('mappingPair').innerHTML = pairs.map(pair =>
+        '<option value="' + escapeHtml(pairKey(pair)) + '"' + (pair.backwards ? ' class="backwards-option"' : '') + '>' +
+          escapeHtml(pair.from + ' → ' + pair.to + (pair.backwards ? ' (backwards)' : '')) +
+        '</option>'
+      ).join('');
+      if (selectedPair) {
+        $('mappingPair').value = pairKey(selectedPair);
+      }
     }
 
     function currentSimpleMapping() {
-      return state.simpleMappings[simpleSection.value] || { source: [], target: [], entries: [] };
+      return state.simpleMappings[state.simpleSection] || { source: [], target: [], entries: [] };
     }
 
     function currentNameMapping() {
@@ -797,7 +958,32 @@
 
     function renderSimpleControls() {
       const sections = Object.keys(state.simpleMappings);
-      simpleSection.innerHTML = sections.map(section => '<option value="' + escapeHtml(section) + '">' + escapeHtml(section) + '</option>').join('');
+      if (!sections.includes(state.simpleSection)) {
+        state.simpleSection = sections[0] || '';
+      }
+
+      $('simpleSections').innerHTML = sections.map(section => {
+        const mapping = state.simpleMappings[section] || { entries: [] };
+        const missing = warnsOnMissing(section) ? missingEntries(mapping).length : 0;
+        return '<button class="mapping-type' +
+          (section === state.simpleSection ? ' active' : '') +
+          (missing ? ' missing' : '') +
+          '" data-simple-section="' + escapeHtml(section) + '" type="button">' +
+          escapeHtml(section) +
+          (missing ? ' (' + missing + ' missing)' : '') +
+          '</button>';
+      }).join('') || '<span class="muted">No mapping sections in this diff.</span>';
+
+      document.querySelectorAll('[data-simple-section]').forEach(button => {
+        button.addEventListener('click', () => {
+          state.simpleSection = button.dataset.simpleSection;
+          $('simpleSource').value = '';
+          $('simpleTarget').value = '';
+          renderSimpleControls();
+          renderDiffList();
+          clearPreview();
+        });
+      });
       renderSimpleDatalists();
     }
 
@@ -808,6 +994,14 @@
     }
 
     function renderNameControls() {
+      ['itemnames', 'entitynames'].forEach(section => {
+        const option = nameSection.querySelector('option[value="' + section + '"]');
+        const mapping = state.nameMappings[section] || { entries: [] };
+        const missing = missingEntries(mapping).length;
+        if (option) {
+          option.textContent = (section === 'itemnames' ? 'Item names' : 'Entity names') + (missing ? ' (' + missing + ' missing)' : '');
+        }
+      });
       renderNameDatalist();
     }
 
@@ -817,10 +1011,24 @@
     }
 
     function renderBlockLists() {
-      const sourceBlocks = unique(state.sourceStates.map(state => state.block));
-      const targetBlocks = unique(state.targetStates.map(state => state.block));
-      $('sourceBlocks').innerHTML = sourceBlocks.map(block => '<option value="' + block + '"></option>').join('');
-      $('targetBlocks').innerHTML = targetBlocks.map(block => '<option value="' + block + '"></option>').join('');
+      const source = sourceBlock.value.trim();
+      if (state.targetSuggestionSource !== source) {
+        state.targetSuggestionSource = source;
+        state.targetSuggestions = state.targetBlocks
+          .map(targetSuggestion)
+          .sort((first, second) =>
+            first.rank - second.rank ||
+            second.score - first.score ||
+            first.block.localeCompare(second.block)
+          );
+      }
+
+      $('sourceBlocks').innerHTML = state.sourceBlocks.map(block => '<option value="' + escapeHtml(block) + '"></option>').join('');
+      $('targetBlocks').innerHTML = state.targetSuggestions.map(suggestion =>
+        '<option value="' + escapeHtml(suggestion.block) + '"' +
+          (suggestion.label ? ' label="' + escapeHtml(suggestion.label) + '"' : '') +
+        '></option>'
+      ).join('');
     }
 
     function renderDiffList() {
@@ -849,6 +1057,7 @@
 
       const entries = [...groups.values()]
         .filter(group => !q || group.block.toLowerCase().includes(q) || String(group.fallback || '').toLowerCase().includes(q))
+        .sort((first, second) => Number(second.empty > 0) - Number(first.empty > 0) || first.block.localeCompare(second.block))
         .slice(0, 500);
       $('diffCount').textContent = groups.size + ' blocks';
       $('diffList').innerHTML = entries.map(group => {
@@ -856,7 +1065,7 @@
         if (group.empty) parts.push(group.empty + ' missing');
         if (group.mapped) parts.push(group.mapped + ' mapped');
         if (group.fallback !== null) parts.push('fallback: ' + group.fallback);
-        return '<div class="entry" data-block="' + escapeHtml(group.block) + '">' +
+        return '<div class="entry' + (group.empty ? ' empty-mapping' : '') + '" data-block="' + escapeHtml(group.block) + '">' +
           '<code>' + escapeHtml(group.block) + '</code>' +
           '<span class="muted">' + escapeHtml(parts.join(' · ') || 'no entries') + '</span>' +
           '</div>';
@@ -865,7 +1074,9 @@
         entry.addEventListener('click', () => {
           sourceBlock.value = entry.dataset.block;
           clearTransformRules();
+          renderBlockLists();
           renderRuleProperties();
+          autoSelectMode();
         });
       });
     }
@@ -873,12 +1084,14 @@
     function renderSimpleDiffList() {
       const mapping = currentSimpleMapping();
       const q = $('search').value.trim().toLowerCase();
+      const warnMissing = warnsOnMissing(state.simpleSection);
       const entries = (mapping.entries || [])
         .filter(entry => !q || entry.key.toLowerCase().includes(q) || entry.value.toLowerCase().includes(q))
+        .sort((first, second) => (warnMissing ? Number(!second.value) - Number(!first.value) : 0) || first.key.localeCompare(second.key))
         .slice(0, 500);
       $('diffCount').textContent = (mapping.entries || []).length + ' entries';
       $('diffList').innerHTML = entries.map(entry =>
-        '<div class="entry" data-simple-key="' + escapeHtml(entry.key) + '" data-simple-value="' + escapeHtml(entry.value) + '">' +
+        '<div class="entry' + (warnMissing && !entry.value ? ' empty-mapping' : '') + '" data-simple-key="' + escapeHtml(entry.key) + '" data-simple-value="' + escapeHtml(entry.value) + '">' +
           '<code>' + escapeHtml(entry.key) + '</code>' +
           '<span class="muted">' + escapeHtml(entry.value || '<empty>') + '</span>' +
         '</div>'
@@ -894,12 +1107,14 @@
     function renderNameDiffList() {
       const mapping = currentNameMapping();
       const q = $('search').value.trim().toLowerCase();
+      const warnMissing = warnsOnMissing(nameSection.value);
       const entries = (mapping.entries || [])
         .filter(entry => !q || entry.key.toLowerCase().includes(q) || entry.value.toLowerCase().includes(q))
+        .sort((first, second) => (warnMissing ? Number(!second.value) - Number(!first.value) : 0) || first.key.localeCompare(second.key))
         .slice(0, 500);
       $('diffCount').textContent = (mapping.entries || []).length + ' entries';
       $('diffList').innerHTML = entries.map(entry =>
-        '<div class="entry" data-name-key="' + escapeHtml(entry.key) + '" data-name-value="' + escapeHtml(entry.value) + '">' +
+        '<div class="entry' + (warnMissing && !entry.value ? ' empty-mapping' : '') + '" data-name-key="' + escapeHtml(entry.key) + '" data-name-value="' + escapeHtml(entry.value) + '">' +
           '<code>' + escapeHtml(entry.key) + '</code>' +
           '<span class="muted">' + escapeHtml(entry.value || '<empty>') + '</span>' +
         '</div>'
@@ -1072,11 +1287,20 @@
     }
 
     function renderMode() {
+      document.querySelectorAll('[data-mode]').forEach(button => {
+        button.classList.toggle('active', button.dataset.mode === mode.value);
+      });
       $('transformFields').style.display = mode.value === 'transform' ? '' : 'none';
     }
 
+    function setMode(value) {
+      mode.value = value;
+      renderMode();
+      clearPreview();
+    }
+
     function activeSection() {
-      if (state.activeTab === 'simple') return simpleSection.value;
+      if (state.activeTab === 'simple') return state.simpleSection;
       if (state.activeTab === 'names') return nameSection.value;
       return 'blockstates';
     }
@@ -1132,6 +1356,68 @@
       await load();
     }
 
+    async function regenerateNbt() {
+      const button = $('regenerateNbtButton');
+      status.className = 'status';
+      status.textContent = 'Regenerating NBT output files...';
+      button.disabled = true;
+      const oldText = button.textContent;
+      button.textContent = 'Regenerating...';
+      try {
+        const response = await fetch('/api/regenerate-nbt', { method: 'POST' });
+        const body = await response.json();
+        if (!response.ok) {
+          throw new Error(body.error || 'Failed to regenerate NBT output files');
+        }
+        status.textContent = 'Regenerated NBT output files in ' + body.durationMs + 'ms';
+        status.classList.add('ok');
+      } catch (error) {
+        status.textContent = error.message;
+        status.classList.add('error');
+      } finally {
+        button.disabled = false;
+        button.textContent = oldText;
+      }
+    }
+
+    async function moveArtifact(endpoint, buttonId, workingText, successText) {
+      const button = $(buttonId);
+      status.className = 'status';
+      status.textContent = workingText;
+      button.disabled = true;
+      const oldText = button.textContent;
+      button.textContent = 'Moving...';
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ from: state.from, to: state.to })
+        });
+        const body = await response.json();
+        if (!response.ok) {
+          throw new Error('No files copied' + (body.missing && body.missing.length ? ': ' + body.missing.join(', ') : ''));
+        }
+
+        status.textContent = successText + ': ' + body.copied.join(', ') +
+          (body.missing && body.missing.length ? ' (missing: ' + body.missing.join(', ') + ')' : '');
+        status.classList.add('ok');
+      } catch (error) {
+        status.textContent = error.message;
+        status.classList.add('error');
+      } finally {
+        button.disabled = false;
+        button.textContent = oldText;
+      }
+    }
+
+    function moveCurrentOutput() {
+      return moveArtifact('/api/move-current-output', 'moveOutputButton', 'Moving selected NBT...', 'Moved selected NBT');
+    }
+
+    function moveIdentifiers() {
+      return moveArtifact('/api/move-identifiers', 'moveIdentifiersButton', 'Moving identifier files...', 'Moved identifier files');
+    }
+
     function clearRule() {
       targetBlock.value = '';
       $('simpleSource').value = '';
@@ -1150,11 +1436,10 @@
     async function loadVersions() {
       const response = await fetch('/api/versions');
       const body = await response.json();
-      const options = body.versions.map(version => '<option value="' + escapeHtml(version) + '">' + escapeHtml(version) + '</option>').join('');
-      $('fromVersion').innerHTML = options;
-      $('toVersion').innerHTML = options;
-      $('fromVersion').value = body.defaultFrom;
-      $('toVersion').value = body.defaultTo;
+      state.from = body.defaultFrom;
+      state.to = body.defaultTo;
+      state.mappingPairs = body.mappingPairs || [];
+      renderMappingPairs(body.defaultFrom, body.defaultTo);
     }
 
     async function load() {
@@ -1167,10 +1452,17 @@
       state.to = body.to;
       state.sourceStates = body.sourceStates;
       state.targetStates = body.targetStates;
+      state.sourceStatesByBlock = blockStateIndex(state.sourceStates);
+      state.targetStatesByBlock = blockStateIndex(state.targetStates);
+      state.sourceBlocks = [...state.sourceStatesByBlock.keys()].sort((a, b) => a.localeCompare(b));
+      state.targetBlocks = [...state.targetStatesByBlock.keys()].sort((a, b) => a.localeCompare(b));
+      state.targetSuggestionSource = null;
+      state.targetSuggestions = [];
       state.diffEntries = body.diffEntries;
       state.simpleMappings = body.simpleMappings || {};
       state.nameMappings = body.nameMappings || {};
       $('version').textContent = body.diffPath;
+      $('version').classList.toggle('backwards', body.backwards);
       sourceBlock.value = '';
       targetBlock.value = '';
       $('simpleSource').value = '';
@@ -1189,26 +1481,24 @@
     $('search').addEventListener('input', renderDiffList);
     sourceBlock.addEventListener('input', () => {
       clearTransformRules();
+      renderBlockLists();
       renderRuleProperties();
+      autoSelectMode();
     });
     targetBlock.addEventListener('input', () => {
       renderTransformDatalists();
       renderCompatibility();
+      autoSelectMode();
     });
-    mode.addEventListener('change', renderMode);
+    document.querySelectorAll('[data-mode]').forEach(button => {
+      button.addEventListener('click', () => setMode(button.dataset.mode));
+    });
     $('previewButton').addEventListener('click', renderPreview);
     $('applyButton').addEventListener('click', applyPreview);
     $('clearButton').addEventListener('click', clearRule);
     $('addRenameRule').addEventListener('click', () => addRenameRule());
     $('addSetRule').addEventListener('click', () => addSetRule());
     $('addValueRule').addEventListener('click', () => addValueRule());
-    simpleSection.addEventListener('change', () => {
-      $('simpleSource').value = '';
-      $('simpleTarget').value = '';
-      renderSimpleDatalists();
-      renderDiffList();
-      clearPreview();
-    });
     nameSection.addEventListener('change', () => {
       $('nameKey').value = '';
       $('nameValue').value = '';
@@ -1222,8 +1512,15 @@
         renderTab();
       });
     });
-    $('fromVersion').addEventListener('change', () => load().catch(showError));
-    $('toVersion').addEventListener('change', () => load().catch(showError));
+    $('mappingPair').addEventListener('change', () => load().catch(showError));
+    $('showBackwards').addEventListener('change', () => {
+      const pair = currentPair();
+      renderMappingPairs(pair.from, pair.to);
+      load().catch(showError);
+    });
+    $('regenerateNbtButton').addEventListener('click', regenerateNbt);
+    $('moveOutputButton').addEventListener('click', moveCurrentOutput);
+    $('moveIdentifiersButton').addEventListener('click', moveIdentifiers);
 
     renderMode();
     function showError(error) {

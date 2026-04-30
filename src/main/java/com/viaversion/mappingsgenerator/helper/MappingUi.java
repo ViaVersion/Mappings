@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import com.viaversion.mappingsgenerator.ErrorStrategy;
+import com.viaversion.mappingsgenerator.ManualRunner;
 import com.viaversion.mappingsgenerator.MappingsLoader;
 import com.viaversion.mappingsgenerator.util.GsonUtil;
 import com.viaversion.mappingsgenerator.util.Version;
@@ -17,24 +19,33 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 import static com.viaversion.mappingsgenerator.MappingsOptimizer.MAPPINGS_DIR;
 import static com.viaversion.mappingsgenerator.MappingsOptimizer.MAPPING_FILE_FORMAT;
+import static com.viaversion.mappingsgenerator.MappingsOptimizer.OUTPUT_BACKWARDS_DIR;
+import static com.viaversion.mappingsgenerator.MappingsOptimizer.OUTPUT_DIR;
+import static com.viaversion.mappingsgenerator.MappingsOptimizer.OUTPUT_FILE_FORMAT;
+import static com.viaversion.mappingsgenerator.MappingsOptimizer.OUTPUT_GLOBAL_IDENTIFIERS_FILE;
+import static com.viaversion.mappingsgenerator.MappingsOptimizer.OUTPUT_IDENTIFIERS_FILE_FORMAT;
 
 /**
- * Local helper UI for filling blockstate diff mappings.
+ * Local helper UI for filling diff mappings.
  * <p>
  * This directly edits the diff json.
  */
-public final class BlockStateMappingUi {
+public final class MappingUi {
 
-    private static final String INDEX_RESOURCE = "/com/viaversion/mappingsgenerator/helper/blockstate-mapping-ui.html";
+    private static final String INDEX_RESOURCE = "/com/viaversion/mappingsgenerator/helper/mapping-ui.html";
     private static final String[] SIMPLE_SECTIONS = {
         "blocks",
         "items",
@@ -55,8 +66,11 @@ public final class BlockStateMappingUi {
 
     private final String defaultFrom;
     private final String defaultTo;
+    private final AtomicBoolean regenerating = new AtomicBoolean();
+    private final Map<String, JsonObject> mappingCache = new HashMap<>();
+    private final Map<String, JsonArray> blockStateCache = new HashMap<>();
 
-    private BlockStateMappingUi(final String defaultFrom, final String defaultTo) {
+    private MappingUi(final String defaultFrom, final String defaultTo) {
         this.defaultFrom = defaultFrom;
         this.defaultTo = defaultTo;
     }
@@ -66,7 +80,7 @@ public final class BlockStateMappingUi {
         final String defaultFrom = args.length > 0 ? args[0] : defaultPair.from();
         final String defaultTo = args.length > 1 ? args[1] : defaultPair.to();
         final int port = args.length > 2 ? Integer.parseInt(args[2]) : 8765;
-        new BlockStateMappingUi(defaultFrom, defaultTo).start(port);
+        new MappingUi(defaultFrom, defaultTo).start(port);
     }
 
     private void start(final int port) throws IOException {
@@ -75,6 +89,9 @@ public final class BlockStateMappingUi {
         server.createContext("/api/versions", this::handleVersions);
         server.createContext("/api/state", this::handleState);
         server.createContext("/api/apply", this::handleApply);
+        server.createContext("/api/regenerate-nbt", this::handleRegenerateNbt);
+        server.createContext("/api/move-current-output", this::handleMoveCurrentOutput);
+        server.createContext("/api/move-identifiers", this::handleMoveIdentifiers);
         server.start();
         System.out.println("UI running at: http://127.0.0.1:" + port + "/");
     }
@@ -95,6 +112,7 @@ public final class BlockStateMappingUi {
         response.addProperty("defaultFrom", defaultFrom);
         response.addProperty("defaultTo", defaultTo);
         response.add("versions", versions());
+        response.add("mappingPairs", mappingPairs());
         send(exchange, 200, "application/json", GsonUtil.GSON.toJson(response));
     }
 
@@ -109,6 +127,7 @@ public final class BlockStateMappingUi {
         final JsonObject response = new JsonObject();
         response.addProperty("from", pair.from());
         response.addProperty("to", pair.to());
+        response.addProperty("backwards", pair.backwards());
         response.addProperty("diffPath", diffPath.toString());
         response.add("sourceStates", blockStates(pair.from()));
         response.add("targetStates", blockStates(pair.to()));
@@ -116,6 +135,107 @@ public final class BlockStateMappingUi {
         response.add("simpleMappings", simpleMappings(pair, diffPath));
         response.add("nameMappings", nameMappings(pair, diffPath));
         send(exchange, 200, "application/json", GsonUtil.GSON.toJson(response));
+    }
+
+    private void handleRegenerateNbt(final HttpExchange exchange) throws IOException {
+        if (!method(exchange, RequestMethod.POST)) {
+            return;
+        }
+        if (!regenerating.compareAndSet(false, true)) {
+            send(exchange, 409, "application/json", "{\"error\":\"NBT regeneration is already running\"}");
+            return;
+        }
+
+        final long start = System.nanoTime();
+        try {
+            ManualRunner.regenerateNbtOutputFiles(ErrorStrategy.ERROR);
+            final JsonObject response = new JsonObject();
+            response.addProperty("durationMs", (System.nanoTime() - start) / 1_000_000);
+            send(exchange, 200, "application/json", GsonUtil.GSON.toJson(response));
+        } catch (final Exception e) {
+            final JsonObject response = new JsonObject();
+            response.addProperty("error", e.getClass().getSimpleName() + ": " + e.getMessage());
+            send(exchange, 500, "application/json", GsonUtil.GSON.toJson(response));
+        } finally {
+            regenerating.set(false);
+        }
+    }
+
+    private void handleMoveCurrentOutput(final HttpExchange exchange) throws IOException {
+        if (!method(exchange, RequestMethod.POST)) {
+            return;
+        }
+
+        final VersionPair pair = requestPair(exchange);
+        final boolean backwards = pair.backwards();
+        final Path source = (backwards ? OUTPUT_BACKWARDS_DIR : OUTPUT_DIR).resolve(OUTPUT_FILE_FORMAT.formatted(pair.from(), pair.to()));
+        final Path targetDir = backwards ? viaBackwardsDataDir() : viaVersionResourceDir();
+        sendCopyResult(exchange, copyFiles(source, targetDir));
+    }
+
+    private void handleMoveIdentifiers(final HttpExchange exchange) throws IOException {
+        if (!method(exchange, RequestMethod.POST)) {
+            return;
+        }
+
+        final VersionPair pair = requestPair(exchange);
+        final Set<Path> sources = new LinkedHashSet<>();
+        sources.add(OUTPUT_DIR.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(pair.from())));
+        sources.add(OUTPUT_DIR.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(pair.to())));
+        sources.add(OUTPUT_DIR.resolve(OUTPUT_GLOBAL_IDENTIFIERS_FILE));
+        sendCopyResult(exchange, copyFiles(sources, viaVersionDataDir()));
+    }
+
+    private VersionPair requestPair(final HttpExchange exchange) throws IOException {
+        final String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+        final JsonObject request = GsonUtil.GSON.fromJson(body, JsonObject.class);
+        return pair(string(request, "from"), string(request, "to"));
+    }
+
+    private static CopyResult copyFiles(final Path source, final Path targetDir) throws IOException {
+        return copyFiles(Set.of(source), targetDir);
+    }
+
+    private static CopyResult copyFiles(final Set<Path> sources, final Path targetDir) throws IOException {
+        final JsonArray copied = new JsonArray();
+        final JsonArray missing = new JsonArray();
+        Files.createDirectories(targetDir);
+        for (final Path source : sources) {
+            if (!Files.exists(source)) {
+                missing.add(source.toString());
+                continue;
+            }
+
+            final Path target = targetDir.resolve(source.getFileName());
+            Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+            copied.add(target.toString());
+        }
+        return new CopyResult(copied, missing);
+    }
+
+    private static void sendCopyResult(final HttpExchange exchange, final CopyResult result) throws IOException {
+        final JsonObject response = new JsonObject();
+        response.add("copied", result.copied());
+        response.add("missing", result.missing());
+        send(exchange, result.copied().isEmpty() ? 404 : 200, "application/json", GsonUtil.GSON.toJson(response));
+    }
+
+    private static Path ideaProjectsDir() {
+        return Path.of(System.getProperty("user.home"), "IdeaProjects");
+    }
+
+    private static Path viaVersionResourceDir() {
+        return ideaProjectsDir().resolve("ViaVersion").resolve("common").resolve("src").resolve("main").resolve("resources")
+            .resolve("assets").resolve("viaversion");
+    }
+
+    private static Path viaVersionDataDir() {
+        return viaVersionResourceDir().resolve("data");
+    }
+
+    private static Path viaBackwardsDataDir() {
+        return ideaProjectsDir().resolve("ViaBackwards").resolve("common").resolve("src").resolve("main").resolve("resources")
+            .resolve("assets").resolve("viabackwards").resolve("data");
     }
 
     private void handleApply(final HttpExchange exchange) throws IOException {
@@ -253,7 +373,12 @@ public final class BlockStateMappingUi {
     }
 
     private JsonArray blockStates(final String version) throws IOException {
-        final JsonObject mapping = MappingsLoader.load("mapping-" + version + ".json");
+        final JsonArray cachedStates = blockStateCache.get(version);
+        if (cachedStates != null) {
+            return cachedStates;
+        }
+
+        final JsonObject mapping = loadMapping(version);
         if (mapping == null || !mapping.has("blockstates")) {
             throw new IllegalStateException("No blockstates found for " + version);
         }
@@ -262,6 +387,7 @@ public final class BlockStateMappingUi {
         for (final JsonElement element : mapping.getAsJsonArray("blockstates")) {
             states.add(parseState(element.getAsString()));
         }
+        blockStateCache.put(version, states);
         return states;
     }
 
@@ -282,11 +408,15 @@ public final class BlockStateMappingUi {
     }
 
     private JsonObject simpleMappings(final VersionPair pair, final Path diffPath) throws IOException {
-        final JsonObject sourceMapping = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(pair.from()));
-        final JsonObject targetMapping = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(pair.to()));
+        final JsonObject sourceMapping = loadMapping(pair.from());
+        final JsonObject targetMapping = loadMapping(pair.to());
         final JsonObject diff = loadOrCreateDiff(diffPath);
         final JsonObject mappings = new JsonObject();
         for (final String section : SIMPLE_SECTIONS) {
+            final JsonObject sectionEntries = diff.getAsJsonObject(section);
+            if (sectionEntries == null) {
+                continue;
+            }
             if (sourceMapping == null || targetMapping == null || !sourceMapping.has(section) || !targetMapping.has(section)
                 || !sourceMapping.get(section).isJsonArray() || !targetMapping.get(section).isJsonArray()) {
                 continue;
@@ -295,19 +425,32 @@ public final class BlockStateMappingUi {
             final JsonObject object = new JsonObject();
             object.add("source", sourceMapping.getAsJsonArray(section));
             object.add("target", targetMapping.getAsJsonArray(section));
-            object.add("entries", entries(diff.getAsJsonObject(section)));
+            object.add("entries", entries(sectionEntries));
             mappings.add(section, object);
         }
         return mappings;
     }
 
     private JsonObject nameMappings(final VersionPair pair, final Path diffPath) throws IOException {
-        final JsonObject sourceMapping = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(pair.from()));
+        final JsonObject sourceMapping = loadMapping(pair.from());
         final JsonObject diff = loadOrCreateDiff(diffPath);
         final JsonObject mappings = new JsonObject();
         addNameMapping(mappings, sourceMapping, diff, "itemnames", "items");
         addNameMapping(mappings, sourceMapping, diff, "entitynames", "entities");
         return mappings;
+    }
+
+    private JsonObject loadMapping(final String version) throws IOException {
+        final JsonObject cachedMapping = mappingCache.get(version);
+        if (cachedMapping != null) {
+            return cachedMapping;
+        }
+
+        final JsonObject mapping = MappingsLoader.load(MAPPING_FILE_FORMAT.formatted(version));
+        if (mapping != null) {
+            mappingCache.put(version, mapping);
+        }
+        return mapping;
     }
 
     private static void addNameMapping(final JsonObject mappings, final JsonObject sourceMapping, final JsonObject diff, final String section, final String sourceKey) {
@@ -352,7 +495,30 @@ public final class BlockStateMappingUi {
         return array;
     }
 
+    private JsonArray mappingPairs() throws IOException {
+        final JsonArray array = new JsonArray();
+        for (final VersionPair pair : diffPairs()) {
+            final JsonObject object = new JsonObject();
+            object.addProperty("from", pair.from());
+            object.addProperty("to", pair.to());
+            object.addProperty("backwards", pair.backwards());
+            array.add(object);
+        }
+        return array;
+    }
+
     private static VersionPair defaultPair() throws IOException {
+        final TreeSet<VersionPair> diffPairs = diffPairs();
+        if (!diffPairs.isEmpty()) {
+            VersionPair latestForward = null;
+            for (final VersionPair pair : diffPairs) {
+                if (!pair.backwards()) {
+                    latestForward = pair;
+                }
+            }
+            return latestForward != null ? latestForward : diffPairs.last();
+        }
+
         final TreeSet<String> versions = mappingVersions();
         if (versions.size() < 2) {
             throw new IllegalStateException("Need at least two mapping files to choose default versions");
@@ -360,6 +526,41 @@ public final class BlockStateMappingUi {
 
         final String newest = versions.pollLast();
         return new VersionPair(versions.last(), newest);
+    }
+
+    private static TreeSet<VersionPair> diffPairs() throws IOException {
+        final TreeSet<VersionPair> pairs = new TreeSet<>((first, second) -> {
+            final int fromCompare = Version.compare(first.from(), second.from());
+            if (fromCompare != 0) {
+                return fromCompare;
+            }
+            return Version.compare(first.to(), second.to());
+        });
+        final Path diffDir = MAPPINGS_DIR.resolve("diff");
+        if (!Files.isDirectory(diffDir)) {
+            return pairs;
+        }
+
+        try (final Stream<@NotNull Path> paths = Files.list(diffDir)) {
+            paths.map(path -> path.getFileName().toString())
+                .map(MappingUi::parseDiffPair)
+                .filter(Objects::nonNull)
+                .forEach(pairs::add);
+        }
+        return pairs;
+    }
+
+    private static VersionPair parseDiffPair(final String name) {
+        if (!name.startsWith("mapping-") || !name.endsWith(".json")) {
+            return null;
+        }
+
+        final String pair = name.substring("mapping-".length(), name.length() - ".json".length());
+        final int separator = pair.indexOf("to");
+        if (separator == -1) {
+            return null;
+        }
+        return new VersionPair(pair.substring(0, separator), pair.substring(separator + "to".length()));
     }
 
     private static TreeSet<String> mappingVersions() throws IOException {
@@ -548,7 +749,7 @@ public final class BlockStateMappingUi {
     }
 
     private static String index() throws IOException {
-        try (final InputStream stream = BlockStateMappingUi.class.getResourceAsStream(INDEX_RESOURCE)) {
+        try (final InputStream stream = MappingUi.class.getResourceAsStream(INDEX_RESOURCE)) {
             if (stream == null) {
                 throw new IOException("Missing resource " + INDEX_RESOURCE);
             }
@@ -580,9 +781,15 @@ public final class BlockStateMappingUi {
     }
 
     private record VersionPair(String from, String to) {
+        private boolean backwards() {
+            return Version.isBackwards(from, to);
+        }
     }
 
     private record ApplyResult(int written, int skipped, int removed) {
+    }
+
+    private record CopyResult(JsonArray copied, JsonArray missing) {
     }
 
     private static final class ApplyConflictException extends RuntimeException {

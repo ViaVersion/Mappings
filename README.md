@@ -2,13 +2,19 @@
 
 Generates and compiles mapping files for Via*. Current mapping files can be found in the `mappings/` directory.
 
+## Non-technical editing of existing mappings
+
+If you're just here to edit an existing mapping of a block, item, or an entity name, you can use the helper UI.
+Via IntelliJ or the command line, run `BlockStateMappingUi` main function. After generating the output NBT files,
+you can find them in the `output/` directory.
+
 ## Generating json mapping files for a Minecraft version
 
 Compile the project using `./gradlew build` and put the jar in some directory, ideally the project root.
 
 Then run the jar with:
 
-```
+```bash
 java -jar MappingsGenerator.jar <path to server jar> <version>
 ```
 
@@ -19,7 +25,7 @@ The mapping file will then be generated in the `mappings/` directory.
 If you want to generate the compact mapping files with already present json files, you can also trigger the optimizer on
 its own by starting the `MappingsOptimizer` class with the two arguments flipped:
 
-```
+```bash
 java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimizer <from version> <to version>
 ```
 

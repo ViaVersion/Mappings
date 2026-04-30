@@ -139,6 +139,13 @@ public final class MappingsOptimizer {
         }
     }
 
+    public static void resetRunState() {
+        Arrays.fill(storageStrategyCounts, 0);
+        savedIdentifierFiles.clear();
+        globalIdentifiersObject = null;
+        fileHashesObject = null;
+    }
+
     public MappingsOptimizer(final String from, final String to) throws IOException {
         this(from, to, false, false);
     }
