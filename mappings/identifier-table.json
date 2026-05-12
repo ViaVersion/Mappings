@@ -1757,7 +1757,8 @@
     "chiseled_cinnabar",
     "sulfur_cube_bucket",
     "sulfur_cube_spawn_egg",
-    "sulfur_spike"
+    "sulfur_spike",
+    "music_disc_bounce"
   ],
   "sounds": [
     "entity.allay.ambient_with_item",
@@ -4093,7 +4094,11 @@
     "block.sulfur_spike.fall",
     "block.sulfur_spike.land",
     "block.potent_sulfur.geyser_eruption",
-    "block.potent_sulfur.geyser_eruption_active"
+    "block.potent_sulfur.geyser_eruption_active",
+    "music_disc.bounce",
+    "music.overworld.sulfur_caves",
+    "block.potent_sulfur.geyser_continuous_eruption",
+    "block.potent_sulfur.geyser_continuous_eruption_active"
   ],
   "blocks": [
     "air",

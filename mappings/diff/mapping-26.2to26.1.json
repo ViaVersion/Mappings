@@ -59,7 +59,8 @@
     "chiseled_cinnabar": "chiseled_copper",
     "sulfur_cube_bucket": "powder_snow_bucket",
     "sulfur_cube_spawn_egg": "slime_spawn_egg",
-    "sulfur_spike": "pointed_dripstone"
+    "sulfur_spike": "pointed_dripstone",
+    "music_disc_bounce": ""
   },
   "itemnames": {
     "sulfur": "26.2 Sulfur",
@@ -91,7 +92,8 @@
     "chiseled_cinnabar": "26.2 Chiseled Cinnabar",
     "sulfur_cube_bucket": "26.2 Sulfur Cube Bucket",
     "sulfur_cube_spawn_egg": "26.2 Sulfur Cube Spawn Egg",
-    "sulfur_spike": "26.2 Sulfur Spike"
+    "sulfur_spike": "26.2 Sulfur Spike",
+    "music_disc_bounce": "26.2 Music Disc Bounce"
   },
   "sounds": {
     "block.sulfur.break": "",
@@ -132,7 +134,11 @@
     "block.sulfur_spike.fall": "",
     "block.sulfur_spike.land": "",
     "block.potent_sulfur.geyser_eruption": "",
-    "block.potent_sulfur.geyser_eruption_active": ""
+    "block.potent_sulfur.geyser_eruption_active": "",
+    "music_disc.bounce": "",
+    "music.overworld.sulfur_caves": "",
+    "block.potent_sulfur.geyser_continuous_eruption": "",
+    "block.potent_sulfur.geyser_continuous_eruption_active": ""
   },
   "particles": {
     "sulfur_bubbles": "bubble_column_up",
