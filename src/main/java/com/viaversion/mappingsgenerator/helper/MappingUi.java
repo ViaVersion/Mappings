@@ -221,11 +221,20 @@ public final class MappingUi {
     }
 
     private static Path ideaProjectsDir() {
+        final Path parent = Path.of("").toAbsolutePath().getParent();
+        if (parent != null && (Files.exists(parent.resolve("ViaVersion")) || Files.exists(parent.resolve("viaversion"))
+            || Files.exists(parent.resolve("ViaBackwards")) || Files.exists(parent.resolve("viabackwards")))) {
+            return parent;
+        }
         return Path.of(System.getProperty("user.home"), "IdeaProjects");
     }
 
     private static Path viaVersionResourceDir() {
-        return ideaProjectsDir().resolve("ViaVersion").resolve("common").resolve("src").resolve("main").resolve("resources")
+        Path base = ideaProjectsDir().resolve("ViaVersion");
+        if (!Files.exists(base)) {
+            base = ideaProjectsDir().resolve("viaversion");
+        }
+        return base.resolve("common").resolve("src").resolve("main").resolve("resources")
             .resolve("assets").resolve("viaversion");
     }
 
@@ -234,7 +243,11 @@ public final class MappingUi {
     }
 
     private static Path viaBackwardsDataDir() {
-        return ideaProjectsDir().resolve("ViaBackwards").resolve("common").resolve("src").resolve("main").resolve("resources")
+        Path base = ideaProjectsDir().resolve("ViaBackwards");
+        if (!Files.exists(base)) {
+            base = ideaProjectsDir().resolve("viabackwards");
+        }
+        return base.resolve("common").resolve("src").resolve("main").resolve("resources")
             .resolve("assets").resolve("viabackwards").resolve("data");
     }
 

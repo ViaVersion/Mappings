@@ -76,4 +76,15 @@ tasks {
     test {
         useJUnitPlatform()
     }
+
+    register<JavaExec>("runUi") {
+        group = "application"
+        description = "Starts the mapping helper UI"
+        mainClass.set("com.viaversion.mappingsgenerator.helper.MappingUi")
+        classpath = sourceSets["main"].runtimeClasspath
+        standardInput = System.`in`
+        if (project.hasProperty("args")) {
+            args = (project.property("args") as String).split(" ")
+        }
+    }
 }
