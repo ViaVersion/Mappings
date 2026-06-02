@@ -5,7 +5,7 @@ Generates and compiles mapping files for Via*. Current mapping files can be foun
 ## Non-technical editing of existing mappings
 
 If you're just here to edit an existing mapping of a block, item, or an entity name, you can use the helper UI.
-Via IntelliJ or the command line, run `BlockStateMappingUi` main function. After generating the output NBT files,
+Run the `MappingUi` main function via IntelliJ or via the command line with `./gradlew runUi`. After generating the output NBT files,
 you can find them in the `output/` directory.
 
 ## Generating json mapping files for a Minecraft version
