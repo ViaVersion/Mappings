@@ -17,7 +17,7 @@ dependencies {
     // Uncomment to manually run mappings gen in ide
     // compileOnly(files("server.jar"))
 
-    testImplementation("org.junit.jupiter:junit-jupiter:6.0.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
