@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    api("com.google.code.gson:gson:2.13.2")
+    api("com.google.code.gson:gson:2.14.0")
     api("com.viaversion:nbt:5.1.2")
     api("it.unimi.dsi:fastutil:8.5.18")
     api("ch.qos.logback:logback-classic:1.5.32")
@@ -17,7 +17,7 @@ dependencies {
     // Uncomment to manually run mappings gen in ide
     // compileOnly(files("server.jar"))
 
-    testImplementation("org.junit.jupiter:junit-jupiter:6.0.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
