@@ -440,13 +440,8 @@
     "item.bucket.empty_lava": "liquid.lava",
     "item.bucket.fill": "liquid.water",
     "item.bucket.fill_lava": "liquid.lava",
-    "item.elytra.flying": "mob.enderdragon.wings",
     "item.hoe.till": "dig.grass",
     "item.shield.block": "random.anvil_land",
     "item.shovel.flatten": "dig.grass"
-  },
-  "entitynames": {
-    "shulker": "Shulker",
-    "shulker_bullet": "Shulker Bullet"
   }
 }
