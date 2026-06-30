@@ -5899,7 +5899,8 @@
     "zombie_nautilus/variant",
     "cat/sound_variant",
     "sulfur_cube_content",
-    "provides_pottery_pattern"
+    "provides_pottery_pattern",
+    "block_transformer"
   ],
   "blockentities": [
     "furnace",

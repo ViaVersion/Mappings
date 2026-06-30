@@ -137,7 +137,8 @@
     "poplar_chest_boat": "birch_chest_boat"
   },
   "data_component_type": {
-    "provides_pottery_pattern": ""
+    "provides_pottery_pattern": "",
+    "block_transformer": ""
   },
   "itemnames": {
     "poplar_planks": "26.3 Poplar Planks",
