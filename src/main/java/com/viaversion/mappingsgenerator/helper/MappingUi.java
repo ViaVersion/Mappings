@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.viaversion.mappingsgenerator.ErrorStrategy;
 import com.viaversion.mappingsgenerator.ManualRunner;
@@ -85,15 +86,45 @@ public final class MappingUi {
 
     private void start(final int port) throws IOException {
         final HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", port), 0);
-        server.createContext("/", this::handleIndex);
-        server.createContext("/api/versions", this::handleVersions);
-        server.createContext("/api/state", this::handleState);
-        server.createContext("/api/apply", this::handleApply);
-        server.createContext("/api/regenerate-nbt", this::handleRegenerateNbt);
-        server.createContext("/api/move-current-output", this::handleMoveCurrentOutput);
-        server.createContext("/api/move-identifiers", this::handleMoveIdentifiers);
+        server.createContext("/", safe(this::handleIndex));
+        server.createContext("/api/versions", safe(this::handleVersions));
+        server.createContext("/api/state", safe(this::handleState));
+        server.createContext("/api/apply", safe(this::handleApply));
+        server.createContext("/api/regenerate-nbt", safe(this::handleRegenerateNbt));
+        server.createContext("/api/move-current-output", safe(this::handleMoveCurrentOutput));
+        server.createContext("/api/move-identifiers", safe(this::handleMoveIdentifiers));
         server.start();
         System.out.println("UI running at: http://127.0.0.1:" + port + "/");
+    }
+
+    private static HttpHandler safe(final HttpHandler handler) {
+        return exchange -> {
+            try {
+                handler.handle(exchange);
+            } catch (final Exception e) {
+                final JsonObject response = new JsonObject();
+                response.addProperty("error", exceptionMessage(e));
+                try {
+                    send(exchange, 500, "application/json", GsonUtil.GSON.toJson(response));
+                } catch (final IOException ignored) {
+                    // Response was already partially sent
+                }
+            }
+        };
+    }
+
+    private static String exceptionMessage(final Throwable throwable) {
+        final StringBuilder message = new StringBuilder();
+        for (Throwable t = throwable; t != null; t = t.getCause()) {
+            if (!message.isEmpty()) {
+                message.append("\nCaused by: ");
+            }
+            message.append(t.getClass().getSimpleName());
+            if (t.getMessage() != null) {
+                message.append(": ").append(t.getMessage());
+            }
+        }
+        return message.toString();
     }
 
     private void handleIndex(final HttpExchange exchange) throws IOException {
@@ -154,7 +185,7 @@ public final class MappingUi {
             send(exchange, 200, "application/json", GsonUtil.GSON.toJson(response));
         } catch (final Exception e) {
             final JsonObject response = new JsonObject();
-            response.addProperty("error", e.getClass().getSimpleName() + ": " + e.getMessage());
+            response.addProperty("error", exceptionMessage(e));
             send(exchange, 500, "application/json", GsonUtil.GSON.toJson(response));
         } finally {
             regenerating.set(false);

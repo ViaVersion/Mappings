@@ -25,12 +25,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.viaversion.mappingsgenerator.util.ServerJarUtil;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.TreeMap;
 import org.slf4j.Logger;
@@ -65,8 +67,8 @@ public final class MappingsGenerator {
 
         LOGGER.info("Loading net.minecraft.data.Main class...");
         final ClassLoader loader = URLClassLoader.newInstance(
-                new URL[]{serverFile.toURI().toURL()},
-                MappingsGenerator.class.getClassLoader()
+            new URL[]{serverFile.toURI().toURL()},
+            MappingsGenerator.class.getClassLoader()
         );
 
         final String[] serverArgs = {"--reports"};
@@ -111,8 +113,10 @@ public final class MappingsGenerator {
      */
     public static void collectMappings(final String version) throws IOException {
         LOGGER.info("Beginning mapping collection...");
-        final String blocksContent = new String(Files.readAllBytes(new File("generated/reports/blocks.json").toPath()));
-        final JsonObject blocksObject = GSON.fromJson(blocksContent, JsonObject.class);
+        final JsonObject blocksObject;
+        try (final BufferedReader reader = Files.newBufferedReader(Path.of("generated/reports/blocks.json"))) {
+            blocksObject = GSON.fromJson(reader, JsonObject.class);
+        }
 
         // Blocks and blockstates
         final Map<Integer, String> blockstatesById = new TreeMap<>();
@@ -148,8 +152,10 @@ public final class MappingsGenerator {
             }
         }
 
-        final String registriesContent = new String(Files.readAllBytes(new File("generated/reports/registries.json").toPath()));
-        final JsonObject registries = GSON.fromJson(registriesContent, JsonObject.class);
+        final JsonObject registries;
+        try (final BufferedReader reader = Files.newBufferedReader(Path.of("generated/reports/registries.json"))) {
+            registries = GSON.fromJson(reader, JsonObject.class);
+        }
         addArray(viaMappings, registries, "minecraft:item", "items");
         addArray(viaMappings, registries, "minecraft:sound_event", "sounds");
         addArray(viaMappings, registries, "minecraft:custom_stat", "statistics");

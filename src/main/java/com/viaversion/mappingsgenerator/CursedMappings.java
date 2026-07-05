@@ -22,15 +22,15 @@ import java.io.IOException;
 
 public final class CursedMappings {
 
-    public static void optimizeAndSaveOhSoSpecial1_12AsNBT() throws IOException {
-        final MappingsOptimizer optimizer = create("1.12", "1.13");
+    public static void optimizeAndSaveOhSoSpecial1_12AsNBT(final RunContext runContext) throws IOException {
+        final MappingsOptimizer optimizer = create("1.12", "1.13", runContext);
         optimizer.cursedMappings("blocks", "blockstates", "blockstates", 4084);
         optimizer.cursedMappings("legacy_enchantments", "enchantments", "enchantments", 72);
         optimizer.writeToDir(MappingsOptimizer.OUTPUT_DIR);
     }
 
-    public static void optimizeAndSaveOhSoSpecial1_12AsNBTBackwards() throws IOException {
-        final MappingsOptimizer optimizer = create("1.13", "1.12");
+    public static void optimizeAndSaveOhSoSpecial1_12AsNBTBackwards(final RunContext runContext) throws IOException {
+        final MappingsOptimizer optimizer = create("1.13", "1.12", runContext);
         optimizer.cursedMappings("blockstates", "blocks", "blockstates", 8582);
         optimizer.cursedMappings("enchantments", "legacy_enchantments", "enchantments");
         optimizer.names("items", "itemnames");
@@ -39,8 +39,8 @@ public final class CursedMappings {
         optimizer.writeToDir(MappingsOptimizer.OUTPUT_BACKWARDS_DIR);
     }
 
-    private static MappingsOptimizer create(final String from, final String to) throws IOException {
-        final MappingsOptimizer optimizer = new MappingsOptimizer(from, to);
+    private static MappingsOptimizer create(final String from, final String to, final RunContext runContext) throws IOException {
+        final MappingsOptimizer optimizer = new MappingsOptimizer(from, to, runContext);
         optimizer.setErrorStrategy(ErrorStrategy.IGNORE);
         optimizer.keepUnknownFields();
         optimizer.handleUnknownFields();

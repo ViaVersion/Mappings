@@ -18,8 +18,6 @@
  */
 package com.viaversion.mappingsgenerator;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import com.viaversion.mappingsgenerator.util.ServerJarUtil;
 import com.viaversion.mappingsgenerator.util.Version;
 import java.io.File;
@@ -61,75 +59,79 @@ public final class ManualRunner {
 
         final String from = "1.20.3";
         final String to = "1.20.5";
-        MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to);
+        final RunContext runContext = RunContext.load();
+        MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to, runContext);
         mappingsOptimizer.writeDiffStubs();
         mappingsOptimizer.optimizeAndWrite();
 
-        mappingsOptimizer = new MappingsOptimizer(to, from);
+        mappingsOptimizer = new MappingsOptimizer(to, from, runContext);
         mappingsOptimizer.writeDiffStubs();
         mappingsOptimizer.optimizeAndWrite();
+        runContext.finish();
     }
 
     /**
      * Runs the optimizer for all mapping files present in the 'mappings' directory.
      */
     public static void regenerateNbtOutputFiles(final ErrorStrategy errorStrategy) throws IOException {
-        MappingsOptimizer.resetRunState();
         Files.createDirectories(MappingsOptimizer.OUTPUT_DIR);
         Files.createDirectories(MappingsOptimizer.OUTPUT_BACKWARDS_DIR);
         Files.createDirectories(MappingsOptimizer.OUTPUT_DIR.resolve("special"));
         Files.createDirectories(MappingsOptimizer.OUTPUT_BACKWARDS_DIR.resolve("special"));
-        runAll(errorStrategy);
-        MappingsOptimizer.printStats();
+        final RunContext runContext = RunContext.load();
+        runAll(errorStrategy, runContext);
+        runContext.finish();
+        runContext.printStats();
     }
 
-    public static void runAll(final ErrorStrategy errorStrategy) throws IOException {
+    public static void runAll(final ErrorStrategy errorStrategy, final RunContext runContext) throws IOException {
         // Going backwards wil result in less index shifts in the versions that matter most/have the most entries
         final List<String> versions = allVersions();
         for (int i = versions.size() - 1; i > 0; i--) {
             final String from = versions.get(i - 1);
             final String to = versions.get(i);
             if (from.equals("1.12") && to.equals("1.13")) {
-                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBTBackwards();
-                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBT();
+                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBTBackwards(runContext);
+                CursedMappings.optimizeAndSaveOhSoSpecial1_12AsNBT(runContext);
                 continue;
             }
 
             final boolean special = SPECIAL_BACKWARDS_ONLY.contains(from);
 
-            final MappingsOptimizer backwardsOptimizer = new MappingsOptimizer(to, from);
+            final MappingsOptimizer backwardsOptimizer = new MappingsOptimizer(to, from, runContext);
             backwardsOptimizer.setErrorStrategy(errorStrategy);
             if (special) {
                 backwardsOptimizer.ignoreMissingMappingsFor("sounds");
             }
-            backwardsOptimizer.optimizeAndWrite();
+            optimizeAndWrite(backwardsOptimizer, to, from);
 
             if (!special) {
-                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to);
+                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to, runContext);
                 mappingsOptimizer.setErrorStrategy(errorStrategy);
-                mappingsOptimizer.optimizeAndWrite();
+                optimizeAndWrite(mappingsOptimizer, from, to);
             }
         }
 
         if (ALL_SPECIAL) {
             for (Map.Entry<String, String> entry : SPECIAL_BACKWARDS_VERSIONS.entrySet()) {
-                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), true, false);
+                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), true, false, runContext);
                 mappingsOptimizer.setErrorStrategy(errorStrategy);
-                mappingsOptimizer.optimizeAndWrite();
+                optimizeAndWrite(mappingsOptimizer, entry.getKey(), entry.getValue());
             }
             for (Map.Entry<String, String> entry : SPECIAL_VERSIONS.entrySet()) {
-                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), false, true);
+                final MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(entry.getKey(), entry.getValue(), false, true, runContext);
                 mappingsOptimizer.setErrorStrategy(errorStrategy);
-                mappingsOptimizer.optimizeAndWrite();
+                optimizeAndWrite(mappingsOptimizer, entry.getKey(), entry.getValue());
             }
         }
+    }
 
-        int totalSize = 0;
-        for (final Map.Entry<String, JsonElement> entry : MappingsOptimizer.fileHashesObject.entrySet()) {
-            final JsonPrimitive size = entry.getValue().getAsJsonObject().getAsJsonPrimitive("size");
-            totalSize += size.getAsInt();
+    private static void optimizeAndWrite(final MappingsOptimizer optimizer, final String from, final String to) throws IOException {
+        try {
+            optimizer.optimizeAndWrite();
+        } catch (final IOException | RuntimeException e) {
+            throw new IllegalStateException("Failed to optimize mappings for " + from + " → " + to, e);
         }
-        LOGGER.info("Total size of all mapping and identifier files: {}kb", totalSize / 1024);
     }
 
     private static List<String> allVersions() {

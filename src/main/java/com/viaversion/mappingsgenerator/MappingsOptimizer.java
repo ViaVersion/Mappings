@@ -30,13 +30,9 @@ import com.viaversion.nbt.tag.CompoundTag;
 import com.viaversion.nbt.tag.IntArrayTag;
 import com.viaversion.nbt.tag.Tag;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -85,13 +81,9 @@ public final class MappingsOptimizer {
         "tags",
         "attributes"
     );
-    private static final int[] storageStrategyCounts = new int[IDENTITY_ID + 1];
-    private static final Set<String> savedIdentifierFiles = new HashSet<>();
-    static JsonObject globalIdentifiersObject;
-    static JsonObject fileHashesObject;
-
     private final Set<String> ignoreMissing = new HashSet<>(Arrays.asList("blocks", "statistics"));
     private final CompoundTag output = new CompoundTag();
+    private final RunContext runContext;
     private final String fromVersion;
     private final String toVersion;
     private final JsonObject unmappedObject;
@@ -102,7 +94,6 @@ public final class MappingsOptimizer {
     private ErrorStrategy errorStrategy = ErrorStrategy.WARN;
     private JsonObject diffObject;
     private boolean keepUnknownFields;
-    private boolean updatedGlobalIdentifiers;
 
     public static void main(final String[] args) throws IOException {
         if (args.length < 2) {
@@ -117,7 +108,8 @@ public final class MappingsOptimizer {
         final String from = args[0];
         final String to = args[1];
 
-        final MappingsOptimizer optimizer = new MappingsOptimizer(from, to);
+        final RunContext runContext = RunContext.load();
+        final MappingsOptimizer optimizer = new MappingsOptimizer(from, to, runContext);
         if (argsSet.contains("--generateDiffStubs")) {
             optimizer.writeDiffStubs();
         }
@@ -125,29 +117,11 @@ public final class MappingsOptimizer {
             optimizer.keepUnknownFields();
         }
         optimizer.optimizeAndWrite();
+        runContext.finish();
     }
 
-    static void loadGlobalFiles() throws IOException {
-        // Load and reuse identifiers file, being a global table across all versions
-        if (globalIdentifiersObject == null) {
-            globalIdentifiersObject = MappingsLoader.load(MAPPINGS_DIR, "identifier-table.json");
-        }
-        if (fileHashesObject == null) {
-            try (final BufferedReader reader = Files.newBufferedReader(Path.of("output_hashes.json"))) {
-                fileHashesObject = MappingsGenerator.GSON.fromJson(reader, JsonObject.class);
-            }
-        }
-    }
-
-    public static void resetRunState() {
-        Arrays.fill(storageStrategyCounts, 0);
-        savedIdentifierFiles.clear();
-        globalIdentifiersObject = null;
-        fileHashesObject = null;
-    }
-
-    public MappingsOptimizer(final String from, final String to) throws IOException {
-        this(from, to, false, false);
+    public MappingsOptimizer(final String from, final String to, final RunContext runContext) throws IOException {
+        this(from, to, false, false, runContext);
     }
 
     private Path getMappingsDir(final boolean special) {
@@ -166,9 +140,11 @@ public final class MappingsOptimizer {
      * @param to          version to map to
      * @param specialFrom If true, the special folders will be used for input
      * @param specialTo   If true, the special folders will be used for output
+     * @param runContext  state shared across the optimizer runs, to be finished after the last run
      * @see #optimizeAndWrite()
      */
-    public MappingsOptimizer(final String from, final String to, final boolean specialFrom, final boolean specialTo) throws IOException {
+    public MappingsOptimizer(final String from, final String to, final boolean specialFrom, final boolean specialTo, final RunContext runContext) throws IOException {
+        this.runContext = runContext;
         this.fromVersion = from;
         this.toVersion = to;
         this.specialFrom = specialFrom;
@@ -187,8 +163,6 @@ public final class MappingsOptimizer {
         }
 
         diffObject = MappingsLoader.load(getDiffDir(specialFrom || specialTo), DIFF_FILE_FORMAT.formatted(from, to));
-
-        loadGlobalFiles();
     }
 
     /**
@@ -244,7 +218,7 @@ public final class MappingsOptimizer {
         saveIdentifierFiles(toVersion, mappedObject);
 
         // Store object/file data to keep track of changes
-        addFileData(fromVersion + ":" + toVersion, output.hashCode(), outputPath);
+        runContext.addFileData(fromVersion + ":" + toVersion, outputPath);
     }
 
     /**
@@ -353,41 +327,13 @@ public final class MappingsOptimizer {
         storeIdentifierIndexes(identifiers, object, "blockentities");
 
         // No need to save the same identifiers multiple times if one version appears in multiple runs
-        if (savedIdentifierFiles.add(version) && !identifiers.isEmpty()) {
+        if (runContext.markIdentifierFileSaved(version) && !identifiers.isEmpty()) {
             final Path outputDir = (specialFrom || specialTo) ? OUTPUT_DIR.resolve("special") : OUTPUT_DIR;
             final Path outputPath = outputDir.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(version));
 
             write(identifiers, outputPath);
-            addFileData(version, identifiers.hashCode(), outputPath);
+            runContext.addFileData(version, outputPath);
         }
-
-        // Update global identifiers file if necessary
-        if (updatedGlobalIdentifiers) {
-            // Also keep a json file around for easier viewing
-            writeJson(globalIdentifiersObject, MAPPINGS_DIR.resolve("identifier-table.json"));
-            LOGGER.info("Updated global identifiers file");
-        }
-
-        // Always create output file
-        final Path outputPath = OUTPUT_DIR.resolve(OUTPUT_GLOBAL_IDENTIFIERS_FILE);
-        final CompoundTag globalIdentifiersTag = (CompoundTag) JsonConverter.toTag(globalIdentifiersObject);
-        write(globalIdentifiersTag, outputPath);
-        addFileData("identifier-table", globalIdentifiersTag.hashCode(), outputPath);
-        updatedGlobalIdentifiers = false;
-    }
-
-    private static void addFileData(final String key, final int hash, final Path path) throws IOException {
-        JsonObject fileData = fileHashesObject.getAsJsonObject(key);
-        if (fileData == null) {
-            fileData = new JsonObject();
-            fileHashesObject.add(key, fileData);
-        }
-
-        // The object hash is good enough
-        fileData.addProperty("object-hash", hash);
-        fileData.addProperty("size", Files.size(path));
-
-        writeJson(fileHashesObject, Path.of("output_hashes.json"));
     }
 
     static void writeJson(final JsonObject object, final Path path) throws IOException {
@@ -496,9 +442,14 @@ public final class MappingsOptimizer {
         output.put(namesKey, tag);
 
         for (final Map.Entry<String, JsonElement> entry : nameMappings.entrySet()) {
+            final int id = identifierMap.getInt(entry.getKey());
+            if (id == -1) {
+                errorStrategy.apply("Unknown " + key + " identifier in " + namesKey + " mapping: " + entry.getKey());
+                continue;
+            }
+
             // Would be smaller as two arrays, but /shrug
-            final String idAsString = Integer.toString(identifierMap.getInt(entry.getKey()));
-            tag.putString(idAsString, entry.getValue().getAsString());
+            tag.putString(Integer.toString(id), entry.getValue().getAsString());
         }
     }
 
@@ -527,32 +478,27 @@ public final class MappingsOptimizer {
      * This checks for any change whether it's the base type or a property, but does not list changed properties,
      * as that would increase file size by a lot for no real value.
      */
-    private void changedBlockStateProperties() throws IOException {
+    private void changedBlockStateProperties() {
         if (fromVersion.equals("1.13.2") && toVersion.equals("1.13")
             || fromVersion.equals("1.13") && toVersion.equals("1.13.2")) {
             return;
         }
 
+        final Object2IntMap<String> blockIds = MappingsLoader.arrayToMap(unmappedObject.getAsJsonArray("blocks"));
         final IntSet changedProperties = new IntOpenHashSet();
         for (final Map.Entry<String, JsonElement> entry : diffObject.getAsJsonObject("blockstates").entrySet()) {
             final String block = entry.getKey().split("\\[", 2)[0];
-            changedProperties.add(idOf("blocks", block, false));
+            final int id = blockIds.getInt(block);
+            if (id == -1) {
+                throw new IllegalArgumentException("Could not find id for blocks: " + block);
+            }
+
+            changedProperties.add(id);
         }
 
         if (!changedProperties.isEmpty()) {
             output.put("changed_blocks", new IntArrayTag(changedProperties.toIntArray()));
         }
-    }
-
-    private int idOf(final String key, final String value, final boolean mapped) {
-        final JsonArray array = (mapped ? mappedObject : unmappedObject).getAsJsonArray(key);
-        for (int i = 0; i < array.size(); i++) {
-            final JsonElement element = array.get(i);
-            if (element.getAsString().equals(value)) {
-                return i;
-            }
-        }
-        throw new IllegalArgumentException("Could not find id for " + key + ": " + value);
     }
 
     /**
@@ -630,18 +576,8 @@ public final class MappingsOptimizer {
 
         // Add to global identifiers if not already present
         final JsonArray identifiers = identifiersElement.getAsJsonArray();
-        JsonArray globalIdentifiersArray = globalIdentifiersObject.getAsJsonArray(key);
-        if (globalIdentifiersArray == null) {
-            globalIdentifiersArray = new JsonArray();
-            globalIdentifiersObject.add(key, globalIdentifiersArray);
-        }
-
-        final Object2IntMap<String> globalIdentifiers = new Object2IntOpenHashMap<>(globalIdentifiersArray.size());
-        globalIdentifiers.defaultReturnValue(-1);
-        for (int globalId = 0; globalId < globalIdentifiersArray.size(); globalId++) {
-            final String identifier = globalIdentifiersArray.get(globalId).getAsString();
-            globalIdentifiers.put(identifier, globalId);
-        }
+        final JsonArray globalIdentifiersArray = runContext.globalIdentifierArray(key);
+        final Object2IntMap<String> globalIdentifiers = runContext.globalIdentifierMap(key);
 
         for (int id = 0; id < identifiers.size(); id++) {
             final JsonElement entry = identifiers.get(id);
@@ -654,10 +590,7 @@ public final class MappingsOptimizer {
                 continue;
             }
 
-            final int addedGlobalIndex = globalIdentifiersArray.size();
-            globalIdentifiersArray.add(identifier);
-            globalIdentifiers.put(identifier, addedGlobalIndex);
-            updatedGlobalIdentifiers = true;
+            runContext.addGlobalIdentifier(key, identifier);
         }
 
         // Use the same compact storage on the identifier->global identifier files, just about halves the size
@@ -675,7 +608,7 @@ public final class MappingsOptimizer {
      * @param key                 key to write to
      * @param alwaysWriteIdentity whether to write identity mappings even if there are no changes
      */
-    private static void serialize(final MappingsResult result, final CompoundTag parent, final String key, final boolean alwaysWriteIdentity) {
+    private void serialize(final MappingsResult result, final CompoundTag parent, final String key, final boolean alwaysWriteIdentity) {
         final int[] mappings = result.mappings();
         final int numberOfChanges = mappings.length - result.identityMappings();
         final boolean hasChanges = numberOfChanges != 0 || result.emptyMappings() != 0;
@@ -693,7 +626,7 @@ public final class MappingsOptimizer {
         if (!hasChanges) {
             tag.putByte("id", IDENTITY_ID);
             tag.putInt("size", mappings.length);
-            storageStrategyCounts[IDENTITY_ID]++;
+            runContext.countStorageStrategy(IDENTITY_ID);
             return;
         }
 
@@ -702,14 +635,14 @@ public final class MappingsOptimizer {
         final int plainFormatSize = mappings.length;
         if (changedFormatSize < plainFormatSize && changedFormatSize < shiftFormatSize) {
             writeChangedFormat(tag, result, key, numberOfChanges);
-            storageStrategyCounts[CHANGES_ID]++;
+            runContext.countStorageStrategy(CHANGES_ID);
         } else if (shiftFormatSize < changedFormatSize && shiftFormatSize < plainFormatSize) {
             writeShiftFormat(tag, result, key);
-            storageStrategyCounts[SHIFTS_ID]++;
+            runContext.countStorageStrategy(SHIFTS_ID);
         } else {
             tag.putByte("id", DIRECT_ID);
             tag.put("val", new IntArrayTag(mappings));
-            storageStrategyCounts[DIRECT_ID]++;
+            runContext.countStorageStrategy(DIRECT_ID);
         }
     }
 
@@ -787,10 +720,6 @@ public final class MappingsOptimizer {
 
         tag.put("at", new IntArrayTag(shiftsAt));
         tag.put("to", new IntArrayTag(shiftsTo));
-    }
-
-    public static void printStats() {
-        LOGGER.info("Storage format counts: direct={}, shifts={}, changes={}, identity={}", storageStrategyCounts[DIRECT_ID], storageStrategyCounts[SHIFTS_ID], storageStrategyCounts[CHANGES_ID], storageStrategyCounts[IDENTITY_ID]);
     }
 
     public static void write(final CompoundTag tag, final Path path) throws IOException {

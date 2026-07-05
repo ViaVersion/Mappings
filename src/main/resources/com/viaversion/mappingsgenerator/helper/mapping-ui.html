@@ -260,7 +260,7 @@
     }
     .mode-tabs {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 6px;
     }
     .mode-button {
@@ -332,6 +332,36 @@
     .sub-actions {
       margin-top: 8px;
     }
+    .item-map-grid {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    #errorBox {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 10px 12px 0;
+      padding: 8px 10px;
+      border: 1px solid var(--danger);
+      border-radius: 6px;
+      background: var(--panel);
+    }
+    #errorBox pre {
+      flex: 1;
+      margin: 0;
+      padding: 0;
+      max-height: 200px;
+      background: none;
+      color: var(--danger);
+      white-space: pre-wrap;
+    }
+    .chip.family-unmappable {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
     @media (max-width: 1100px) {
       main {
         grid-template-columns: 1fr;
@@ -357,6 +387,10 @@
       <div class="muted version-path" id="version"></div>
     </div>
   </header>
+  <div id="errorBox" class="hidden">
+    <pre id="errorText"></pre>
+    <button id="errorClose" class="icon-button" type="button" title="Dismiss">×</button>
+  </div>
   <nav class="tabs">
     <button class="tab-button active" data-tab="blockstates" type="button">Blockstates</button>
     <button class="tab-button" data-tab="simple" type="button">Mappings</button>
@@ -392,7 +426,7 @@
       <div class="section-head">Rule</div>
       <div class="body">
         <div id="blockRule">
-          <div class="grid">
+          <div class="grid" id="blockGrid">
             <div class="row">
               <label for="sourceBlock">Source block</label>
               <input id="sourceBlock" list="sourceBlocks" placeholder="note_block">
@@ -407,7 +441,7 @@
             </div>
           </div>
 
-          <div class="row">
+          <div class="row" id="compatRow">
             <label>Property compatibility</label>
             <div id="compatibility" class="compat-grid"></div>
           </div>
@@ -419,10 +453,30 @@
               <button class="mode-button" data-mode="transform" type="button">Transform</button>
               <button class="mode-button" data-mode="constant" type="button">Preserve</button>
               <button class="mode-button" data-mode="compact" type="button">Compact ([)</button>
+              <button class="mode-button" data-mode="family" type="button">Family (bulk)</button>
             </div>
           </div>
 
-          <div class="row">
+          <div id="familyFields" class="hidden">
+            <div class="grid">
+              <div class="row">
+                <label for="familySource">Source base</label>
+                <input id="familySource" list="familySourceBases" placeholder="pale_oak">
+                <datalist id="familySourceBases"></datalist>
+              </div>
+              <div class="row">
+                <label for="familyTarget">Target base</label>
+                <input id="familyTarget" list="familyTargetBases" placeholder="oak">
+                <datalist id="familyTargetBases"></datalist>
+              </div>
+            </div>
+            <div class="row">
+              <label>Family members</label>
+              <div id="familyMembers" class="chips"></div>
+            </div>
+          </div>
+
+          <div class="row" id="filtersRow">
             <label>Filters</label>
             <div id="filters"></div>
           </div>
@@ -453,6 +507,16 @@
                 <button id="addValueRule" type="button">Add value map</button>
               </div>
             </div>
+          </div>
+
+          <div class="row hidden" id="itemMapRow">
+            <label>Item mapping</label>
+            <div class="item-map-grid">
+              <label class="chip"><input id="alsoMapItem" type="checkbox"> also map item</label>
+              <input id="itemTarget" list="itemTargetKeys" placeholder="target item">
+              <datalist id="itemTargetKeys"></datalist>
+            </div>
+            <div class="muted" id="itemMapHint"></div>
           </div>
         </div>
 
@@ -522,7 +586,8 @@
       simpleMappings: {},
       simpleSection: '',
       nameMappings: {},
-      previewEntries: {}
+      previewEntries: {},
+      previewItemEntries: {}
     };
 
     const $ = id => document.getElementById(id);
@@ -639,6 +704,235 @@
 
     function entriesObject(entries) {
       return Object.fromEntries(entries.map(entry => [entry.key, entry.value]));
+    }
+
+    function itemsMapping() {
+      return state.simpleMappings.items;
+    }
+
+    function itemDiffEntry(key) {
+      const mapping = itemsMapping();
+      return mapping ? (mapping.entries || []).find(entry => entry.key === key) : undefined;
+    }
+
+    function targetItemExists(item) {
+      const mapping = itemsMapping();
+      return !!mapping && (mapping.target || []).includes(item);
+    }
+
+    function refreshItemMapRow() {
+      const row = $('itemMapRow');
+      const source = sourceBlock.value.trim();
+      const entry = source ? itemDiffEntry(source) : undefined;
+      if (!entry) {
+        row.classList.add('hidden');
+        $('alsoMapItem').checked = false;
+        $('itemTarget').value = '';
+        return;
+      }
+
+      const target = targetBlock.value.trim();
+      const suggested = targetItemExists(target) ? target : '';
+      row.classList.remove('hidden');
+      $('itemTarget').value = suggested;
+      $('alsoMapItem').checked = !entry.value && suggested !== '';
+      $('itemMapHint').textContent = entry.value
+        ? 'Existing item mapping: ' + entry.value
+        : 'Item mapping for ' + entry.key + ' is still missing';
+    }
+
+    function generateItemPreview() {
+      if (state.activeTab !== 'blockstates') {
+        return {};
+      }
+      if (mode.value === 'family') {
+        return familyItemEntries();
+      }
+      if ($('itemMapRow').classList.contains('hidden') || !$('alsoMapItem').checked) {
+        return {};
+      }
+
+      const source = sourceBlock.value.trim();
+      const item = $('itemTarget').value.trim();
+      if (!source || !item) return {};
+      if (!targetItemExists(item)) throw new Error('Target item does not exist: ' + item);
+      return { [source]: item };
+    }
+
+    function blockstateTargetSuggestions() {
+      const suggestions = new Map();
+      for (const entry of state.diffEntries) {
+        if (!entry.value) continue;
+        const sourceKey = entry.block.replace('minecraft:', '');
+        const targetKey = entry.value.replace('minecraft:', '').split('[', 1)[0];
+        if (!targetKey) continue;
+        const existing = suggestions.get(sourceKey) || new Set();
+        existing.add(targetKey);
+        suggestions.set(sourceKey, existing);
+      }
+      return suggestions;
+    }
+
+    function commonPrefixLength(left, right) {
+      const max = Math.min(left.length, right.length);
+      let i = 0;
+      while (i < max && left[i] === right[i]) i++;
+      return i;
+    }
+
+    function commonSuffixLength(left, right, maxLength) {
+      const max = Math.min(left.length, right.length, maxLength);
+      let i = 0;
+      while (i < max && left[left.length - 1 - i] === right[right.length - 1 - i]) i++;
+      return i;
+    }
+
+    function soundSuggestions() {
+      const mapping = currentSimpleMapping();
+      const targets = mapping.target || [];
+      const suggestions = new Map();
+      for (const entry of mapping.entries || []) {
+        if (entry.value) continue;
+        const key = entry.key;
+        let best = '';
+        let bestScore = 0;
+        for (const target of targets) {
+          const prefix = commonPrefixLength(key, target);
+          const suffix = commonSuffixLength(key, target, Math.min(key.length, target.length) - prefix);
+          const score = prefix * 2 + suffix;
+          if (score > bestScore || (score === bestScore && best && target.length < best.length)) {
+            bestScore = score;
+            best = target;
+          }
+        }
+        if (best && bestScore >= Math.max(12, key.length)) {
+          suggestions.set(key, new Set([best]));
+        }
+      }
+      return suggestions;
+    }
+
+    function cachedSoundSuggestions() {
+      if (!state.soundSuggestionsCache) {
+        state.soundSuggestionsCache = soundSuggestions();
+      }
+      return state.soundSuggestionsCache;
+    }
+
+    function suggestionFor(key) {
+      const targets = new Set(currentSimpleMapping().target || []);
+      if (state.simpleSection === 'items' || state.simpleSection === 'blocks') {
+        const matches = [...(blockstateTargetSuggestions().get(key) || [])].filter(match => targets.has(match));
+        return matches.length === 1 ? matches[0] : '';
+      }
+      if (state.simpleSection === 'sounds') {
+        const matches = cachedSoundSuggestions().get(key);
+        return matches ? [...matches][0] : '';
+      }
+      return '';
+    }
+
+    const FAMILY_SUFFIXES = [
+      '_wood', '_log', '_sapling', '_wall', '_slab', '_stairs',
+      '_trapdoor', '_door', '_button', '_hanging_sign', '_wall_sign', '_sign',
+      '_leaves', '_fence_gate', '_fence', '_pressure_plate', '_planks', '_stem', '_hyphae'
+    ].sort((left, right) => right.length - left.length);
+
+    function unresolvedDiffBlocks() {
+      const blocks = new Map();
+      for (const entry of state.diffEntries) {
+        if (!entry.value && !blocks.has(entry.block)) blocks.set(entry.block, true);
+      }
+      return [...blocks.keys()];
+    }
+
+    function familyBases(blocks) {
+      const bases = new Set();
+      for (const block of blocks) {
+        const suffix = FAMILY_SUFFIXES.find(candidate => block.endsWith(candidate) && block.length > candidate.length);
+        if (suffix) bases.add(block.slice(0, -suffix.length));
+      }
+      return [...bases].sort((left, right) => left.localeCompare(right));
+    }
+
+    function familyMembers() {
+      const base = $('familySource').value.trim();
+      const target = $('familyTarget').value.trim();
+      if (!base) return [];
+      return unresolvedDiffBlocks()
+        .filter(block => block === base || block.startsWith(base + '_'))
+        .sort((left, right) => left.localeCompare(right))
+        .map(block => {
+          const targetBlockName = target ? target + block.slice(base.length) : '';
+          let memberMode = 'no target base';
+          if (targetBlockName) {
+            if (blockStates(state.targetStates, targetBlockName).length === 0) memberMode = 'missing';
+            else if (canCompactMapping(block, targetBlockName)) memberMode = 'compact';
+            else if (canConstantMapping(block, targetBlockName)) memberMode = 'preserve';
+            else memberMode = 'incompatible';
+          }
+          return { block, targetBlock: targetBlockName, mode: memberMode };
+        });
+    }
+
+    function renderFamilyMembers() {
+      const members = familyMembers();
+      $('familyMembers').innerHTML = members.map(member => {
+        const mappable = member.mode === 'compact' || member.mode === 'preserve';
+        const label = member.targetBlock ? member.targetBlock + ' (' + member.mode + ')' : member.mode;
+        return '<label class="chip' + (mappable ? '' : ' family-unmappable') + '">' +
+          '<input type="checkbox" data-family-member="' + escapeHtml(member.block) + '"' +
+          (mappable ? ' checked' : ' disabled') + '> ' +
+          escapeHtml(member.block) + ' → ' + escapeHtml(label) + '</label>';
+      }).join('') || '<span class="muted">No unresolved blocks match this base.</span>';
+    }
+
+    function checkedFamilyMembers() {
+      const checked = new Set([...document.querySelectorAll('[data-family-member]:checked')].map(input => input.dataset.familyMember));
+      return familyMembers().filter(member => checked.has(member.block));
+    }
+
+    function generateFamilyPreview() {
+      if (!$('familySource').value.trim()) throw new Error('Enter a source base');
+      if (!$('familyTarget').value.trim()) throw new Error('Enter a target base');
+
+      const members = checkedFamilyMembers();
+      if (members.length === 0) throw new Error('No mappable family members selected');
+
+      const entries = {};
+      for (const member of members) {
+        if (member.mode === 'compact') {
+          entries[member.block] = member.targetBlock + '[';
+        } else if (member.mode === 'preserve') {
+          for (const blockState of blockStates(state.sourceStates, member.block)) {
+            entries[blockState.raw] = canonicalTargetState(member.targetBlock, matchingTargetProperties(blockState.properties, member.targetBlock));
+          }
+        } else {
+          throw new Error('Cannot map ' + member.block + ' to ' + (member.targetBlock || 'missing target') + ' (' + member.mode + ')');
+        }
+      }
+      return entries;
+    }
+
+    function familyItemEntries() {
+      const items = {};
+      for (const member of checkedFamilyMembers()) {
+        const entry = itemDiffEntry(member.block);
+        if (entry && !entry.value && targetItemExists(member.targetBlock)) {
+          items[member.block] = member.targetBlock;
+        }
+      }
+      return items;
+    }
+
+    function showErrorDetails(text) {
+      $('errorText').textContent = text;
+      $('errorBox').classList.remove('hidden');
+    }
+
+    function clearErrorDetails() {
+      $('errorBox').classList.add('hidden');
+      $('errorText').textContent = '';
     }
 
     function stateString(block, properties) {
@@ -847,6 +1141,10 @@
     }
 
     function generateBlockstatePreview() {
+      if (mode.value === 'family') {
+        return generateFamilyPreview();
+      }
+
       const source = sourceBlock.value.trim();
       const target = targetBlock.value.trim();
       if (!source) throw new Error('Select a source block');
@@ -904,12 +1202,18 @@
       status.className = 'status';
       try {
         state.previewEntries = generatePreview();
-        $('preview').textContent = JSON.stringify(state.previewEntries, null, 2);
-        $('previewCount').textContent = Object.keys(state.previewEntries).length + ' entries';
+        state.previewItemEntries = generateItemPreview();
+        const itemCount = Object.keys(state.previewItemEntries).length;
+        const display = itemCount
+          ? { blockstates: state.previewEntries, items: state.previewItemEntries }
+          : state.previewEntries;
+        $('preview').textContent = JSON.stringify(display, null, 2);
+        $('previewCount').textContent = Object.keys(state.previewEntries).length + ' entries' + (itemCount ? ' + item' : '');
         status.textContent = 'Preview generated';
         status.classList.add('ok');
       } catch (error) {
         state.previewEntries = {};
+        state.previewItemEntries = {};
         $('preview').textContent = '{}';
         $('previewCount').textContent = '';
         status.textContent = error.message;
@@ -919,6 +1223,7 @@
 
     function clearPreview() {
       state.previewEntries = {};
+      state.previewItemEntries = {};
       $('preview').textContent = '{}';
       $('previewCount').textContent = '';
     }
@@ -1077,6 +1382,7 @@
           renderBlockLists();
           renderRuleProperties();
           autoSelectMode();
+          refreshItemMapRow();
         });
       });
     }
@@ -1085,21 +1391,35 @@
       const mapping = currentSimpleMapping();
       const q = $('search').value.trim().toLowerCase();
       const warnMissing = warnsOnMissing(state.simpleSection);
+      const fromBlockstates = state.simpleSection === 'items' || state.simpleSection === 'blocks';
+      const suggestions = fromBlockstates ? blockstateTargetSuggestions()
+        : state.simpleSection === 'sounds' ? cachedSoundSuggestions()
+        : null;
+      const suggestionLabel = fromBlockstates ? ' · blockstates → ' : ' · similar: ';
+      const targetKeys = new Set(mapping.target || []);
       const entries = (mapping.entries || [])
         .filter(entry => !q || entry.key.toLowerCase().includes(q) || entry.value.toLowerCase().includes(q))
         .sort((first, second) => (warnMissing ? Number(!second.value) - Number(!first.value) : 0) || first.key.localeCompare(second.key))
         .slice(0, 500);
       $('diffCount').textContent = (mapping.entries || []).length + ' entries';
-      $('diffList').innerHTML = entries.map(entry =>
-        '<div class="entry' + (warnMissing && !entry.value ? ' empty-mapping' : '') + '" data-simple-key="' + escapeHtml(entry.key) + '" data-simple-value="' + escapeHtml(entry.value) + '">' +
+      $('diffList').innerHTML = entries.map(entry => {
+        let suggested = [];
+        if (suggestions && !entry.value) {
+          suggested = [...(suggestions.get(entry.key) || [])].filter(key => targetKeys.has(key));
+        }
+        return '<div class="entry' + (warnMissing && !entry.value ? ' empty-mapping' : '') +
+          '" data-simple-key="' + escapeHtml(entry.key) +
+          '" data-simple-value="' + escapeHtml(entry.value) +
+          '" data-suggestion="' + escapeHtml(suggested.length === 1 ? suggested[0] : '') + '">' +
           '<code>' + escapeHtml(entry.key) + '</code>' +
-          '<span class="muted">' + escapeHtml(entry.value || '<empty>') + '</span>' +
-        '</div>'
-      ).join('');
+          '<span class="muted">' + escapeHtml(entry.value || '<empty>') +
+          (suggested.length !== 0 ? suggestionLabel + escapeHtml(suggested.join(' / ')) : '') + '</span>' +
+        '</div>';
+      }).join('');
       document.querySelectorAll('.entry[data-simple-key]').forEach(entry => {
         entry.addEventListener('click', () => {
           $('simpleSource').value = entry.dataset.simpleKey;
-          $('simpleTarget').value = entry.dataset.simpleValue;
+          $('simpleTarget').value = entry.dataset.simpleValue || entry.dataset.suggestion || '';
         });
       });
     }
@@ -1290,7 +1610,18 @@
       document.querySelectorAll('[data-mode]').forEach(button => {
         button.classList.toggle('active', button.dataset.mode === mode.value);
       });
+      const family = mode.value === 'family';
       $('transformFields').style.display = mode.value === 'transform' ? '' : 'none';
+      $('familyFields').classList.toggle('hidden', !family);
+      $('blockGrid').classList.toggle('hidden', family);
+      $('compatRow').classList.toggle('hidden', family);
+      $('filtersRow').classList.toggle('hidden', family);
+      if (family) {
+        $('itemMapRow').classList.add('hidden');
+        renderFamilyMembers();
+      } else {
+        refreshItemMapRow();
+      }
     }
 
     function setMode(value) {
@@ -1326,12 +1657,19 @@
         .replaceAll('"', '&quot;');
     }
 
+    function apiError(body) {
+      return body.error + (body.conflicts ? '\nConflicts:\n' + body.conflicts.join('\n') : '');
+    }
+
     async function applyPreview() {
       const count = Object.keys(state.previewEntries).length;
       if (count === 0) {
         renderPreview();
         if (Object.keys(state.previewEntries).length === 0) return;
       }
+      const appliedKey = state.activeTab === 'blockstates' ? sourceBlock.value.trim()
+        : state.activeTab === 'simple' ? $('simpleSource').value.trim()
+        : $('nameKey').value.trim();
       status.className = 'status';
       status.textContent = 'Writing diff...';
       const response = await fetch('/api/apply', {
@@ -1349,11 +1687,83 @@
       if (!response.ok) {
         status.textContent = body.error + (body.conflicts ? ': ' + body.conflicts.slice(0, 6).join(', ') : '');
         status.classList.add('error');
+        showErrorDetails(apiError(body));
         return;
       }
-      status.textContent = 'Wrote ' + body.written + ', skipped ' + body.skipped + ', removed ' + body.removed + ' · ' + body.path;
+
+      let itemSummary = '';
+      if (activeSection() === 'blockstates' && Object.keys(state.previewItemEntries).length !== 0) {
+        const itemCount = Object.keys(state.previewItemEntries).length;
+        const itemResponse = await fetch('/api/apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            from: state.from,
+            to: state.to,
+            section: 'items',
+            entries: state.previewItemEntries,
+            overwrite: $('overwrite').checked
+          })
+        });
+        const itemBody = await itemResponse.json();
+        if (!itemResponse.ok) {
+          status.textContent = 'Blockstates written, but item mapping failed: ' + itemBody.error +
+            (itemBody.conflicts ? ': ' + itemBody.conflicts.slice(0, 6).join(', ') : '');
+          status.classList.add('error');
+          showErrorDetails('Blockstates were written, but the item mapping failed:\n' + apiError(itemBody));
+          await load();
+          return;
+        }
+        itemSummary = ' · ' + (itemBody.written ? itemBody.written + (itemCount === 1 ? ' item mapping' : ' item mappings') + ' written' : 'item mappings unchanged');
+      }
+
+      clearErrorDetails();
+      status.textContent = 'Wrote ' + body.written + ', skipped ' + body.skipped + ', removed ' + body.removed + itemSummary + ' · ' + body.path;
       status.classList.add('ok');
       await load();
+      advanceToNextUnresolved(appliedKey);
+    }
+
+    function nextUnresolvedKey(keys, afterKey) {
+      // Continue after the just-applied key in displayed (alphabetical) order, wrapping to the top
+      const search = $('search').value.trim().toLowerCase();
+      const sorted = keys
+        .filter(key => !search || key.toLowerCase().includes(search))
+        .sort((left, right) => left.localeCompare(right));
+      if (sorted.length === 0) return '';
+      return (afterKey && sorted.find(key => key.localeCompare(afterKey) > 0)) || sorted[0];
+    }
+
+    function advanceToNextUnresolved(afterKey) {
+      if (state.activeTab === 'blockstates') {
+        if (mode.value === 'family') {
+          renderFamilyMembers();
+          return;
+        }
+
+        const nextBlock = nextUnresolvedKey(unresolvedDiffBlocks(), afterKey);
+        if (!nextBlock) return;
+        sourceBlock.value = nextBlock;
+        clearTransformRules();
+        renderBlockLists();
+        renderRuleProperties();
+        autoSelectMode();
+        refreshItemMapRow();
+        return;
+      }
+
+      if (!warnsOnMissing(activeSection())) return;
+      const mapping = state.activeTab === 'simple' ? currentSimpleMapping() : currentNameMapping();
+      const unresolvedKeys = (mapping.entries || []).filter(entry => !entry.value).map(entry => entry.key);
+      const nextKey = nextUnresolvedKey(unresolvedKeys, afterKey);
+      if (!nextKey) return;
+      if (state.activeTab === 'simple') {
+        $('simpleSource').value = nextKey;
+        $('simpleTarget').value = suggestionFor(nextKey);
+      } else {
+        $('nameKey').value = nextKey;
+        $('nameValue').value = '';
+      }
     }
 
     async function regenerateNbt() {
@@ -1369,11 +1779,13 @@
         if (!response.ok) {
           throw new Error(body.error || 'Failed to regenerate NBT output files');
         }
+        clearErrorDetails();
         status.textContent = 'Regenerated NBT output files in ' + body.durationMs + 'ms';
         status.classList.add('ok');
       } catch (error) {
-        status.textContent = error.message;
+        status.textContent = error.message.split('\n', 1)[0];
         status.classList.add('error');
+        showErrorDetails(error.message);
       } finally {
         button.disabled = false;
         button.textContent = oldText;
@@ -1429,6 +1841,7 @@
         if (input.id !== 'overwrite') input.checked = false;
       });
       renderRuleProperties();
+      refreshItemMapRow();
       clearPreview();
       status.textContent = '';
     }
@@ -1475,6 +1888,12 @@
       renderNameControls();
       renderDiffList();
       renderRuleProperties();
+      $('itemTargetKeys').innerHTML = optionHtml((itemsMapping() || {}).target || []);
+      refreshItemMapRow();
+      state.soundSuggestionsCache = null;
+      $('familySourceBases').innerHTML = optionHtml(familyBases(unresolvedDiffBlocks()));
+      $('familyTargetBases').innerHTML = optionHtml(familyBases(state.targetBlocks));
+      renderFamilyMembers();
       renderTab();
     }
 
@@ -1484,11 +1903,13 @@
       renderBlockLists();
       renderRuleProperties();
       autoSelectMode();
+      refreshItemMapRow();
     });
     targetBlock.addEventListener('input', () => {
       renderTransformDatalists();
       renderCompatibility();
       autoSelectMode();
+      refreshItemMapRow();
     });
     document.querySelectorAll('[data-mode]').forEach(button => {
       button.addEventListener('click', () => setMode(button.dataset.mode));
@@ -1522,10 +1943,34 @@
     $('moveOutputButton').addEventListener('click', moveCurrentOutput);
     $('moveIdentifiersButton').addEventListener('click', moveIdentifiers);
 
+    $('familySource').addEventListener('input', () => {
+      renderFamilyMembers();
+      clearPreview();
+    });
+    $('familyTarget').addEventListener('input', () => {
+      renderFamilyMembers();
+      clearPreview();
+    });
+    $('errorClose').addEventListener('click', clearErrorDetails);
+
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Enter') return;
+      if (event.ctrlKey || event.metaKey) {
+        event.preventDefault();
+        applyPreview().catch(showError);
+        return;
+      }
+      if (event.target instanceof HTMLInputElement && event.target.closest('#blockRule, #simpleRule, #nameRule')) {
+        event.preventDefault();
+        renderPreview();
+      }
+    });
+
     renderMode();
     function showError(error) {
-      status.textContent = error.message;
+      status.textContent = error.message.split('\n', 1)[0];
       status.classList.add('error');
+      showErrorDetails(error.stack || error.message);
     }
 
     loadVersions().then(load).catch(showError);
