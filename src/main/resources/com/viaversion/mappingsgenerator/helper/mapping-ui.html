@@ -239,6 +239,9 @@
       gap: 6px;
       padding: 10px 12px 0;
     }
+    .tab-button.has-missing {
+      border-color: var(--danger);
+    }
     .tab-button.active {
       border-color: var(--accent);
       color: var(--accent);
@@ -406,6 +409,9 @@
         <div id="simpleControls" class="row hidden">
           <label>Mapping types</label>
           <div id="simpleSections" class="mapping-types"></div>
+          <div class="sub-actions">
+            <button id="suggestAllButton" class="hidden" type="button">Preview all suggestions</button>
+          </div>
         </div>
         <div id="nameControls" class="row hidden">
           <label for="nameSection">Name type</label>
@@ -562,6 +568,7 @@
       <div class="body">
         <div class="row actions">
           <button id="applyButton" class="primary">Apply to diff</button>
+          <button id="undoButton" type="button" disabled>Undo</button>
         </div>
         <pre id="preview">{}</pre>
       </div>
@@ -925,6 +932,56 @@
       return items;
     }
 
+    function allSuggestions() {
+      const search = $('search').value.trim().toLowerCase();
+      const entries = {};
+      for (const entry of currentSimpleMapping().entries || []) {
+        if (entry.value) continue;
+        if (search && !entry.key.toLowerCase().includes(search)) continue;
+        const suggestion = suggestionFor(entry.key);
+        if (suggestion) entries[entry.key] = suggestion;
+      }
+      return entries;
+    }
+
+    function previewAllSuggestions() {
+      status.className = 'status';
+      const entries = allSuggestions();
+      const count = Object.keys(entries).length;
+      if (count === 0) {
+        status.textContent = 'No suggestions available';
+        status.classList.add('error');
+        return;
+      }
+
+      state.previewEntries = entries;
+      state.previewItemEntries = {};
+      $('preview').textContent = JSON.stringify(entries, null, 2);
+      $('previewCount').textContent = count + ' entries';
+      status.textContent = 'Review the suggested mappings, then apply';
+      status.classList.add('ok');
+    }
+
+    function updateTabBadges() {
+      let simpleCount = 0;
+      for (const [section, mapping] of Object.entries(state.simpleMappings)) {
+        if (warnsOnMissing(section)) simpleCount += missingEntries(mapping).length;
+      }
+      let nameCount = 0;
+      for (const mapping of Object.values(state.nameMappings)) {
+        nameCount += missingEntries(mapping).length;
+      }
+      setTabBadge('blockstates', 'Blockstates', unresolvedDiffBlocks().length);
+      setTabBadge('simple', 'Mappings', simpleCount);
+      setTabBadge('names', 'Names', nameCount);
+    }
+
+    function setTabBadge(tab, label, count) {
+      const button = document.querySelector('.tab-button[data-tab="' + tab + '"]');
+      button.textContent = count ? label + ' (' + count + ')' : label;
+      button.classList.toggle('has-missing', count !== 0);
+    }
+
     function showErrorDetails(text) {
       $('errorText').textContent = text;
       $('errorBox').classList.remove('hidden');
@@ -1245,7 +1302,7 @@
 
       $('mappingPair').innerHTML = pairs.map(pair =>
         '<option value="' + escapeHtml(pairKey(pair)) + '"' + (pair.backwards ? ' class="backwards-option"' : '') + '>' +
-          escapeHtml(pair.from + ' → ' + pair.to + (pair.backwards ? ' (backwards)' : '')) +
+          escapeHtml(pair.from + ' → ' + pair.to + (pair.backwards ? ' (backwards)' : '') + (pair.unresolved ? ' · ' + pair.unresolved + ' open' : '')) +
         '</option>'
       ).join('');
       if (selectedPair) {
@@ -1422,6 +1479,13 @@
           $('simpleTarget').value = entry.dataset.simpleValue || entry.dataset.suggestion || '';
         });
       });
+
+      $('suggestAllButton').classList.toggle('hidden', !suggestions);
+      if (suggestions) {
+        const suggestCount = Object.keys(allSuggestions()).length;
+        $('suggestAllButton').disabled = suggestCount === 0;
+        $('suggestAllButton').textContent = 'Preview all suggestions (' + suggestCount + ')';
+      }
     }
 
     function renderNameDiffList() {
@@ -1670,6 +1734,7 @@
       const appliedKey = state.activeTab === 'blockstates' ? sourceBlock.value.trim()
         : state.activeTab === 'simple' ? $('simpleSource').value.trim()
         : $('nameKey').value.trim();
+      const undoGroup = 'apply-' + Date.now() + '-' + Math.random().toString(36).slice(2);
       status.className = 'status';
       status.textContent = 'Writing diff...';
       const response = await fetch('/api/apply', {
@@ -1680,7 +1745,8 @@
           to: state.to,
           section: activeSection(),
           entries: state.previewEntries,
-          overwrite: $('overwrite').checked
+          overwrite: $('overwrite').checked,
+          undoGroup
         })
       });
       const body = await response.json();
@@ -1702,7 +1768,8 @@
             to: state.to,
             section: 'items',
             entries: state.previewItemEntries,
-            overwrite: $('overwrite').checked
+            overwrite: $('overwrite').checked,
+            undoGroup
           })
         });
         const itemBody = await itemResponse.json();
@@ -1722,6 +1789,30 @@
       status.classList.add('ok');
       await load();
       advanceToNextUnresolved(appliedKey);
+      await refreshPairs();
+    }
+
+    async function undoLastApply() {
+      status.className = 'status';
+      const response = await fetch('/api/undo', { method: 'POST' });
+      const body = await response.json();
+      if (!response.ok) {
+        status.textContent = body.error;
+        status.classList.add('error');
+        return;
+      }
+
+      status.textContent = 'Undid last apply · ' + body.restored.join(', ');
+      status.classList.add('ok');
+      await load();
+      await refreshPairs();
+    }
+
+    async function refreshPairs() {
+      const response = await fetch('/api/versions');
+      const body = await response.json();
+      state.mappingPairs = body.mappingPairs || [];
+      renderMappingPairs(state.from, state.to);
     }
 
     function nextUnresolvedKey(keys, afterKey) {
@@ -1894,6 +1985,9 @@
       $('familySourceBases').innerHTML = optionHtml(familyBases(unresolvedDiffBlocks()));
       $('familyTargetBases').innerHTML = optionHtml(familyBases(state.targetBlocks));
       renderFamilyMembers();
+      $('undoButton').textContent = body.undoCount ? 'Undo (' + body.undoCount + ')' : 'Undo';
+      $('undoButton').disabled = !body.undoCount;
+      updateTabBadges();
       renderTab();
     }
 
@@ -1952,6 +2046,8 @@
       clearPreview();
     });
     $('errorClose').addEventListener('click', clearErrorDetails);
+    $('suggestAllButton').addEventListener('click', previewAllSuggestions);
+    $('undoButton').addEventListener('click', () => undoLastApply().catch(showError));
 
     document.addEventListener('keydown', event => {
       if (event.key !== 'Enter') return;
