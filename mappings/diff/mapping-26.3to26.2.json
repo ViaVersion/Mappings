@@ -165,8 +165,8 @@
     "yellow_poplar_leaves": ""
   },
   "argumenttypes": {
-    "slot_source": "",
-    "feature": ""
+    "slot_source": "brigadier:string",
+    "feature": "brigadier:string"
   },
   "entities": {
     "poplar_boat": "birch_boat",
