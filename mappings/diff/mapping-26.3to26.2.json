@@ -56,7 +56,23 @@
     "poplar_wood": "birch_log[",
     "shelf_mushroom": "cocoa[",
     "stripped_poplar_log": "stripped_birch_log[",
-    "stripped_poplar_wood": "stripped_birch_wood["
+    "stripped_poplar_wood": "stripped_birch_wood[",
+    "straw_bed[facing=north,occupied=true,part=head]": "",
+    "straw_bed[facing=north,occupied=true,part=foot]": "",
+    "straw_bed[facing=north,occupied=false,part=head]": "",
+    "straw_bed[facing=north,occupied=false,part=foot]": "",
+    "straw_bed[facing=south,occupied=true,part=head]": "",
+    "straw_bed[facing=south,occupied=true,part=foot]": "",
+    "straw_bed[facing=south,occupied=false,part=head]": "",
+    "straw_bed[facing=south,occupied=false,part=foot]": "",
+    "straw_bed[facing=west,occupied=true,part=head]": "",
+    "straw_bed[facing=west,occupied=true,part=foot]": "",
+    "straw_bed[facing=west,occupied=false,part=head]": "",
+    "straw_bed[facing=west,occupied=false,part=foot]": "",
+    "straw_bed[facing=east,occupied=true,part=head]": "",
+    "straw_bed[facing=east,occupied=true,part=foot]": "",
+    "straw_bed[facing=east,occupied=false,part=head]": "",
+    "straw_bed[facing=east,occupied=false,part=foot]": ""
   },
   "items": {
     "poplar_planks": "birch_planks",
@@ -114,7 +130,24 @@
     "poplar_boat": "birch_boat",
     "poplar_chest_boat": "birch_chest_boat",
     "poplar_sign": "birch_sign",
-    "poplar_hanging_sign": "birch_hanging_sign"
+    "poplar_hanging_sign": "birch_hanging_sign",
+    "white_cushion": "",
+    "orange_cushion": "",
+    "magenta_cushion": "",
+    "light_blue_cushion": "",
+    "yellow_cushion": "",
+    "lime_cushion": "",
+    "pink_cushion": "",
+    "gray_cushion": "",
+    "light_gray_cushion": "",
+    "cyan_cushion": "",
+    "purple_cushion": "",
+    "blue_cushion": "",
+    "brown_cushion": "",
+    "green_cushion": "",
+    "red_cushion": "",
+    "black_cushion": "",
+    "straw_bed": ""
   },
   "sounds": {
     "block.shelf_mushroom.break": "",
@@ -122,7 +155,24 @@
     "block.shelf_mushroom.place": "",
     "block.shelf_mushroom.step": "",
     "block.shelf_mushroom.bounce": "",
-    "block.poplar_leaves.ambient": ""
+    "block.poplar_leaves.ambient": "",
+    "entity.cushion.break": "",
+    "entity.cushion.place": "",
+    "entity.cushion.sit": "",
+    "entity.cushion.get_up": "",
+    "block.poplar_leaves.break": "",
+    "block.poplar_leaves.hit": "",
+    "block.poplar_leaves.fall": "",
+    "block.poplar_leaves.place": "",
+    "block.poplar_leaves.step": "",
+    "block.straw_bed.break": "",
+    "block.straw_bed.break_leave": "",
+    "block.straw_bed.step": "",
+    "block.straw_bed.place": "",
+    "block.straw_bed.hit": "",
+    "block.straw_bed.fall": "",
+    "block.red_shrub.break": "",
+    "block.red_shrub.place": ""
   },
   "particles": {
     "red_poplar_leaves": "",
@@ -130,15 +180,18 @@
     "yellow_poplar_leaves": ""
   },
   "argumenttypes": {
-    "slot_source": ""
+    "slot_source": "",
+    "feature": ""
   },
   "entities": {
     "poplar_boat": "birch_boat",
-    "poplar_chest_boat": "birch_chest_boat"
+    "poplar_chest_boat": "birch_chest_boat",
+    "cushion": ""
   },
   "data_component_type": {
     "provides_pottery_pattern": "",
-    "block_transformer": ""
+    "block_transformer": "",
+    "compostable": ""
   },
   "itemnames": {
     "poplar_planks": "26.3 Poplar Planks",
@@ -196,10 +249,31 @@
     "poplar_boat": "26.3 Poplar Boat",
     "poplar_chest_boat": "26.3 Poplar Chest Boat",
     "poplar_sign": "26.3 Poplar Sign",
-    "poplar_hanging_sign": "26.3 Poplar Hanging Sign"
+    "poplar_hanging_sign": "26.3 Poplar Hanging Sign",
+    "white_cushion": "26.3 White Cushion",
+    "orange_cushion": "26.3 Orange Cushion",
+    "magenta_cushion": "26.3 Magenta Cushion",
+    "light_blue_cushion": "26.3 Light Blue Cushion",
+    "yellow_cushion": "26.3 Yellow Cushion",
+    "lime_cushion": "26.3 Lime Cushion",
+    "pink_cushion": "26.3 Pink Cushion",
+    "gray_cushion": "26.3 Gray Cushion",
+    "light_gray_cushion": "26.3 Light Gray Cushion",
+    "cyan_cushion": "26.3 Cyan Cushion",
+    "purple_cushion": "26.3 Purple Cushion",
+    "blue_cushion": "26.3 Blue Cushion",
+    "brown_cushion": "26.3 Brown Cushion",
+    "green_cushion": "26.3 Green Cushion",
+    "red_cushion": "26.3 Red Cushion",
+    "black_cushion": "26.3 Black Cushion",
+    "straw_bed": "26.3 Straw Bed"
   },
   "entitynames": {
     "poplar_boat": "Poplar Boat",
-    "poplar_chest_boat": "Poplar Chest Boat"
+    "poplar_chest_boat": "Poplar Chest Boat",
+    "cushion": "Cushion"
+  },
+  "recipe_serializers": {
+    "brewing": ""
   }
 }
