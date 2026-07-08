@@ -260,5 +260,8 @@
   },
   "recipe_serializers": {
     "brewing": ""
+  },
+  "environment_attribute": {
+    "gameplay/straw_bed_rule": ""
   }
 }

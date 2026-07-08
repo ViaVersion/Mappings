@@ -124,7 +124,7 @@
     "entity.small_sulfur_cube.squish": "entity.slime.squish_small",
     "entity.small_sulfur_cube.eat": "entity.baby_nautilus.eat",
     "item.bucket.empty_sulfur_cube": "item.bucket.empty_lava",
-    "item.bucket.fill_sulfur_cube": "item.bucket.fill_lava",    
+    "item.bucket.fill_sulfur_cube": "item.bucket.fill_lava",
     "block.potent_sulfur.noxious_gas": "ambient.underwater.loop.additions",
     "block.sulfur_spike.break": "block.sponge.break",
     "block.sulfur_spike.step": "block.wart_block.step",

@@ -171,6 +171,7 @@ public final class MappingsGenerator {
         addArray(viaMappings, registries, "minecraft:recipe_serializer", "recipe_serializers");
         addArray(viaMappings, registries, "minecraft:slot_display", "slot_displays");
         addArray(viaMappings, registries, "minecraft:data_component_type", "data_component_type");
+        addArray(viaMappings, registries, "minecraft:environment_attribute", "environment_attribute");
 
         // Save
         new File("mappings").mkdir();

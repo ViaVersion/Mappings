@@ -57,8 +57,8 @@ public final class ManualRunner {
             return;
         }
 
-        final String from = "1.20.3";
-        final String to = "1.20.5";
+        final String from = "1.21.11";
+        final String to = "26.1";
         final RunContext runContext = RunContext.load();
         MappingsOptimizer mappingsOptimizer = new MappingsOptimizer(from, to, runContext);
         mappingsOptimizer.writeDiffStubs();

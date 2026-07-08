@@ -28,6 +28,8 @@ import com.viaversion.nbt.io.NBTIO;
 import com.viaversion.nbt.io.TagWriter;
 import com.viaversion.nbt.tag.CompoundTag;
 import com.viaversion.nbt.tag.IntArrayTag;
+import com.viaversion.nbt.tag.ListTag;
+import com.viaversion.nbt.tag.StringTag;
 import com.viaversion.nbt.tag.Tag;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -202,6 +204,9 @@ public final class MappingsOptimizer {
             }
             if (diffObject.has("blockstates")) {
                 changedBlockStateProperties();
+            }
+            if (diffObject.has("environment_attribute")) {
+                changedEnvironmentAttributes();
             }
         }
 
@@ -498,6 +503,17 @@ public final class MappingsOptimizer {
 
         if (!changedProperties.isEmpty()) {
             output.put("changed_blocks", new IntArrayTag(changedProperties.toIntArray()));
+        }
+    }
+
+    private void changedEnvironmentAttributes() {
+        final ListTag<StringTag> changed = new ListTag<>(StringTag.class);
+        for (final Map.Entry<String, JsonElement> entry : diffObject.getAsJsonObject("environment_attribute").entrySet()) {
+            // Ids aren't stored, take any change as a need to remove it from registry data
+            changed.add(new StringTag(entry.getKey()));
+        }
+        if (!changed.isEmpty()) {
+            output.put("changed_environment_attributes", changed);
         }
     }
 

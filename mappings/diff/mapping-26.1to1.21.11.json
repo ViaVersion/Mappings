@@ -295,5 +295,10 @@
   "particles": {
     "pause_mob_growth": "scrape",
     "reset_mob_growth": "happy_villager"
+  },
+  "environment_attribute": {
+    "visual/block_light_tint": "",
+    "visual/night_vision_color": "",
+    "visual/ambient_light_color": ""
   }
 }
