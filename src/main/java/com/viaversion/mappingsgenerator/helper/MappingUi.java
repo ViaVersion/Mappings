@@ -68,7 +68,7 @@ public final class MappingUi {
         "data_component_type"
     };
 
-    private static final String[] BLOCKER_SECTIONS = {"blockstates", "items", "entities", "sounds", "itemnames", "entitynames"};
+    private static final String[] BLOCKER_SECTIONS = {"blockstates", "items", "entities", "sounds"};
     private static final int MAX_UNDO_HISTORY = 50;
 
     private final String defaultFrom;
@@ -172,7 +172,6 @@ public final class MappingUi {
         response.add("targetStates", blockStates(pair.to()));
         response.add("diffEntries", diffEntries(diffPath));
         response.add("simpleMappings", simpleMappings(pair, diffPath));
-        response.add("nameMappings", nameMappings(pair, diffPath));
         response.addProperty("undoCount", undoHistory.size());
         send(exchange, 200, "application/json", GsonUtil.GSON.toJson(response));
     }
@@ -529,15 +528,6 @@ public final class MappingUi {
             object.add("entries", entries(sectionEntries));
             mappings.add(section, object);
         }
-        return mappings;
-    }
-
-    private JsonObject nameMappings(final VersionPair pair, final Path diffPath) throws IOException {
-        final JsonObject sourceMapping = loadMapping(pair.from());
-        final JsonObject diff = loadOrCreateDiff(diffPath);
-        final JsonObject mappings = new JsonObject();
-        addNameMapping(mappings, sourceMapping, diff, "itemnames", "items");
-        addNameMapping(mappings, sourceMapping, diff, "entitynames", "entities");
         return mappings;
     }
 

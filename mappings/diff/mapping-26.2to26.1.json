@@ -62,39 +62,6 @@
     "sulfur_spike": "pointed_dripstone",
     "music_disc_bounce": "music_disc_13"
   },
-  "itemnames": {
-    "sulfur": "26.2 Sulfur",
-    "potent_sulfur": "26.2 Potent Sulfur",
-    "sulfur_slab": "26.2 Sulfur Slab",
-    "sulfur_stairs": "26.2 Sulfur Stairs",
-    "sulfur_wall": "26.2 Sulfur Wall",
-    "polished_sulfur": "26.2 Polished Sulfur",
-    "polished_sulfur_slab": "26.2 Polished Sulfur Slab",
-    "polished_sulfur_stairs": "26.2 Polished Sulfur Stairs",
-    "polished_sulfur_wall": "26.2 Polished Sulfur Wall",
-    "sulfur_bricks": "26.2 Sulfur Bricks",
-    "sulfur_brick_slab": "26.2 Sulfur Brick Slab",
-    "sulfur_brick_stairs": "26.2 Sulfur Brick Stairs",
-    "sulfur_brick_wall": "26.2 Sulfur Brick Wall",
-    "chiseled_sulfur": "26.2 Chiseled Sulfur",
-    "cinnabar": "26.2 Cinnabar",
-    "cinnabar_slab": "26.2 Cinnabar Slab",
-    "cinnabar_stairs": "26.2 Cinnabar Stairs",
-    "cinnabar_wall": "26.2 Cinnabar Wall",
-    "polished_cinnabar": "26.2 Polished Cinnabar",
-    "polished_cinnabar_slab": "26.2 Polished Cinnabar Slab",
-    "polished_cinnabar_stairs": "26.2 Polished Cinnabar Stairs",
-    "polished_cinnabar_wall": "26.2 Polished Cinnabar Wall",
-    "cinnabar_bricks": "26.2 Cinnabar Bricks",
-    "cinnabar_brick_slab": "26.2 Cinnabar Brick Slab",
-    "cinnabar_brick_stairs": "26.2 Cinnabar Brick Stairs",
-    "cinnabar_brick_wall": "26.2 Cinnabar Brick Wall",
-    "chiseled_cinnabar": "26.2 Chiseled Cinnabar",
-    "sulfur_cube_bucket": "26.2 Sulfur Cube Bucket",
-    "sulfur_cube_spawn_egg": "26.2 Sulfur Cube Spawn Egg",
-    "sulfur_spike": "26.2 Sulfur Spike",
-    "music_disc_bounce": "26.2 Music Disc Bounce"
-  },
   "sounds": {
     "block.sulfur.break": "block.sponge.break",
     "block.sulfur.step": "block.wart_block.step",
@@ -179,9 +146,6 @@
   "entities": {
     "sulfur_cube": "slime"
   },
-  "entitynames": {
-    "sulfur_cube": "Sulfur Cube"
-  },
   "attributes": {
     "air_drag_modifier": "",
     "bounciness": "",
@@ -194,5 +158,38 @@
   },
   "argumenttypes": {
     "team_color": "color"
+  },
+  "custom_model_data": {
+    "sulfur": 834,
+    "potent_sulfur": 835,
+    "sulfur_slab": 836,
+    "sulfur_stairs": 837,
+    "sulfur_wall": 838,
+    "polished_sulfur": 839,
+    "polished_sulfur_slab": 840,
+    "polished_sulfur_stairs": 841,
+    "polished_sulfur_wall": 842,
+    "sulfur_bricks": 843,
+    "sulfur_brick_slab": 844,
+    "sulfur_brick_stairs": 845,
+    "sulfur_brick_wall": 846,
+    "chiseled_sulfur": 847,
+    "cinnabar": 848,
+    "cinnabar_slab": 849,
+    "cinnabar_stairs": 850,
+    "cinnabar_wall": 851,
+    "polished_cinnabar": 852,
+    "polished_cinnabar_slab": 853,
+    "polished_cinnabar_stairs": 854,
+    "polished_cinnabar_wall": 855,
+    "cinnabar_bricks": 856,
+    "cinnabar_brick_slab": 857,
+    "cinnabar_brick_stairs": 858,
+    "cinnabar_brick_wall": 859,
+    "chiseled_cinnabar": 860,
+    "sulfur_cube_bucket": 861,
+    "sulfur_cube_spawn_egg": 862,
+    "sulfur_spike": 863,
+    "music_disc_bounce": 864
   }
 }

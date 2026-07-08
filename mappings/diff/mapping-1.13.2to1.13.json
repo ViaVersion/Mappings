@@ -29,16 +29,16 @@
     "green_dye": "cactus_green",
     "yellow_dye": "dandelion_yellow"
   },
-  "itemnames": {
-    "smooth_stone_slab": "1.13.2 Smooth Stone Slab",
-    "dead_brain_coral": "1.13.2 Dead Brain Coral",
-    "dead_bubble_coral": "1.13.2 Dead Bubble Coral",
-    "dead_fire_coral": "1.13.2 Dead Fire Coral",
-    "dead_horn_coral": "1.13.2 Dead Horn Coral",
-    "dead_tube_coral": "1.13.2 Dead Tube Coral",
-    "oak_sign": "1.13.2 Oak Sign",
-    "red_dye": "1.13.2 Red Dye",
-    "green_dye": "1.13.2 Green Dye",
-    "yellow_dye": "1.13.2 Yellow Dye"
+  "custom_model_data": {
+    "smooth_stone_slab": 102,
+    "dead_brain_coral": 103,
+    "dead_bubble_coral": 104,
+    "dead_fire_coral": 105,
+    "dead_horn_coral": 106,
+    "dead_tube_coral": 107,
+    "oak_sign": 108,
+    "red_dye": 109,
+    "green_dye": 110,
+    "yellow_dye": 111
   }
 }

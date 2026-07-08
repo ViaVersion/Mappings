@@ -33,8 +33,7 @@ public final class CursedMappings {
         final MappingsOptimizer optimizer = create("1.13", "1.12", runContext);
         optimizer.cursedMappings("blockstates", "blocks", "blockstates", 8582);
         optimizer.cursedMappings("enchantments", "legacy_enchantments", "enchantments");
-        optimizer.names("items", "itemnames");
-        optimizer.fullNames("entitynames", "entitynames");
+        optimizer.customModelData();
         optimizer.fullNames("sounds", "soundnames");
         optimizer.writeToDir(MappingsOptimizer.OUTPUT_BACKWARDS_DIR);
     }

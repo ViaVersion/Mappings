@@ -280,9 +280,6 @@
   "items": {
     "golden_dandelion": "dandelion"
   },
-  "itemnames": {
-    "golden_dandelion": "26.1 Golden Dandelion"
-  },
   "recipe_serializers": {
     "crafting_dye": "",
     "crafting_imbue": ""
@@ -300,5 +297,8 @@
     "visual/block_light_tint": "",
     "visual/night_vision_color": "",
     "visual/ambient_light_color": ""
+  },
+  "custom_model_data": {
+    "golden_dandelion": 833
   }
 }

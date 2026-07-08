@@ -446,9 +446,5 @@
     "item.hoe.till": "",
     "item.shield.block": "",
     "item.shovel.flatten": ""
-  },
-  "entitynames": {
-    "shulker": "Shulker",
-    "shulker_bullet": "Shulker Bullet"
   }
 }

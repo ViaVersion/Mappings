@@ -21,6 +21,7 @@ package com.viaversion.mappingsgenerator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.viaversion.mappingsgenerator.MappingsLoader.MappingsResult;
 import com.viaversion.mappingsgenerator.util.JsonConverter;
 import com.viaversion.mappingsgenerator.util.Version;
@@ -28,6 +29,7 @@ import com.viaversion.nbt.io.NBTIO;
 import com.viaversion.nbt.io.TagWriter;
 import com.viaversion.nbt.tag.CompoundTag;
 import com.viaversion.nbt.tag.IntArrayTag;
+import com.viaversion.nbt.tag.IntTag;
 import com.viaversion.nbt.tag.ListTag;
 import com.viaversion.nbt.tag.StringTag;
 import com.viaversion.nbt.tag.Tag;
@@ -43,6 +45,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +63,7 @@ public final class MappingsOptimizer {
     public static final Path MAPPINGS_DIR = Path.of("mappings");
     public static final Path OUTPUT_DIR = Path.of("output");
     public static final Path OUTPUT_BACKWARDS_DIR = OUTPUT_DIR.resolve("backwards");
+    public static final Path LAST_CUSTOM_MODEL_DATA_PATH = Path.of("last_custom_model_data.txt");
     public static final String DIFF_FILE_FORMAT = "mapping-%sto%s.json";
     public static final String MAPPING_FILE_FORMAT = "mapping-%s.json";
     public static final String OUTPUT_FILE_FORMAT = "mappings-%sto%s.nbt";
@@ -195,9 +200,8 @@ public final class MappingsOptimizer {
         mappings(false, "data_component_type");
 
         if (diffObject != null) {
-            names("items", "itemnames");
+            customModelData();
             names("enchantments", "enchantmentnames");
-            fullNames("entitynames", "entitynames");
 
             if (diffObject.has("tags")) {
                 tags();
@@ -235,17 +239,21 @@ public final class MappingsOptimizer {
     public boolean writeDiffStubs() throws IOException {
         JsonObject diffObject = MappingsLoader.getDiffObjectStub(unmappedObject, mappedObject, this.diffObject, ignoreMissing);
         final boolean hasStubChanges = diffObject != null;
-        boolean hasNameChanges = false;
+        boolean hasExtraChanges = false;
         if (backwards) {
             if (diffObject == null) {
                 diffObject = this.diffObject != null ? this.diffObject : new JsonObject();
             }
 
-            hasNameChanges |= addBackwardsNames(diffObject, "items", "itemnames", true);
-            hasNameChanges |= addBackwardsNames(diffObject, "entities", "entitynames", false);
+            final AtomicInteger customModelData = new AtomicInteger(Integer.parseInt(Files.readString(LAST_CUSTOM_MODEL_DATA_PATH)));
+            // Count up from the last known custom model data number
+            if (addBackwardsData(diffObject, "items", "custom_model_data", name -> new JsonPrimitive(customModelData.incrementAndGet()))) {
+                Files.writeString(LAST_CUSTOM_MODEL_DATA_PATH, Integer.toString(customModelData.get()));
+                hasExtraChanges = true;
+            }
         }
 
-        if (hasStubChanges || hasNameChanges) {
+        if (hasStubChanges || hasExtraChanges) {
             LOGGER.info("Writing diff stubs for versions {} → {}", fromVersion, toVersion);
             Files.writeString(getDiffDir(specialFrom || specialTo).resolve(DIFF_FILE_FORMAT.formatted(fromVersion, toVersion)), MappingsGenerator.GSON.toJson(diffObject));
             this.diffObject = diffObject;
@@ -254,12 +262,12 @@ public final class MappingsOptimizer {
         return false;
     }
 
-    private boolean addBackwardsNames(final JsonObject diffObject, final String key, final String namesKey, final boolean includeVersion) {
+    private boolean addBackwardsData(final JsonObject diffObject, final String key, final String dataKey, final Function<String, JsonElement> outputMapper) {
         if (!unmappedObject.has(key) || !mappedObject.has(key)) {
             return false;
         }
 
-        JsonObject nameMappings = diffObject.getAsJsonObject(namesKey);
+        JsonObject nameMappings = diffObject.getAsJsonObject(dataKey);
 
         boolean changed = false;
         final Set<String> mappedIdentifiers = new HashSet<>();
@@ -275,10 +283,11 @@ public final class MappingsOptimizer {
 
             if (nameMappings == null) {
                 nameMappings = new JsonObject();
-                diffObject.add(namesKey, nameMappings);
+                diffObject.add(dataKey, nameMappings);
             }
+
             final String name = nameFromIdentifier(identifier);
-            nameMappings.addProperty(identifier, includeVersion ? fromVersion + " " + name : name);
+            nameMappings.add(identifier, outputMapper.apply(name));
             changed = true;
         }
         return changed;
@@ -430,6 +439,10 @@ public final class MappingsOptimizer {
         output.put(outputKey, changedTag);
     }
 
+    public void customModelData() {
+        addExtraDataPerKey("items", "custom_model_data", element -> new IntTag(element.getAsInt()));
+    }
+
     /**
      * Writes int->string mappings to the given tag.
      *
@@ -437,24 +450,28 @@ public final class MappingsOptimizer {
      * @param namesKey key to read names from and to write to
      */
     public void names(final String key, final String namesKey) {
-        if (!unmappedObject.has(key) || !diffObject.has(namesKey)) {
+        addExtraDataPerKey(key, namesKey, element -> new StringTag(element.getAsString()));
+    }
+
+    private void addExtraDataPerKey(final String key, final String extraDataKey, final Function<JsonElement, Tag> valueMapper) {
+        if (!unmappedObject.has(key) || !diffObject.has(extraDataKey)) {
             return;
         }
 
         final Object2IntMap<String> identifierMap = MappingsLoader.arrayToMap(unmappedObject.getAsJsonArray(key));
-        final JsonObject nameMappings = diffObject.getAsJsonObject(namesKey);
+        final JsonObject nameMappings = diffObject.getAsJsonObject(extraDataKey);
         final CompoundTag tag = new CompoundTag();
-        output.put(namesKey, tag);
+        output.put(extraDataKey, tag);
 
         for (final Map.Entry<String, JsonElement> entry : nameMappings.entrySet()) {
             final int id = identifierMap.getInt(entry.getKey());
             if (id == -1) {
-                errorStrategy.apply("Unknown " + key + " identifier in " + namesKey + " mapping: " + entry.getKey());
+                errorStrategy.apply("Unknown " + key + " identifier in " + extraDataKey + " mapping: " + entry.getKey());
                 continue;
             }
 
             // Would be smaller as two arrays, but /shrug
-            tag.putString(Integer.toString(id), entry.getValue().getAsString());
+            tag.put(Integer.toString(id), valueMapper.apply(entry.getValue()));
         }
     }
 

@@ -20,26 +20,6 @@
     "ominous_trial_key": "trial_key",
     "ominous_bottle": "honey_bottle"
   },
-  "itemnames": {
-    "armadillo_scute": "1.20.5 Armadillo Scute",
-    "wolf_armor": "1.20.5 Wolf Armor",
-    "armadillo_spawn_egg": "1.20.5 Armadillo Spawn Egg",
-    "vault": "1.21 Vault",
-    "wind_charge": "1.21 Wind Charge",
-    "bogged_spawn_egg": "1.21 Bogged Spawn Egg",
-    "heavy_core": "1.21 Heavy Core",
-    "mace": "1.21 Mace",
-    "flow_banner_pattern": "1.21 Flow Banner Pattern",
-    "guster_banner_pattern": "1.21 Guster Banner Pattern",
-    "flow_armor_trim_smithing_template": "1.21 Flow Armor Trim Smithing Template",
-    "bolt_armor_trim_smithing_template": "1.21 Bolt Armor Trim Smithing Template",
-    "flow_pottery_sherd": "1.21 Flow Pottery Sherd",
-    "guster_pottery_sherd": "1.21 Guster Pottery Sherd",
-    "scrape_pottery_sherd": "1.21 Scrape Pottery Sherd",
-    "breeze_rod": "1.21 Breeze Rod",
-    "ominous_trial_key": "1.21 Ominous Trial Key",
-    "ominous_bottle": "1.21 Ominous Bottle"
-  },
   "sounds": {
     "entity.armadillo.eat": "entity.sniffer.eat",
     "entity.armadillo.hurt": "entity.llama.hurt",
@@ -118,11 +98,6 @@
     "bogged": "stray",
     "ominous_item_spawner": "text_display"
   },
-  "entitynames": {
-    "armadillo": "Armadillo",
-    "breeze_wind_charge": "Wind Charge",
-    "bogged": "Bogged"
-  },
   "attributes": {
     "generic.scale": "",
     "generic.step_height": "",
@@ -182,5 +157,25 @@
     "loot_table": "brigadier:string",
     "loot_predicate": "brigadier:string",
     "loot_modifier": "brigadier:string"
+  },
+  "custom_model_data": {
+    "armadillo_scute": 640,
+    "wolf_armor": 641,
+    "armadillo_spawn_egg": 642,
+    "vault": 643,
+    "wind_charge": 644,
+    "bogged_spawn_egg": 645,
+    "heavy_core": 646,
+    "mace": 647,
+    "flow_banner_pattern": 648,
+    "guster_banner_pattern": 649,
+    "flow_armor_trim_smithing_template": 650,
+    "bolt_armor_trim_smithing_template": 651,
+    "flow_pottery_sherd": 652,
+    "guster_pottery_sherd": 653,
+    "scrape_pottery_sherd": 654,
+    "breeze_rod": 655,
+    "ominous_trial_key": 656,
+    "ominous_bottle": 657
   }
 }
