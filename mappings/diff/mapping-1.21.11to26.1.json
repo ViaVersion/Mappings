@@ -5,6 +5,12 @@
     "crafting_special_tippedarrow": ""
   },
   "tags": {
+    "fluid": {
+      "supports_sugar_cane_adjacently": [
+        1,
+        2
+      ]
+    },
     "block": {
       "supports_azalea": [
         "dirt",

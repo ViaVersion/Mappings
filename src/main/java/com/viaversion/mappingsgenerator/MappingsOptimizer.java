@@ -513,26 +513,26 @@ public final class MappingsOptimizer {
             final String type = entry.getKey();
             tagsTag.put(type, tag);
 
-            final String typeKey = switch (type) {
-                case "block" -> "blocks";
-                case "item" -> "items";
-                case "entity_type" -> "entities";
-                case "enchantment" -> "enchantments";
-                default -> throw new IllegalArgumentException("Registry type not supported: " + type);
-            };
-            if (!mappedObject.has(typeKey)) {
-                throw new IllegalArgumentException("Could not find mapped object for " + typeKey);
-            }
-
-            final JsonArray typeElements = mappedObject.get(typeKey).getAsJsonArray();
-            final Object2IntMap<String> typeMap = MappingsLoader.arrayToMap(typeElements);
+            // Resolved when a string element needs mapping
+            Object2IntMap<String> typeMap = null;
 
             for (final Map.Entry<String, JsonElement> tagEntry : object.entrySet()) {
                 final JsonArray elements = tagEntry.getValue().getAsJsonArray();
                 final int[] tagIds = new int[elements.size()];
                 final String tagName = tagEntry.getKey();
                 for (int i = 0; i < elements.size(); i++) {
-                    final String element = elements.get(i).getAsString();
+                    final JsonElement rawElement = elements.get(i);
+                    if (rawElement.isJsonPrimitive() && rawElement.getAsJsonPrimitive().isNumber()) {
+                        // Allow passing raw ids (for simple, hardcoded registries that don't need to be present in mapping data)
+                        tagIds[i] = rawElement.getAsInt();
+                        continue;
+                    }
+
+                    if (typeMap == null) {
+                        typeMap = resolveTypeMap(type);
+                    }
+
+                    final String element = rawElement.getAsString();
                     final int mappedId = typeMap.getInt(element.replace("minecraft:", ""));
                     if (mappedId == -1) {
                         LOGGER.error("Could not find id for {}", element);
@@ -549,6 +549,22 @@ public final class MappingsOptimizer {
         if (!tagsTag.isEmpty()) {
             output.put("tags", tagsTag);
         }
+    }
+
+    private Object2IntMap<String> resolveTypeMap(final String type) {
+        final String typeKey = switch (type) {
+            case "block" -> "blocks";
+            case "item" -> "items";
+            case "entity_type" -> "entities";
+            case "enchantment" -> "enchantments";
+            default -> throw new IllegalArgumentException("Registry type not supported: " + type);
+        };
+        if (!mappedObject.has(typeKey)) {
+            throw new IllegalArgumentException("Could not find mapped object for " + typeKey);
+        }
+
+        final JsonArray typeElements = mappedObject.get(typeKey).getAsJsonArray();
+        return MappingsLoader.arrayToMap(typeElements);
     }
 
     /**
