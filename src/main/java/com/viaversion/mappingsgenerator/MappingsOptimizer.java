@@ -24,15 +24,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.viaversion.mappingsgenerator.MappingsLoader.MappingsResult;
 import com.viaversion.mappingsgenerator.util.JsonConverter;
+import com.viaversion.mappingsgenerator.util.VarInts;
 import com.viaversion.mappingsgenerator.util.Version;
 import com.viaversion.nbt.io.NBTIO;
 import com.viaversion.nbt.io.TagWriter;
+import com.viaversion.nbt.tag.ByteArrayTag;
 import com.viaversion.nbt.tag.CompoundTag;
 import com.viaversion.nbt.tag.IntArrayTag;
 import com.viaversion.nbt.tag.IntTag;
 import com.viaversion.nbt.tag.ListTag;
 import com.viaversion.nbt.tag.StringTag;
 import com.viaversion.nbt.tag.Tag;
+import it.unimi.dsi.fastutil.bytes.ByteArrayList;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -55,7 +58,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class MappingsOptimizer {
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     public static final byte DIRECT_ID = 0;
     public static final byte SHIFTS_ID = 1;
     public static final byte CHANGES_ID = 2;
@@ -328,6 +331,7 @@ public final class MappingsOptimizer {
 
     public void saveIdentifierFiles(final String version, final JsonObject object) throws IOException {
         final CompoundTag identifiers = new CompoundTag();
+        identifiers.putInt("version", VERSION);
         storeIdentifierIndexes(identifiers, object, "entities");
         storeIdentifierIndexes(identifiers, object, "items");
         storeIdentifierIndexes(identifiers, object, "sounds");
@@ -341,7 +345,7 @@ public final class MappingsOptimizer {
         storeIdentifierIndexes(identifiers, object, "blockentities");
 
         // No need to save the same identifiers multiple times if one version appears in multiple runs
-        if (runContext.markIdentifierFileSaved(version) && !identifiers.isEmpty()) {
+        if (runContext.markIdentifierFileSaved(version) && identifiers.size() > 1) {
             final Path outputDir = (specialFrom || specialTo) ? OUTPUT_DIR.resolve("special") : OUTPUT_DIR;
             final Path outputPath = outputDir.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(version));
 
@@ -421,21 +425,18 @@ public final class MappingsOptimizer {
         );
 
         final CompoundTag changedTag = new CompoundTag();
-        final int[] unmapped = new int[map.size()];
-        final int[] mapped = new int[map.size()];
-        int i = 0;
-        for (final Int2IntMap.Entry entry : map.int2IntEntrySet()) {
-            unmapped[i] = entry.getIntKey();
-            mapped[i] = entry.getIntValue();
-            i++;
+        final int[] unmapped = map.keySet().toIntArray();
+        Arrays.sort(unmapped);
+        final int[] mapped = new int[unmapped.length];
+        for (int i = 0; i < unmapped.length; i++) {
+            mapped[i] = map.get(unmapped[i]);
         }
 
         changedTag.putByte("id", MappingsOptimizer.CHANGES_ID);
         changedTag.putByte("nofill", (byte) 1);
         changedTag.putInt("size", size);
         changedTag.putInt("mappedSize", mappedIdentifiers.size());
-        changedTag.put("at", new IntArrayTag(unmapped));
-        changedTag.put("val", new IntArrayTag(mapped));
+        changedTag.put("val", atValuePairs(unmapped, mapped));
         output.put(outputKey, changedTag);
     }
 
@@ -679,37 +680,79 @@ public final class MappingsOptimizer {
             return;
         }
 
-        final int changedFormatSize = approximateChangedFormatSize(result);
-        final int shiftFormatSize = approximateShiftFormatSize(result);
-        final int plainFormatSize = mappings.length;
-        if (changedFormatSize < plainFormatSize && changedFormatSize < shiftFormatSize) {
-            writeChangedFormat(tag, result, key, numberOfChanges);
-            runContext.countStorageStrategy(CHANGES_ID);
-        } else if (shiftFormatSize < changedFormatSize && shiftFormatSize < plainFormatSize) {
-            writeShiftFormat(tag, result, key);
-            runContext.countStorageStrategy(SHIFTS_ID);
+        // Compare output sizes to pick the most optimal strategy.
+        // The whole run is so fast that it's free to just do the actual encode runs.
+        final ByteArrayTag directValues = directValues(mappings);
+        final ByteArrayTag changedValues = changedValues(result, numberOfChanges);
+        final ByteArrayTag shiftValues = shiftValues(result, key);
+        final byte id;
+        final ByteArrayTag values;
+        if (directValues.length() <= changedValues.length() && directValues.length() <= shiftValues.length()) {
+            LOGGER.debug("{}: Storing directly", key);
+            id = DIRECT_ID;
+            values = directValues;
+        } else if (changedValues.length() <= shiftValues.length()) {
+            LOGGER.debug("{}: Storing as changed and mapped arrays", key);
+            id = CHANGES_ID;
+            values = changedValues;
         } else {
-            tag.putByte("id", DIRECT_ID);
-            tag.put("val", new IntArrayTag(mappings));
-            runContext.countStorageStrategy(DIRECT_ID);
+            LOGGER.debug("{}: Storing as shifts", key);
+            id = SHIFTS_ID;
+            values = shiftValues;
         }
+
+        tag.putByte("id", id);
+        tag.putInt("size", mappings.length);
+        tag.put("val", values);
+        runContext.countStorageStrategy(id);
     }
 
     /**
-     * Writes compact int to int mappings as changed values to the given tag.
+     * Packs full mapped ids as zigzag varints of the difference to the previous mapped id.
      *
-     * @param tag             tag to write to
-     * @param result          result with int to int mappings
-     * @param key             key to write to
-     * @param numberOfChanges number of changed mappings
+     * @param mappings the mappings to pack
+     * @return the packed mappings
      */
-    private static void writeChangedFormat(final CompoundTag tag, final MappingsResult result, final String key, final int numberOfChanges) {
-        // Put two intarrays of only changed ids instead of adding an entry for every single identifier
-        LOGGER.debug("{}: Storing as changed and mapped arrays", key);
-        final int[] mappings = result.mappings();
-        tag.putByte("id", CHANGES_ID);
-        tag.putInt("size", mappings.length);
+    static ByteArrayTag directValues(final int[] mappings) {
+        final ByteArrayList out = new ByteArrayList();
+        int prev = 0;
+        for (final int mappedId : mappings) {
+            VarInts.writeZigZag(out, mappedId - prev);
+            prev = mappedId;
+        }
+        return new ByteArrayTag(out.toByteArray());
+    }
 
+    /**
+     * Packs id and value pairs as varints. The id is stored as the difference to the previous id
+     * (ids always have to be ascending), the value as the zigzag difference to the previous value.
+     *
+     * @param at     the ids to pack
+     * @param values the values to pack
+     * @return the packed mappings
+     */
+    static ByteArrayTag atValuePairs(final int[] at, final int[] values) {
+        final ByteArrayList out = new ByteArrayList();
+        int prevAt = -1;
+        int prevValue = 0;
+        for (int i = 0; i < at.length; i++) {
+            VarInts.write(out, at[i] - prevAt - 1);
+            VarInts.writeZigZag(out, values[i] - prevValue);
+            prevAt = at[i];
+            prevValue = values[i];
+        }
+        return new ByteArrayTag(out.toByteArray());
+    }
+
+    /**
+     * Packs only the changed ids and their mapped values instead of an entry for every single identifier.
+     *
+     * @param result          result with int to int mappings
+     * @param numberOfChanges number of changed mappings
+     * @return the packed changed mappings
+     */
+    static ByteArrayTag changedValues(final MappingsResult result, final int numberOfChanges) {
+        final int[] mappings = result.mappings();
         final int[] unmapped = new int[numberOfChanges];
         final int[] mapped = new int[numberOfChanges];
         int index = 0;
@@ -726,23 +769,18 @@ public final class MappingsOptimizer {
             throw new IllegalStateException("Index " + index + " does not equal number of changes " + numberOfChanges);
         }
 
-        tag.put("at", new IntArrayTag(unmapped));
-        tag.put("val", new IntArrayTag(mapped));
+        return atValuePairs(unmapped, mapped);
     }
 
     /**
-     * Writes compact int to int mappings as shifted values to the given tag.
+     * Packs the ids at which the mapped ids no longer shift by 1 from the previous mapped id.
      *
-     * @param tag    tag to write to
      * @param result result with int to int mappings
      * @param key    key to write to
+     * @return the packed shifted mappings
      */
-    private static void writeShiftFormat(final CompoundTag tag, final MappingsResult result, final String key) {
-        LOGGER.debug("{}: Storing as shifts", key);
+    static ByteArrayTag shiftValues(final MappingsResult result, final String key) {
         final int[] mappings = result.mappings();
-        tag.putByte("id", SHIFTS_ID);
-        tag.putInt("size", mappings.length);
-
         final int[] shiftsAt = new int[result.shiftChanges()];
         final int[] shiftsTo = new int[result.shiftChanges()];
 
@@ -767,22 +805,11 @@ public final class MappingsOptimizer {
             throw new IllegalStateException("Index " + index + " does not equal number of changes " + result.shiftChanges() + " for " + key);
         }
 
-        tag.put("at", new IntArrayTag(shiftsAt));
-        tag.put("to", new IntArrayTag(shiftsTo));
+        return atValuePairs(shiftsAt, shiftsTo);
     }
 
     public static void write(final CompoundTag tag, final Path path) throws IOException {
         TAG_WRITER.write(path, tag, false);
-    }
-
-    private static int approximateChangedFormatSize(final MappingsResult result) {
-        // Length of two arrays + more approximate length for extra tags
-        return (result.mappings().length - result.identityMappings()) * 2 + 10;
-    }
-
-    private static int approximateShiftFormatSize(final MappingsResult result) {
-        // One entry in two arrays each time the id is not shifted by 1 from the last id + more approximate length for extra tags
-        return result.shiftChanges() * 2 + 10;
     }
 
     public void setErrorStrategy(final ErrorStrategy errorStrategy) {

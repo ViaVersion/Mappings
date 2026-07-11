@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("com.gradleup.shadow") version "9.4.2"
+    id("com.gradleup.shadow") version "9.5.1"
 }
 
 repositories {
@@ -12,7 +12,7 @@ dependencies {
     api("com.google.code.gson:gson:2.14.0")
     api("com.viaversion:nbt:5.1.2")
     api("it.unimi.dsi:fastutil:8.5.18")
-    api("ch.qos.logback:logback-classic:1.5.34")
+    api("ch.qos.logback:logback-classic:1.5.35")
     compileOnly("org.jetbrains:annotations:26.1.0")
     // Uncomment to manually run mappings gen in ide
     // compileOnly(files("server.jar"))
@@ -22,7 +22,7 @@ dependencies {
 }
 
 group = "com.viaversion"
-version = "4.3.0"
+version = "5.0.0"
 description = "MappingsGenerator"
 java.sourceCompatibility = JavaVersion.VERSION_21
 

@@ -5,9 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.viaversion.mappingsgenerator.MappingsLoader;
 import com.viaversion.mappingsgenerator.MappingsOptimizer;
+import com.viaversion.mappingsgenerator.util.IdRanges;
 import com.viaversion.nbt.io.NBTIO;
 import com.viaversion.nbt.tag.CompoundTag;
-import com.viaversion.nbt.tag.IntArrayTag;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import java.io.IOException;
@@ -30,9 +30,8 @@ public final class Fluids26_1 {
             }
             i++;
         }
-        final IntArrayTag arrayTag = new IntArrayTag(list.toIntArray());
         final CompoundTag tag = new CompoundTag();
-        tag.put("fluids", arrayTag);
+        tag.put("fluids", IdRanges.encode(list));
         NBTIO.writer().named().write(MappingsOptimizer.OUTPUT_DIR.resolve("extra/fluids-26.1.nbt"), tag, false);
     }
 }

@@ -23,16 +23,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.viaversion.mappingsgenerator.MappingsLoader;
 import com.viaversion.mappingsgenerator.MappingsOptimizer;
-import com.viaversion.nbt.tag.ByteArrayTag;
+import com.viaversion.mappingsgenerator.util.IdRanges;
 import com.viaversion.nbt.tag.CompoundTag;
-import com.viaversion.nbt.tag.IntArrayTag;
 import com.viaversion.nbt.tag.ListTag;
-import com.viaversion.nbt.tag.ShortTag;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,93 +47,109 @@ public final class BlockConnections {
         final JsonArray blockstates = MappingsLoader.load("mapping-1.13.json").getAsJsonArray("blockstates");
         final Object2IntMap<String> statesMap = new Object2IntOpenHashMap<>();
         statesMap.defaultReturnValue(-1);
+        final Map<String, IntList> blockStates = new HashMap<>();
         for (int id = 0; id < blockstates.size(); id++) {
-            statesMap.put(blockstates.get(id).getAsString(), id);
+            final String state = blockstates.get(id).getAsString();
+            statesMap.put(state, id);
+
+            final int propertiesIndex = state.indexOf('[');
+            if (propertiesIndex != -1) {
+                blockStates.computeIfAbsent(state.substring(0, propertiesIndex), $ -> new IntArrayList()).add(id);
+            }
         }
 
+        // Store each unique connection profile once, along with the ranges of block state ids it applies to,
+        // instead of writing the connection data for every single block state
         final JsonObject object = MappingsLoader.load("extra/blockConnections.json");
-        final CompoundTag tag = new CompoundTag();
-        ListTag<CompoundTag> list = new ListTag<>(CompoundTag.class);
-        tag.put("data", list);
+        final Map<CompoundTag, IntList> profiles = new LinkedHashMap<>();
+        final Int2ObjectMap<CompoundTag> stateProfiles = new Int2ObjectOpenHashMap<>();
         for (final Map.Entry<String, JsonElement> entry : object.entrySet()) {
-            final CompoundTag blockTag = new CompoundTag();
+            final CompoundTag profile = toProfileTag(entry.getKey(), entry.getValue().getAsJsonObject());
             final int blockStateId = statesMap.getInt(entry.getKey());
             if (blockStateId != -1) {
-                blockTag.put("id", new ShortTag((short) blockStateId));
+                addStateId(profiles, stateProfiles, profile, blockStateId, entry.getKey());
             } else {
                 // Used for fences and glass panes, so the json file doesn't need to contain every single block state
-                final int[] ids = statesMap.object2IntEntrySet().stream().filter(e -> {
-                    final int propertiesIndex = e.getKey().indexOf('[');
-                    if (propertiesIndex == -1) {
-                        return false;
-                    }
-
-                    return e.getKey().substring(0, propertiesIndex).equals(entry.getKey());
-                }).mapToInt(Object2IntMap.Entry::getIntValue).toArray();
-
-                if (ids.length == 0) {
+                final IntList stateIds = blockStates.get(entry.getKey());
+                if (stateIds == null) {
                     throw new IllegalArgumentException("Invalid block state " + entry.getKey());
                 }
-
-                blockTag.put("ids", new IntArrayTag(ids));
-            }
-
-            list.add(blockTag);
-
-            final JsonObject blockObject = entry.getValue().getAsJsonObject();
-            for (final Map.Entry<String, JsonElement> blockEntry : blockObject.entrySet()) {
-                final byte connectionTypeId = connectionTypeToId(blockEntry.getKey());
-                final JsonObject valuesObject = blockEntry.getValue().getAsJsonObject();
-                if (valuesObject.size() != 4) {
-                    throw new IllegalArgumentException("Invalid block connection " + blockEntry.getKey());
+                for (final int stateId : stateIds) {
+                    addStateId(profiles, stateProfiles, profile, stateId, entry.getKey());
                 }
-
-                final IntList faces = new IntArrayList(4);
-                for (final Map.Entry<String, JsonElement> faceEntry : valuesObject.entrySet()) {
-                    if (faceEntry.getValue().getAsBoolean()) {
-                        final byte faceId = blockFaceToId(faceEntry.getKey());
-                        faces.add(faceId);
-                    }
-                }
-
-                if (faces.isEmpty()) {
-                    throw new IllegalArgumentException("Invalid block connection (empty faces) " + blockEntry.getKey());
-                }
-
-                final byte[] facesArray = new byte[faces.size()];
-                for (int i = 0; i < facesArray.length; i++) {
-                    facesArray[i] = (byte) faces.getInt(i);
-                }
-                blockTag.put(Integer.toString(connectionTypeId), new ByteArrayTag(facesArray));
-            }
-
-            if (blockTag.size() == 1) {
-                throw new IllegalArgumentException("Invalid block state (blockTag only contains id tag?) " + entry.getKey());
-            }
-
-            // Before 1.12, stairs did not connect to fences
-            if (entry.getKey().contains("stairs[")) {
-                blockTag.put(Integer.toString(connectionTypeToId("allFalseIfStairPre1_12")), new ByteArrayTag());
             }
         }
+
+        final ListTag<CompoundTag> profilesTag = new ListTag<>(CompoundTag.class);
+        for (final Map.Entry<CompoundTag, IntList> entry : profiles.entrySet()) {
+            final CompoundTag profileTag = entry.getKey().copy();
+            profileTag.put("ids", IdRanges.encode(entry.getValue()));
+            profilesTag.add(profileTag);
+        }
+
+        final CompoundTag tag = new CompoundTag();
+        tag.put("profiles", profilesTag);
 
         addOccludingBlockStates(tag, statesMap);
         MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("extra/blockConnections.nbt"));
     }
 
+    private static void addStateId(final Map<CompoundTag, IntList> profiles, final Int2ObjectMap<CompoundTag> stateProfiles, final CompoundTag profile, final int stateId, final String key) {
+        final CompoundTag existingProfile = stateProfiles.putIfAbsent(stateId, profile);
+        if (existingProfile == null) {
+            profiles.computeIfAbsent(profile, $ -> new IntArrayList()).add(stateId);
+        } else if (!existingProfile.equals(profile)) {
+            throw new IllegalArgumentException("Conflicting connection profiles for state id " + stateId + " (from " + key + ")");
+        }
+    }
+
+    private static CompoundTag toProfileTag(final String state, final JsonObject blockObject) {
+        final CompoundTag profile = new CompoundTag();
+        for (final Map.Entry<String, JsonElement> blockEntry : blockObject.entrySet()) {
+            final byte connectionTypeId = connectionTypeToId(blockEntry.getKey());
+            final JsonObject valuesObject = blockEntry.getValue().getAsJsonObject();
+            if (valuesObject.size() != 4) {
+                throw new IllegalArgumentException("Invalid block connection " + blockEntry.getKey());
+            }
+
+            byte faces = 0;
+            for (final Map.Entry<String, JsonElement> faceEntry : valuesObject.entrySet()) {
+                if (faceEntry.getValue().getAsBoolean()) {
+                    faces |= (byte) (1 << blockFaceToId(faceEntry.getKey()));
+                }
+            }
+
+            if (faces == 0) {
+                throw new IllegalArgumentException("Invalid block connection (empty faces) " + blockEntry.getKey());
+            }
+
+            profile.putByte(Integer.toString(connectionTypeId), faces);
+        }
+
+        if (profile.isEmpty()) {
+            throw new IllegalArgumentException("Invalid block state (no connection data?) " + state);
+        }
+
+        // Before 1.12, stairs did not connect to fences
+        if (state.contains("stairs[")) {
+            profile.putByte(Integer.toString(connectionTypeToId("allFalseIfStairPre1_12")), (byte) 0);
+        }
+        return profile;
+    }
+
     private static void addOccludingBlockStates(final CompoundTag tag, final Object2IntMap<String> statesMap) throws IOException {
         final JsonArray states = MappingsLoader.load("extra/occluding-states-1.13.json", JsonArray.class);
-        final int[] value = new int[states.size()];
-        int i = 0;
+        final IntList ids = new IntArrayList(states.size());
         for (final JsonElement stateElement : states) {
             final String state = stateElement.getAsString();
             final int id = statesMap.getInt(state);
             if (id == -1) {
                 throw new IllegalArgumentException("Invalid occluding state " + state);
             }
-            value[i++] = id;
+            ids.add(id);
         }
-        tag.put("occluding-states", new IntArrayTag(value));
+
+        tag.put("occluding-states", IdRanges.encode(ids));
     }
 
     private static byte connectionTypeToId(final String type) {
