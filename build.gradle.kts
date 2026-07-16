@@ -53,7 +53,6 @@ tasks {
         // Object types
         exclude("it/unimi/dsi/fastutil/*/*Reference*")
         exclude("it/unimi/dsi/fastutil/*/*Boolean*")
-        exclude("it/unimi/dsi/fastutil/*/*Byte*")
         exclude("it/unimi/dsi/fastutil/*/*Short*")
         exclude("it/unimi/dsi/fastutil/*/*Float*")
         exclude("it/unimi/dsi/fastutil/*/*Double*")
