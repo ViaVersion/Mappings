@@ -176,13 +176,23 @@
   "data_component_type": {
     "provides_pottery_pattern": "",
     "block_transformer": "",
-    "compostable": ""
+    "compostable": "",
+    "villager_food": "",
+    "cooking_fuel": "",
+    "brewing_fuel": "",
+    "mob_visibility": "",
+    "sign_text_front": "",
+    "sign_text_back": "",
+    "waxed": "",
+    "cushion/color": ""
   },
   "recipe_serializers": {
     "brewing": ""
   },
   "environment_attribute": {
-    "gameplay/straw_bed_rule": ""
+    "gameplay/straw_bed_rule": "",
+    "gameplay/natural_mob_spawns": "",
+    "gameplay/creature_world_gen_spawn_probability": ""
   },
   "custom_model_data": {
     "poplar_planks": 865,

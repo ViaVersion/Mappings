@@ -39844,6 +39844,7 @@
     "swing_animation",
     "additional_trade_cost",
     "block_transformer",
+    "villager_food",
     "stored_enchantments",
     "dye",
     "dyed_color",
@@ -39885,6 +39886,9 @@
     "container_loot",
     "break_sound",
     "compostable",
+    "cooking_fuel",
+    "brewing_fuel",
+    "mob_visibility",
     "villager/variant",
     "wolf/variant",
     "wolf/sound_variant",
@@ -39914,7 +39918,11 @@
     "cat/collar",
     "sheep/color",
     "shulker/color",
-    "provides_pottery_pattern"
+    "provides_pottery_pattern",
+    "sign_text_front",
+    "sign_text_back",
+    "waxed",
+    "cushion/color"
   ],
   "environment_attribute": [
     "visual/fog_color",
@@ -39964,6 +39972,8 @@
     "gameplay/bees_stay_in_hive",
     "gameplay/monsters_burn",
     "gameplay/can_pillager_patrol_spawn",
+    "gameplay/natural_mob_spawns",
+    "gameplay/creature_world_gen_spawn_probability",
     "gameplay/villager_activity",
     "gameplay/baby_villager_activity"
   ]

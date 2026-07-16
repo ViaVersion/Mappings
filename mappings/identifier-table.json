@@ -3608,7 +3608,15 @@
     "sulfur_cube_content",
     "provides_pottery_pattern",
     "block_transformer",
-    "compostable"
+    "compostable",
+    "villager_food",
+    "cooking_fuel",
+    "brewing_fuel",
+    "mob_visibility",
+    "sign_text_front",
+    "sign_text_back",
+    "waxed",
+    "cushion/color"
   ],
   "slot_displays": [
     "empty",
