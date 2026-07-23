@@ -4,5 +4,44 @@
   },
   "argumenttypes": {
     "color": "team_color"
+  },
+  "tags": {
+    "block": {
+      "shears_minor_breaking_speed": [
+        "glow_lichen",
+        "vine"
+      ],
+      "shears_major_breaking_speed": [
+        "white_wool",
+        "orange_wool",
+        "magenta_wool",
+        "light_blue_wool",
+        "yellow_wool",
+        "lime_wool",
+        "pink_wool",
+        "gray_wool",
+        "light_gray_wool",
+        "cyan_wool",
+        "purple_wool",
+        "blue_wool",
+        "brown_wool",
+        "green_wool",
+        "red_wool",
+        "black_wool"
+      ],
+      "shears_extreme_breaking_speed": [
+        "jungle_leaves",
+        "oak_leaves",
+        "spruce_leaves",
+        "pale_oak_leaves",
+        "dark_oak_leaves",
+        "acacia_leaves",
+        "birch_leaves",
+        "azalea_leaves",
+        "flowering_azalea_leaves",
+        "mangrove_leaves",
+        "cherry_leaves"
+      ]
+    }
   }
 }
