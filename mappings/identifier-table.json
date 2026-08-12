@@ -1699,7 +1699,10 @@
     "mineshaft_map",
     "desert_pyramid_map",
     "abandoned_campsite_map",
-    "warm_ocean_ruins_map"
+    "warm_ocean_ruins_map",
+    "buried_ancient_city_map",
+    "buried_mineshaft_map",
+    "abandoned_camp_map"
   ],
   "blocks": [
     "air",

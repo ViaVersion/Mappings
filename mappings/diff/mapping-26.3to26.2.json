@@ -246,7 +246,10 @@
     "mineshaft_map": "",
     "desert_pyramid_map": "",
     "abandoned_campsite_map": "",
-    "warm_ocean_ruins_map": ""
+    "warm_ocean_ruins_map": "",
+    "buried_ancient_city_map": "",
+    "buried_mineshaft_map": "",
+    "abandoned_camp_map": ""
   },
   "sounds": {
     "block.shelf_mushroom.break": "",
@@ -432,6 +435,9 @@
     "mineshaft_map": 982,
     "desert_pyramid_map": 983,
     "abandoned_campsite_map": 984,
-    "warm_ocean_ruins_map": 985
+    "warm_ocean_ruins_map": 985,
+    "buried_ancient_city_map": 986,
+    "buried_mineshaft_map": 987,
+    "abandoned_camp_map": 988
   }
 }
