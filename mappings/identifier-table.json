@@ -1699,7 +1699,12 @@
     "warm_ocean_ruins_map",
     "buried_ancient_city_map",
     "buried_mineshaft_map",
-    "abandoned_camp_map"
+    "abandoned_camp_map",
+    "ocean_monument_map",
+    "woodland_mansion_map",
+    "buried_trial_chambers_map",
+    "jungle_pyramid_map",
+    "swamp_hut_map"
   ],
   "blocks": [
     "air",
@@ -3452,7 +3457,8 @@
     "team_color",
     "slot_source",
     "feature",
-    "swing_animation"
+    "swing_animation",
+    "number_provider"
   ],
   "attributes": [
     "armor",

@@ -247,7 +247,12 @@
     "warm_ocean_ruins_map": "",
     "buried_ancient_city_map": "",
     "buried_mineshaft_map": "",
-    "abandoned_camp_map": ""
+    "abandoned_camp_map": "",
+    "ocean_monument_map": "",
+    "woodland_mansion_map": "",
+    "buried_trial_chambers_map": "",
+    "jungle_pyramid_map": "",
+    "swamp_hut_map": ""
   },
   "sounds": {
     "block.shelf_mushroom.break": "",
@@ -282,7 +287,8 @@
   "argumenttypes": {
     "slot_source": "brigadier:string",
     "feature": "brigadier:string",
-    "swing_animation": ""
+    "swing_animation": "",
+    "number_provider": ""
   },
   "entities": {
     "poplar_boat": "birch_boat",
@@ -433,6 +439,11 @@
     "warm_ocean_ruins_map": 985,
     "buried_ancient_city_map": 986,
     "buried_mineshaft_map": 987,
-    "abandoned_camp_map": 988
+    "abandoned_camp_map": 988,
+    "ocean_monument_map": 989,
+    "woodland_mansion_map": 990,
+    "buried_trial_chambers_map": 991,
+    "jungle_pyramid_map": 992,
+    "swamp_hut_map": 993
   }
 }
