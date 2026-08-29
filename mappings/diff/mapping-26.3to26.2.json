@@ -282,8 +282,8 @@
   "argumenttypes": {
     "slot_source": "brigadier:string",
     "feature": "brigadier:string",
-    "swing_animation": "",
-    "number_provider": ""
+    "swing_animation": "brigadier:string",
+    "number_provider": "brigadier:string"
   },
   "entities": {
     "poplar_boat": "birch_boat",
