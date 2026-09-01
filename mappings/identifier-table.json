@@ -3458,7 +3458,6 @@
     "slot_source",
     "feature",
     "swing_animation",
-    "number_provider",
     "context_float_provider",
     "context_int_provider"
   ],

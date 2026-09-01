@@ -283,9 +283,8 @@
     "slot_source": "brigadier:string",
     "feature": "brigadier:string",
     "swing_animation": "brigadier:string",
-    "number_provider": "brigadier:string",
-    "context_float_provider": "",
-    "context_int_provider": ""
+    "context_float_provider": "brigadier:string",
+    "context_int_provider": "brigadier:string"
   },
   "entities": {
     "poplar_boat": "birch_boat",
