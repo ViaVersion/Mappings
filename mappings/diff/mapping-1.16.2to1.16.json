@@ -30,10 +30,7 @@
   "entities": {
     "piglin_brute": "piglin"
   },
-  "entitynames": {
-    "piglin_brute": "Piglin Brute"
-  },
-  "itemnames": {
-    "piglin_brute_spawn_egg": "1.16.2 Piglin Brute Spawn Egg"
+  "custom_model_data": {
+    "piglin_brute_spawn_egg": 298
   }
 }

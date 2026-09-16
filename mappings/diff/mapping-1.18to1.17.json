@@ -20,7 +20,7 @@
   "particles": {
     "block_marker": "barrier"
   },
-  "itemnames": {
-    "music_disc_otherside": "1.18 Otherside Music Disc"
+  "custom_model_data": {
+    "music_disc_otherside": 424
   }
 }

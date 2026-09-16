@@ -59,19 +59,6 @@
     "blue_egg": "egg",
     "brown_egg": "egg"
   },
-  "itemnames": {
-    "wildflowers": "1.21.5 Wildflowers",
-    "leaf_litter": "1.21.5 Leaf Litter",
-    "test_block": "1.21.5 Test Block",
-    "test_instance_block": "1.21.5 Test Instance Block",
-    "bush": "1.21.5 Bush",
-    "firefly_bush": "1.21.5 Firefly Bush",
-    "short_dry_grass": "1.21.5 Short Dry Grass",
-    "tall_dry_grass": "1.21.5 Tall Dry Grass",
-    "cactus_flower": "1.21.5 Cactus Flower",
-    "blue_egg": "1.21.5 Blue Egg",
-    "brown_egg": "1.21.5 Brown Egg"
-  },
   "sounds": {
     "block.iron.break": "block.metal.break",
     "block.iron.step": "block.metal.step",
@@ -185,5 +172,18 @@
         "wolf_armor"
       ]
     }
+  },
+  "custom_model_data": {
+    "wildflowers": 713,
+    "leaf_litter": 714,
+    "test_block": 715,
+    "test_instance_block": 716,
+    "bush": 717,
+    "firefly_bush": 718,
+    "short_dry_grass": 719,
+    "tall_dry_grass": 720,
+    "cactus_flower": 721,
+    "blue_egg": 722,
+    "brown_egg": 723
   }
 }

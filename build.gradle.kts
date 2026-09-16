@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("com.gradleup.shadow") version "9.4.2"
+    id("com.gradleup.shadow") version "9.6.1"
 }
 
 repositories {
@@ -10,19 +10,19 @@ repositories {
 
 dependencies {
     api("com.google.code.gson:gson:2.14.0")
-    api("com.viaversion:nbt:5.1.2")
+    api("com.viaversion:nbt:5.3.0")
     api("it.unimi.dsi:fastutil:8.5.18")
-    api("ch.qos.logback:logback-classic:1.5.34")
+    api("ch.qos.logback:logback-classic:1.6.3")
     compileOnly("org.jetbrains:annotations:26.1.0")
     // Uncomment to manually run mappings gen in ide
     // compileOnly(files("server.jar"))
 
-    testImplementation("org.junit.jupiter:junit-jupiter:6.1.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 group = "com.viaversion"
-version = "4.2.0"
+version = "5.0.0"
 description = "MappingsGenerator"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
@@ -53,7 +53,6 @@ tasks {
         // Object types
         exclude("it/unimi/dsi/fastutil/*/*Reference*")
         exclude("it/unimi/dsi/fastutil/*/*Boolean*")
-        exclude("it/unimi/dsi/fastutil/*/*Byte*")
         exclude("it/unimi/dsi/fastutil/*/*Short*")
         exclude("it/unimi/dsi/fastutil/*/*Float*")
         exclude("it/unimi/dsi/fastutil/*/*Double*")

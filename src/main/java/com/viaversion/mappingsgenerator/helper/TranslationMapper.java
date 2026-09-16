@@ -8,6 +8,8 @@ import com.viaversion.mappingsgenerator.util.PathUtil;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -28,8 +30,8 @@ final class TranslationMapper {
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
 
     public static void main(final String[] args) throws IOException {
-        final String oldVer = "1.21.9";
-        final String newVer = "1.21.11";
+        final String oldVer = "26.1.2";
+        final String newVer = "26.2-rc-2";
 
         final Map<String, String> oldTranslations = load(oldVer);
         final Set<String> oldValues = new HashSet<>(oldTranslations.values());
@@ -66,7 +68,7 @@ final class TranslationMapper {
             throw new IllegalArgumentException("File " + jarFile + " does not exist");
         }
 
-        final String contents;
+        final JsonObject object;
         try (final ZipFile file = new ZipFile(jarFile)) {
             ZipEntry langEntry = file.getEntry("assets/minecraft/lang/en_us.json");
             if (langEntry == null) {
@@ -74,19 +76,17 @@ final class TranslationMapper {
                 langEntry = file.getEntry("assets/minecraft/lang/en_us.lang");
                 if (langEntry != null) {
                     try (final InputStream inputStream = file.getInputStream(langEntry)) {
-                        contents = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+                        return loadLegacyTranslations(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
                     }
-                    return loadLegacyTranslations(contents);
                 }
                 throw new IllegalArgumentException("File " + jarFile + " does not contain en_us.json");
             }
 
-            try (final InputStream inputStream = file.getInputStream(langEntry)) {
-                contents = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            try (final Reader reader = new InputStreamReader(file.getInputStream(langEntry), StandardCharsets.UTF_8)) {
+                object = GSON.fromJson(reader, JsonObject.class);
             }
         }
 
-        final JsonObject object = GSON.fromJson(contents, JsonObject.class);
         final Map<String, String> translations = new LinkedHashMap<>();
         for (final Map.Entry<String, JsonElement> entry : object.entrySet()) {
             translations.put(entry.getKey(), entry.getValue().getAsString());

@@ -22,8 +22,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.viaversion.mappingsgenerator.MappingsLoader;
 import com.viaversion.mappingsgenerator.MappingsOptimizer;
+import com.viaversion.mappingsgenerator.util.IdRanges;
 import com.viaversion.nbt.tag.CompoundTag;
-import com.viaversion.nbt.tag.IntArrayTag;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -43,7 +43,7 @@ public final class MotionBlocking1_14 {
         }
 
         final JsonArray motionBlocking = MappingsLoader.load("extra/motion-blocking-1.14.json").getAsJsonArray("motion_blocking");
-        final int[] motionBlockingIds = new int[motionBlocking.size()];
+        final IntList motionBlockingIds = new IntArrayList(motionBlocking.size());
         for (int i = 0; i < motionBlocking.size(); i++) {
             final String state = motionBlocking.get(i).getAsString();
             final int mappedId = blockStateMap.getInt(state);
@@ -52,7 +52,7 @@ public final class MotionBlocking1_14 {
                 continue;
             }
 
-            motionBlockingIds[i] = mappedId;
+            motionBlockingIds.add(mappedId);
         }
 
         final IntList nonFullBlocks = new IntArrayList();
@@ -65,8 +65,8 @@ public final class MotionBlocking1_14 {
         }
 
         final CompoundTag tag = new CompoundTag();
-        tag.put("motionBlocking", new IntArrayTag(motionBlockingIds));
-        tag.put("nonFullBlocks", new IntArrayTag(nonFullBlocks.toArray(new int[0])));
+        tag.put("motionBlocking", IdRanges.encode(motionBlockingIds));
+        tag.put("nonFullBlocks", IdRanges.encode(nonFullBlocks));
         MappingsOptimizer.write(tag, MappingsOptimizer.OUTPUT_DIR.resolve("extra/heightmap-1.14.nbt"));
     }
 }

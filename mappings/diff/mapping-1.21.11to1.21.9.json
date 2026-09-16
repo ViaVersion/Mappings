@@ -18,25 +18,6 @@
     "parched_spawn_egg": "skeleton_spawn_egg",
     "netherite_horse_armor": "leather_horse_armor"
   },
-  "itemnames": {
-    "nautilus_spawn_egg": "1.21.11 Nautilus Spawn Egg",
-    "zombie_nautilus_spawn_egg": "1.21.11 Zombie Nautilus Spawn Egg",
-    "wooden_spear": "1.21.11 Wooden Spear",
-    "stone_spear": "1.21.11 Stone Spear",
-    "copper_spear": "1.21.11 Copper Spear",
-    "iron_spear": "1.21.11 Iron Spear",
-    "golden_spear": "1.21.11 Golden Spear",
-    "diamond_spear": "1.21.11 Diamond Spear",
-    "netherite_spear": "1.21.11 Netherite Spear",
-    "iron_nautilus_armor": "1.21.11 Iron Nautilus Armor",
-    "golden_nautilus_armor": "1.21.11 Golden Nautilus Armor",
-    "diamond_nautilus_armor": "1.21.11 Diamond Nautilus Armor",
-    "netherite_nautilus_armor": "1.21.11 Netherite Nautilus Armor",
-    "copper_nautilus_armor": "1.21.11 Copper Nautilus Armor",
-    "camel_husk_spawn_egg": "1.21.11 Camel Husk Spawn Egg",
-    "parched_spawn_egg": "1.21.11 Parched Spawn Egg",
-    "netherite_horse_armor": "1.21.11 Netherite Horse Armor"
-  },
   "sounds": {
     "item.armor.equip_nautilus": "item.armor.equip_wolf",
     "item.armor.unequip_nautilus": "item.armor.unequip_wolf",
@@ -113,12 +94,6 @@
     "camel_husk": "camel",
     "parched": "skeleton"
   },
-  "entitynames": {
-    "nautilus": "Nautilus",
-    "zombie_nautilus": "Zombie Nautilus",
-    "camel_husk": "Camel Husk",
-    "parched": "Parched"
-  },
   "data_component_type": {
     "use_effects": "",
     "minimum_attack_charge": "",
@@ -128,5 +103,24 @@
     "swing_animation": "",
     "zombie_nautilus/variant": "",
     "attack_range": ""
+  },
+  "custom_model_data": {
+    "nautilus_spawn_egg": 816,
+    "zombie_nautilus_spawn_egg": 817,
+    "wooden_spear": 818,
+    "stone_spear": 819,
+    "copper_spear": 820,
+    "iron_spear": 821,
+    "golden_spear": 822,
+    "diamond_spear": 823,
+    "netherite_spear": 824,
+    "iron_nautilus_armor": 825,
+    "golden_nautilus_armor": 826,
+    "diamond_nautilus_armor": 827,
+    "netherite_nautilus_armor": 828,
+    "copper_nautilus_armor": 829,
+    "camel_husk_spawn_egg": 830,
+    "parched_spawn_egg": 831,
+    "netherite_horse_armor": 832
   }
 }

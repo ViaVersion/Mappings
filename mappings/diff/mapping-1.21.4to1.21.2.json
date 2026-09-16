@@ -36,18 +36,6 @@
     "chiseled_resin_bricks": "chiseled_copper",
     "resin_brick": "copper_ingot"
   },
-  "itemnames": {
-    "open_eyeblossom": "1.21.4 Open Eyeblossom",
-    "closed_eyeblossom": "1.21.4 Closed Eyeblossom",
-    "resin_clump": "1.21.4 Resin Clump",
-    "resin_block": "1.21.4 Resin Block",
-    "resin_bricks": "1.21.4 Resin Bricks",
-    "resin_brick_stairs": "1.21.4 Resin Brick Stairs",
-    "resin_brick_slab": "1.21.4 Resin Brick Slab",
-    "resin_brick_wall": "1.21.4 Resin Brick Wall",
-    "chiseled_resin_bricks": "1.21.4 Chiseled Resin Bricks",
-    "resin_brick": "1.21.4 Resin Brick"
-  },
   "sounds": {
     "entity.creaking.twitch": "entity.creaking.sway",
     "block.eyeblossom.open_long": "",
@@ -68,5 +56,17 @@
   },
   "particles": {
     "pale_oak_leaves": "cherry_leaves"
+  },
+  "custom_model_data": {
+    "open_eyeblossom": 703,
+    "closed_eyeblossom": 704,
+    "resin_clump": 705,
+    "resin_block": 706,
+    "resin_bricks": 707,
+    "resin_brick_stairs": 708,
+    "resin_brick_slab": 709,
+    "resin_brick_wall": 710,
+    "chiseled_resin_bricks": 711,
+    "resin_brick": 712
   }
 }

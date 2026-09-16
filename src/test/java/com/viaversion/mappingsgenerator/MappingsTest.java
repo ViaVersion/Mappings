@@ -7,6 +7,6 @@ public class MappingsTest {
 
     @Test
     void testFilledStatus() throws IOException {
-        ManualRunner.runAll(ErrorStrategy.ERROR);
+        ManualRunner.regenerateNbtOutputFiles(ErrorStrategy.ERROR);
     }
 }

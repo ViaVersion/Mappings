@@ -74,19 +74,16 @@
     "landing_honey": "landing_lava",
     "falling_nectar": "falling_water"
   },
-  "entitynames": {
-    "bee": "Bee"
-  },
   "entities": {
     "bee": "pufferfish"
   },
-  "itemnames": {
-    "honey_bottle": "1.15 Honey Bottle",
-    "honeycomb": "1.15 Honeycomb",
-    "honeycomb_block": "1.15 Honeycomb Block",
-    "bee_nest": "1.15 Bee Nest",
-    "beehive": "1.15 Beehive",
-    "honey_block": "1.15 Honey Block",
-    "bee_spawn_egg": "1.15 Bee Spawn Egg"
+  "custom_model_data": {
+    "honey_bottle": 199,
+    "honeycomb": 200,
+    "honeycomb_block": 201,
+    "bee_nest": 202,
+    "beehive": 203,
+    "honey_block": 204,
+    "bee_spawn_egg": 205
   }
 }

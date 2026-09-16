@@ -285,15 +285,15 @@
   },
   "sounds": {
     "block.sponge.absorb": "",
-    "block.sponge.break": "",
-    "block.sponge.fall": "",
-    "block.sponge.hit": "",
-    "block.sponge.place": "",
-    "block.sponge.step": "",
-    "block.wet_sponge.break": "",
-    "block.wet_sponge.fall": "",
-    "block.wet_sponge.hit": "",
-    "block.wet_sponge.place": "",
-    "block.wet_sponge.step": ""
+    "block.sponge.break": "block.grass.break",
+    "block.sponge.fall": "block.grass.fall",
+    "block.sponge.hit": "block.grass.hit",
+    "block.sponge.place": "block.grass.place",
+    "block.sponge.step": "block.grass.step",
+    "block.wet_sponge.break": "block.grass.break",
+    "block.wet_sponge.fall": "block.grass.fall",
+    "block.wet_sponge.hit": "block.grass.hit",
+    "block.wet_sponge.place": "block.grass.place",
+    "block.wet_sponge.step": "block.grass.step"
   }
 }

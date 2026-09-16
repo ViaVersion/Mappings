@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.viaversion.mappingsgenerator.ErrorStrategy;
 import com.viaversion.mappingsgenerator.ManualRunner;
@@ -20,7 +21,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -64,11 +68,15 @@ public final class MappingUi {
         "data_component_type"
     };
 
+    private static final String[] BLOCKER_SECTIONS = {"blockstates", "items", "entities", "sounds"};
+    private static final int MAX_UNDO_HISTORY = 50;
+
     private final String defaultFrom;
     private final String defaultTo;
     private final AtomicBoolean regenerating = new AtomicBoolean();
     private final Map<String, JsonObject> mappingCache = new HashMap<>();
     private final Map<String, JsonArray> blockStateCache = new HashMap<>();
+    private final Deque<UndoEntry> undoHistory = new ArrayDeque<>();
 
     private MappingUi(final String defaultFrom, final String defaultTo) {
         this.defaultFrom = defaultFrom;
@@ -85,15 +93,46 @@ public final class MappingUi {
 
     private void start(final int port) throws IOException {
         final HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", port), 0);
-        server.createContext("/", this::handleIndex);
-        server.createContext("/api/versions", this::handleVersions);
-        server.createContext("/api/state", this::handleState);
-        server.createContext("/api/apply", this::handleApply);
-        server.createContext("/api/regenerate-nbt", this::handleRegenerateNbt);
-        server.createContext("/api/move-current-output", this::handleMoveCurrentOutput);
-        server.createContext("/api/move-identifiers", this::handleMoveIdentifiers);
+        server.createContext("/", safe(this::handleIndex));
+        server.createContext("/api/versions", safe(this::handleVersions));
+        server.createContext("/api/state", safe(this::handleState));
+        server.createContext("/api/apply", safe(this::handleApply));
+        server.createContext("/api/undo", safe(this::handleUndo));
+        server.createContext("/api/regenerate-nbt", safe(this::handleRegenerateNbt));
+        server.createContext("/api/move-current-output", safe(this::handleMoveCurrentOutput));
+        server.createContext("/api/move-identifiers", safe(this::handleMoveIdentifiers));
         server.start();
         System.out.println("UI running at: http://127.0.0.1:" + port + "/");
+    }
+
+    private static HttpHandler safe(final HttpHandler handler) {
+        return exchange -> {
+            try {
+                handler.handle(exchange);
+            } catch (final Exception e) {
+                final JsonObject response = new JsonObject();
+                response.addProperty("error", exceptionMessage(e));
+                try {
+                    send(exchange, 500, "application/json", GsonUtil.GSON.toJson(response));
+                } catch (final IOException ignored) {
+                    // Response was already partially sent
+                }
+            }
+        };
+    }
+
+    private static String exceptionMessage(final Throwable throwable) {
+        final StringBuilder message = new StringBuilder();
+        for (Throwable t = throwable; t != null; t = t.getCause()) {
+            if (!message.isEmpty()) {
+                message.append("\nCaused by: ");
+            }
+            message.append(t.getClass().getSimpleName());
+            if (t.getMessage() != null) {
+                message.append(": ").append(t.getMessage());
+            }
+        }
+        return message.toString();
     }
 
     private void handleIndex(final HttpExchange exchange) throws IOException {
@@ -133,7 +172,7 @@ public final class MappingUi {
         response.add("targetStates", blockStates(pair.to()));
         response.add("diffEntries", diffEntries(diffPath));
         response.add("simpleMappings", simpleMappings(pair, diffPath));
-        response.add("nameMappings", nameMappings(pair, diffPath));
+        response.addProperty("undoCount", undoHistory.size());
         send(exchange, 200, "application/json", GsonUtil.GSON.toJson(response));
     }
 
@@ -154,7 +193,7 @@ public final class MappingUi {
             send(exchange, 200, "application/json", GsonUtil.GSON.toJson(response));
         } catch (final Exception e) {
             final JsonObject response = new JsonObject();
-            response.addProperty("error", e.getClass().getSimpleName() + ": " + e.getMessage());
+            response.addProperty("error", exceptionMessage(e));
             send(exchange, 500, "application/json", GsonUtil.GSON.toJson(response));
         } finally {
             regenerating.set(false);
@@ -268,6 +307,7 @@ public final class MappingUi {
             return;
         }
 
+        final String priorContent = Files.exists(diffPath) ? Files.readString(diffPath) : null;
         final ApplyResult result;
         try {
             result = "blockstates".equals(section)
@@ -278,11 +318,58 @@ public final class MappingUi {
             return;
         }
 
+        if (result.written() != 0 || result.removed() != 0) {
+            pushUndo(diffPath, priorContent, string(request, "undoGroup"));
+        }
+
         final JsonObject response = new JsonObject();
         response.addProperty("written", result.written());
         response.addProperty("skipped", result.skipped());
         response.addProperty("removed", result.removed());
+        response.addProperty("undoCount", undoHistory.size());
         response.addProperty("path", diffPath.toString());
+        send(exchange, 200, "application/json", GsonUtil.GSON.toJson(response));
+    }
+
+    private void pushUndo(final Path path, final String content, final String group) {
+        undoHistory.push(new UndoEntry(path, content, group));
+        while (undoHistory.size() > MAX_UNDO_HISTORY) {
+            undoHistory.removeLast();
+        }
+    }
+
+    private void handleUndo(final HttpExchange exchange) throws IOException {
+        if (!method(exchange, RequestMethod.POST)) {
+            return;
+        }
+
+        final UndoEntry first = undoHistory.poll();
+        if (first == null) {
+            send(exchange, 404, "application/json", "{\"error\":\"Nothing to undo\"}");
+            return;
+        }
+
+        // Applies of one action share an undo group; the oldest snapshot per file wins
+        final Map<Path, String> contents = new LinkedHashMap<>();
+        contents.put(first.path(), first.content());
+        while (first.group() != null && !undoHistory.isEmpty() && first.group().equals(undoHistory.peek().group())) {
+            final UndoEntry entry = undoHistory.poll();
+            contents.put(entry.path(), entry.content());
+        }
+
+        final JsonArray restored = new JsonArray();
+        for (final Map.Entry<Path, String> entry : contents.entrySet()) {
+            if (entry.getValue() == null) {
+                Files.deleteIfExists(entry.getKey());
+            } else {
+                Files.writeString(entry.getKey(), entry.getValue(), StandardCharsets.UTF_8);
+            }
+            restored.add(entry.getKey().toString());
+        }
+
+        final JsonObject response = new JsonObject();
+        response.add("restored", restored);
+        response.addProperty("undoCount", undoHistory.size());
         send(exchange, 200, "application/json", GsonUtil.GSON.toJson(response));
     }
 
@@ -444,15 +531,6 @@ public final class MappingUi {
         return mappings;
     }
 
-    private JsonObject nameMappings(final VersionPair pair, final Path diffPath) throws IOException {
-        final JsonObject sourceMapping = loadMapping(pair.from());
-        final JsonObject diff = loadOrCreateDiff(diffPath);
-        final JsonObject mappings = new JsonObject();
-        addNameMapping(mappings, sourceMapping, diff, "itemnames", "items");
-        addNameMapping(mappings, sourceMapping, diff, "entitynames", "entities");
-        return mappings;
-    }
-
     private JsonObject loadMapping(final String version) throws IOException {
         final JsonObject cachedMapping = mappingCache.get(version);
         if (cachedMapping != null) {
@@ -515,9 +593,31 @@ public final class MappingUi {
             object.addProperty("from", pair.from());
             object.addProperty("to", pair.to());
             object.addProperty("backwards", pair.backwards());
+            object.addProperty("unresolved", unresolvedEntries(pair));
             array.add(object);
         }
         return array;
+    }
+
+    /**
+     * Returns the number of empty diff entries in sections that block an error-free nbt generation.
+     */
+    private int unresolvedEntries(final VersionPair pair) throws IOException {
+        final JsonObject diff = loadOrCreateDiff(diffPath(pair));
+        int count = 0;
+        for (final String section : BLOCKER_SECTIONS) {
+            final JsonObject sectionObject = diff.getAsJsonObject(section);
+            if (sectionObject == null) {
+                continue;
+            }
+
+            for (final Map.Entry<String, JsonElement> entry : sectionObject.entrySet()) {
+                if (entry.getValue().isJsonPrimitive() && entry.getValue().getAsString().isEmpty()) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     private static VersionPair defaultPair() throws IOException {
@@ -800,6 +900,9 @@ public final class MappingUi {
     }
 
     private record ApplyResult(int written, int skipped, int removed) {
+    }
+
+    private record UndoEntry(Path path, String content, String group) {
     }
 
     private record CopyResult(JsonArray copied, JsonArray missing) {

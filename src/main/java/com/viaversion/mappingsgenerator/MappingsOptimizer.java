@@ -21,22 +21,25 @@ package com.viaversion.mappingsgenerator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.viaversion.mappingsgenerator.MappingsLoader.MappingsResult;
 import com.viaversion.mappingsgenerator.util.JsonConverter;
+import com.viaversion.mappingsgenerator.util.VarInts;
 import com.viaversion.mappingsgenerator.util.Version;
 import com.viaversion.nbt.io.NBTIO;
 import com.viaversion.nbt.io.TagWriter;
+import com.viaversion.nbt.tag.ByteArrayTag;
 import com.viaversion.nbt.tag.CompoundTag;
 import com.viaversion.nbt.tag.IntArrayTag;
+import com.viaversion.nbt.tag.IntTag;
+import com.viaversion.nbt.tag.ListTag;
+import com.viaversion.nbt.tag.StringTag;
 import com.viaversion.nbt.tag.Tag;
+import it.unimi.dsi.fastutil.bytes.ByteArrayList;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -45,6 +48,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +58,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class MappingsOptimizer {
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     public static final byte DIRECT_ID = 0;
     public static final byte SHIFTS_ID = 1;
     public static final byte CHANGES_ID = 2;
@@ -61,6 +66,7 @@ public final class MappingsOptimizer {
     public static final Path MAPPINGS_DIR = Path.of("mappings");
     public static final Path OUTPUT_DIR = Path.of("output");
     public static final Path OUTPUT_BACKWARDS_DIR = OUTPUT_DIR.resolve("backwards");
+    public static final Path LAST_CUSTOM_MODEL_DATA_PATH = Path.of("last_custom_model_data.txt");
     public static final String DIFF_FILE_FORMAT = "mapping-%sto%s.json";
     public static final String MAPPING_FILE_FORMAT = "mapping-%s.json";
     public static final String OUTPUT_FILE_FORMAT = "mappings-%sto%s.nbt";
@@ -85,13 +91,9 @@ public final class MappingsOptimizer {
         "tags",
         "attributes"
     );
-    private static final int[] storageStrategyCounts = new int[IDENTITY_ID + 1];
-    private static final Set<String> savedIdentifierFiles = new HashSet<>();
-    static JsonObject globalIdentifiersObject;
-    static JsonObject fileHashesObject;
-
     private final Set<String> ignoreMissing = new HashSet<>(Arrays.asList("blocks", "statistics"));
     private final CompoundTag output = new CompoundTag();
+    private final RunContext runContext;
     private final String fromVersion;
     private final String toVersion;
     private final JsonObject unmappedObject;
@@ -102,7 +104,6 @@ public final class MappingsOptimizer {
     private ErrorStrategy errorStrategy = ErrorStrategy.WARN;
     private JsonObject diffObject;
     private boolean keepUnknownFields;
-    private boolean updatedGlobalIdentifiers;
 
     public static void main(final String[] args) throws IOException {
         if (args.length < 2) {
@@ -117,7 +118,8 @@ public final class MappingsOptimizer {
         final String from = args[0];
         final String to = args[1];
 
-        final MappingsOptimizer optimizer = new MappingsOptimizer(from, to);
+        final RunContext runContext = RunContext.load();
+        final MappingsOptimizer optimizer = new MappingsOptimizer(from, to, runContext);
         if (argsSet.contains("--generateDiffStubs")) {
             optimizer.writeDiffStubs();
         }
@@ -125,29 +127,11 @@ public final class MappingsOptimizer {
             optimizer.keepUnknownFields();
         }
         optimizer.optimizeAndWrite();
+        runContext.finish();
     }
 
-    static void loadGlobalFiles() throws IOException {
-        // Load and reuse identifiers file, being a global table across all versions
-        if (globalIdentifiersObject == null) {
-            globalIdentifiersObject = MappingsLoader.load(MAPPINGS_DIR, "identifier-table.json");
-        }
-        if (fileHashesObject == null) {
-            try (final BufferedReader reader = Files.newBufferedReader(Path.of("output_hashes.json"))) {
-                fileHashesObject = MappingsGenerator.GSON.fromJson(reader, JsonObject.class);
-            }
-        }
-    }
-
-    public static void resetRunState() {
-        Arrays.fill(storageStrategyCounts, 0);
-        savedIdentifierFiles.clear();
-        globalIdentifiersObject = null;
-        fileHashesObject = null;
-    }
-
-    public MappingsOptimizer(final String from, final String to) throws IOException {
-        this(from, to, false, false);
+    public MappingsOptimizer(final String from, final String to, final RunContext runContext) throws IOException {
+        this(from, to, false, false, runContext);
     }
 
     private Path getMappingsDir(final boolean special) {
@@ -166,9 +150,11 @@ public final class MappingsOptimizer {
      * @param to          version to map to
      * @param specialFrom If true, the special folders will be used for input
      * @param specialTo   If true, the special folders will be used for output
+     * @param runContext  state shared across the optimizer runs, to be finished after the last run
      * @see #optimizeAndWrite()
      */
-    public MappingsOptimizer(final String from, final String to, final boolean specialFrom, final boolean specialTo) throws IOException {
+    public MappingsOptimizer(final String from, final String to, final boolean specialFrom, final boolean specialTo, final RunContext runContext) throws IOException {
+        this.runContext = runContext;
         this.fromVersion = from;
         this.toVersion = to;
         this.specialFrom = specialFrom;
@@ -187,8 +173,6 @@ public final class MappingsOptimizer {
         }
 
         diffObject = MappingsLoader.load(getDiffDir(specialFrom || specialTo), DIFF_FILE_FORMAT.formatted(from, to));
-
-        loadGlobalFiles();
     }
 
     /**
@@ -219,15 +203,17 @@ public final class MappingsOptimizer {
         mappings(false, "data_component_type");
 
         if (diffObject != null) {
-            names("items", "itemnames");
+            customModelData();
             names("enchantments", "enchantmentnames");
-            fullNames("entitynames", "entitynames");
 
             if (diffObject.has("tags")) {
                 tags();
             }
             if (diffObject.has("blockstates")) {
                 changedBlockStateProperties();
+            }
+            if (diffObject.has("environment_attribute")) {
+                changedEnvironmentAttributes();
             }
         }
 
@@ -244,7 +230,7 @@ public final class MappingsOptimizer {
         saveIdentifierFiles(toVersion, mappedObject);
 
         // Store object/file data to keep track of changes
-        addFileData(fromVersion + ":" + toVersion, output.hashCode(), outputPath);
+        runContext.addFileData(fromVersion + ":" + toVersion, outputPath);
     }
 
     /**
@@ -256,17 +242,21 @@ public final class MappingsOptimizer {
     public boolean writeDiffStubs() throws IOException {
         JsonObject diffObject = MappingsLoader.getDiffObjectStub(unmappedObject, mappedObject, this.diffObject, ignoreMissing);
         final boolean hasStubChanges = diffObject != null;
-        boolean hasNameChanges = false;
+        boolean hasExtraChanges = false;
         if (backwards) {
             if (diffObject == null) {
                 diffObject = this.diffObject != null ? this.diffObject : new JsonObject();
             }
 
-            hasNameChanges |= addBackwardsNames(diffObject, "items", "itemnames", true);
-            hasNameChanges |= addBackwardsNames(diffObject, "entities", "entitynames", false);
+            final AtomicInteger customModelData = new AtomicInteger(Integer.parseInt(Files.readString(LAST_CUSTOM_MODEL_DATA_PATH)));
+            // Count up from the last known custom model data number
+            if (addBackwardsData(diffObject, "items", "custom_model_data", name -> new JsonPrimitive(customModelData.incrementAndGet()))) {
+                Files.writeString(LAST_CUSTOM_MODEL_DATA_PATH, Integer.toString(customModelData.get()));
+                hasExtraChanges = true;
+            }
         }
 
-        if (hasStubChanges || hasNameChanges) {
+        if (hasStubChanges || hasExtraChanges) {
             LOGGER.info("Writing diff stubs for versions {} → {}", fromVersion, toVersion);
             Files.writeString(getDiffDir(specialFrom || specialTo).resolve(DIFF_FILE_FORMAT.formatted(fromVersion, toVersion)), MappingsGenerator.GSON.toJson(diffObject));
             this.diffObject = diffObject;
@@ -275,12 +265,12 @@ public final class MappingsOptimizer {
         return false;
     }
 
-    private boolean addBackwardsNames(final JsonObject diffObject, final String key, final String namesKey, final boolean includeVersion) {
+    private boolean addBackwardsData(final JsonObject diffObject, final String key, final String dataKey, final Function<String, JsonElement> outputMapper) {
         if (!unmappedObject.has(key) || !mappedObject.has(key)) {
             return false;
         }
 
-        JsonObject nameMappings = diffObject.getAsJsonObject(namesKey);
+        JsonObject nameMappings = diffObject.getAsJsonObject(dataKey);
 
         boolean changed = false;
         final Set<String> mappedIdentifiers = new HashSet<>();
@@ -296,10 +286,11 @@ public final class MappingsOptimizer {
 
             if (nameMappings == null) {
                 nameMappings = new JsonObject();
-                diffObject.add(namesKey, nameMappings);
+                diffObject.add(dataKey, nameMappings);
             }
+
             final String name = nameFromIdentifier(identifier);
-            nameMappings.addProperty(identifier, includeVersion ? fromVersion + " " + name : name);
+            nameMappings.add(identifier, outputMapper.apply(name));
             changed = true;
         }
         return changed;
@@ -340,6 +331,7 @@ public final class MappingsOptimizer {
 
     public void saveIdentifierFiles(final String version, final JsonObject object) throws IOException {
         final CompoundTag identifiers = new CompoundTag();
+        identifiers.putInt("version", VERSION);
         storeIdentifierIndexes(identifiers, object, "entities");
         storeIdentifierIndexes(identifiers, object, "items");
         storeIdentifierIndexes(identifiers, object, "sounds");
@@ -353,41 +345,13 @@ public final class MappingsOptimizer {
         storeIdentifierIndexes(identifiers, object, "blockentities");
 
         // No need to save the same identifiers multiple times if one version appears in multiple runs
-        if (savedIdentifierFiles.add(version) && !identifiers.isEmpty()) {
+        if (runContext.markIdentifierFileSaved(version) && identifiers.size() > 1) {
             final Path outputDir = (specialFrom || specialTo) ? OUTPUT_DIR.resolve("special") : OUTPUT_DIR;
             final Path outputPath = outputDir.resolve(OUTPUT_IDENTIFIERS_FILE_FORMAT.formatted(version));
 
             write(identifiers, outputPath);
-            addFileData(version, identifiers.hashCode(), outputPath);
+            runContext.addFileData(version, outputPath);
         }
-
-        // Update global identifiers file if necessary
-        if (updatedGlobalIdentifiers) {
-            // Also keep a json file around for easier viewing
-            writeJson(globalIdentifiersObject, MAPPINGS_DIR.resolve("identifier-table.json"));
-            LOGGER.info("Updated global identifiers file");
-        }
-
-        // Always create output file
-        final Path outputPath = OUTPUT_DIR.resolve(OUTPUT_GLOBAL_IDENTIFIERS_FILE);
-        final CompoundTag globalIdentifiersTag = (CompoundTag) JsonConverter.toTag(globalIdentifiersObject);
-        write(globalIdentifiersTag, outputPath);
-        addFileData("identifier-table", globalIdentifiersTag.hashCode(), outputPath);
-        updatedGlobalIdentifiers = false;
-    }
-
-    private static void addFileData(final String key, final int hash, final Path path) throws IOException {
-        JsonObject fileData = fileHashesObject.getAsJsonObject(key);
-        if (fileData == null) {
-            fileData = new JsonObject();
-            fileHashesObject.add(key, fileData);
-        }
-
-        // The object hash is good enough
-        fileData.addProperty("object-hash", hash);
-        fileData.addProperty("size", Files.size(path));
-
-        writeJson(fileHashesObject, Path.of("output_hashes.json"));
     }
 
     static void writeJson(final JsonObject object, final Path path) throws IOException {
@@ -461,22 +425,23 @@ public final class MappingsOptimizer {
         );
 
         final CompoundTag changedTag = new CompoundTag();
-        final int[] unmapped = new int[map.size()];
-        final int[] mapped = new int[map.size()];
-        int i = 0;
-        for (final Int2IntMap.Entry entry : map.int2IntEntrySet()) {
-            unmapped[i] = entry.getIntKey();
-            mapped[i] = entry.getIntValue();
-            i++;
+        final int[] unmapped = map.keySet().toIntArray();
+        Arrays.sort(unmapped);
+        final int[] mapped = new int[unmapped.length];
+        for (int i = 0; i < unmapped.length; i++) {
+            mapped[i] = map.get(unmapped[i]);
         }
 
         changedTag.putByte("id", MappingsOptimizer.CHANGES_ID);
         changedTag.putByte("nofill", (byte) 1);
         changedTag.putInt("size", size);
         changedTag.putInt("mappedSize", mappedIdentifiers.size());
-        changedTag.put("at", new IntArrayTag(unmapped));
-        changedTag.put("val", new IntArrayTag(mapped));
+        changedTag.put("val", atValuePairs(unmapped, mapped));
         output.put(outputKey, changedTag);
+    }
+
+    public void customModelData() {
+        addExtraDataPerKey("items", "custom_model_data", element -> new IntTag(element.getAsInt()));
     }
 
     /**
@@ -486,19 +451,28 @@ public final class MappingsOptimizer {
      * @param namesKey key to read names from and to write to
      */
     public void names(final String key, final String namesKey) {
-        if (!unmappedObject.has(key) || !diffObject.has(namesKey)) {
+        addExtraDataPerKey(key, namesKey, element -> new StringTag(element.getAsString()));
+    }
+
+    private void addExtraDataPerKey(final String key, final String extraDataKey, final Function<JsonElement, Tag> valueMapper) {
+        if (!unmappedObject.has(key) || !diffObject.has(extraDataKey)) {
             return;
         }
 
         final Object2IntMap<String> identifierMap = MappingsLoader.arrayToMap(unmappedObject.getAsJsonArray(key));
-        final JsonObject nameMappings = diffObject.getAsJsonObject(namesKey);
+        final JsonObject nameMappings = diffObject.getAsJsonObject(extraDataKey);
         final CompoundTag tag = new CompoundTag();
-        output.put(namesKey, tag);
+        output.put(extraDataKey, tag);
 
         for (final Map.Entry<String, JsonElement> entry : nameMappings.entrySet()) {
+            final int id = identifierMap.getInt(entry.getKey());
+            if (id == -1) {
+                errorStrategy.apply("Unknown " + key + " identifier in " + extraDataKey + " mapping: " + entry.getKey());
+                continue;
+            }
+
             // Would be smaller as two arrays, but /shrug
-            final String idAsString = Integer.toString(identifierMap.getInt(entry.getKey()));
-            tag.putString(idAsString, entry.getValue().getAsString());
+            tag.put(Integer.toString(id), valueMapper.apply(entry.getValue()));
         }
     }
 
@@ -527,16 +501,22 @@ public final class MappingsOptimizer {
      * This checks for any change whether it's the base type or a property, but does not list changed properties,
      * as that would increase file size by a lot for no real value.
      */
-    private void changedBlockStateProperties() throws IOException {
+    private void changedBlockStateProperties() {
         if (fromVersion.equals("1.13.2") && toVersion.equals("1.13")
             || fromVersion.equals("1.13") && toVersion.equals("1.13.2")) {
             return;
         }
 
+        final Object2IntMap<String> blockIds = MappingsLoader.arrayToMap(unmappedObject.getAsJsonArray("blocks"));
         final IntSet changedProperties = new IntOpenHashSet();
         for (final Map.Entry<String, JsonElement> entry : diffObject.getAsJsonObject("blockstates").entrySet()) {
             final String block = entry.getKey().split("\\[", 2)[0];
-            changedProperties.add(idOf("blocks", block, false));
+            final int id = blockIds.getInt(block);
+            if (id == -1) {
+                throw new IllegalArgumentException("Could not find id for blocks: " + block);
+            }
+
+            changedProperties.add(id);
         }
 
         if (!changedProperties.isEmpty()) {
@@ -544,15 +524,15 @@ public final class MappingsOptimizer {
         }
     }
 
-    private int idOf(final String key, final String value, final boolean mapped) {
-        final JsonArray array = (mapped ? mappedObject : unmappedObject).getAsJsonArray(key);
-        for (int i = 0; i < array.size(); i++) {
-            final JsonElement element = array.get(i);
-            if (element.getAsString().equals(value)) {
-                return i;
-            }
+    private void changedEnvironmentAttributes() {
+        final ListTag<StringTag> changed = new ListTag<>(StringTag.class);
+        for (final Map.Entry<String, JsonElement> entry : diffObject.getAsJsonObject("environment_attribute").entrySet()) {
+            // Ids aren't stored, take any change as a need to remove it from registry data
+            changed.add(new StringTag(entry.getKey()));
         }
-        throw new IllegalArgumentException("Could not find id for " + key + ": " + value);
+        if (!changed.isEmpty()) {
+            output.put("changed_environment_attributes", changed);
+        }
     }
 
     /**
@@ -567,26 +547,26 @@ public final class MappingsOptimizer {
             final String type = entry.getKey();
             tagsTag.put(type, tag);
 
-            final String typeKey = switch (type) {
-                case "block" -> "blocks";
-                case "item" -> "items";
-                case "entity_type" -> "entities";
-                case "enchantment" -> "enchantments";
-                default -> throw new IllegalArgumentException("Registry type not supported: " + type);
-            };
-            if (!mappedObject.has(typeKey)) {
-                throw new IllegalArgumentException("Could not find mapped object for " + typeKey);
-            }
-
-            final JsonArray typeElements = mappedObject.get(typeKey).getAsJsonArray();
-            final Object2IntMap<String> typeMap = MappingsLoader.arrayToMap(typeElements);
+            // Resolved when a string element needs mapping
+            Object2IntMap<String> typeMap = null;
 
             for (final Map.Entry<String, JsonElement> tagEntry : object.entrySet()) {
                 final JsonArray elements = tagEntry.getValue().getAsJsonArray();
                 final int[] tagIds = new int[elements.size()];
                 final String tagName = tagEntry.getKey();
                 for (int i = 0; i < elements.size(); i++) {
-                    final String element = elements.get(i).getAsString();
+                    final JsonElement rawElement = elements.get(i);
+                    if (rawElement.isJsonPrimitive() && rawElement.getAsJsonPrimitive().isNumber()) {
+                        // Allow passing raw ids (for simple, hardcoded registries that don't need to be present in mapping data)
+                        tagIds[i] = rawElement.getAsInt();
+                        continue;
+                    }
+
+                    if (typeMap == null) {
+                        typeMap = resolveTypeMap(type);
+                    }
+
+                    final String element = rawElement.getAsString();
                     final int mappedId = typeMap.getInt(element.replace("minecraft:", ""));
                     if (mappedId == -1) {
                         LOGGER.error("Could not find id for {}", element);
@@ -603,6 +583,22 @@ public final class MappingsOptimizer {
         if (!tagsTag.isEmpty()) {
             output.put("tags", tagsTag);
         }
+    }
+
+    private Object2IntMap<String> resolveTypeMap(final String type) {
+        final String typeKey = switch (type) {
+            case "block" -> "blocks";
+            case "item" -> "items";
+            case "entity_type" -> "entities";
+            case "enchantment" -> "enchantments";
+            default -> throw new IllegalArgumentException("Registry type not supported: " + type);
+        };
+        if (!mappedObject.has(typeKey)) {
+            throw new IllegalArgumentException("Could not find mapped object for " + typeKey);
+        }
+
+        final JsonArray typeElements = mappedObject.get(typeKey).getAsJsonArray();
+        return MappingsLoader.arrayToMap(typeElements);
     }
 
     /**
@@ -630,18 +626,8 @@ public final class MappingsOptimizer {
 
         // Add to global identifiers if not already present
         final JsonArray identifiers = identifiersElement.getAsJsonArray();
-        JsonArray globalIdentifiersArray = globalIdentifiersObject.getAsJsonArray(key);
-        if (globalIdentifiersArray == null) {
-            globalIdentifiersArray = new JsonArray();
-            globalIdentifiersObject.add(key, globalIdentifiersArray);
-        }
-
-        final Object2IntMap<String> globalIdentifiers = new Object2IntOpenHashMap<>(globalIdentifiersArray.size());
-        globalIdentifiers.defaultReturnValue(-1);
-        for (int globalId = 0; globalId < globalIdentifiersArray.size(); globalId++) {
-            final String identifier = globalIdentifiersArray.get(globalId).getAsString();
-            globalIdentifiers.put(identifier, globalId);
-        }
+        final JsonArray globalIdentifiersArray = runContext.globalIdentifierArray(key);
+        final Object2IntMap<String> globalIdentifiers = runContext.globalIdentifierMap(key);
 
         for (int id = 0; id < identifiers.size(); id++) {
             final JsonElement entry = identifiers.get(id);
@@ -654,10 +640,7 @@ public final class MappingsOptimizer {
                 continue;
             }
 
-            final int addedGlobalIndex = globalIdentifiersArray.size();
-            globalIdentifiersArray.add(identifier);
-            globalIdentifiers.put(identifier, addedGlobalIndex);
-            updatedGlobalIdentifiers = true;
+            runContext.addGlobalIdentifier(key, identifier);
         }
 
         // Use the same compact storage on the identifier->global identifier files, just about halves the size
@@ -675,7 +658,7 @@ public final class MappingsOptimizer {
      * @param key                 key to write to
      * @param alwaysWriteIdentity whether to write identity mappings even if there are no changes
      */
-    private static void serialize(final MappingsResult result, final CompoundTag parent, final String key, final boolean alwaysWriteIdentity) {
+    private void serialize(final MappingsResult result, final CompoundTag parent, final String key, final boolean alwaysWriteIdentity) {
         final int[] mappings = result.mappings();
         final int numberOfChanges = mappings.length - result.identityMappings();
         final boolean hasChanges = numberOfChanges != 0 || result.emptyMappings() != 0;
@@ -693,41 +676,83 @@ public final class MappingsOptimizer {
         if (!hasChanges) {
             tag.putByte("id", IDENTITY_ID);
             tag.putInt("size", mappings.length);
-            storageStrategyCounts[IDENTITY_ID]++;
+            runContext.countStorageStrategy(IDENTITY_ID);
             return;
         }
 
-        final int changedFormatSize = approximateChangedFormatSize(result);
-        final int shiftFormatSize = approximateShiftFormatSize(result);
-        final int plainFormatSize = mappings.length;
-        if (changedFormatSize < plainFormatSize && changedFormatSize < shiftFormatSize) {
-            writeChangedFormat(tag, result, key, numberOfChanges);
-            storageStrategyCounts[CHANGES_ID]++;
-        } else if (shiftFormatSize < changedFormatSize && shiftFormatSize < plainFormatSize) {
-            writeShiftFormat(tag, result, key);
-            storageStrategyCounts[SHIFTS_ID]++;
+        // Compare output sizes to pick the most optimal strategy.
+        // The whole run is so fast that it's free to just do the actual encode runs.
+        final ByteArrayTag directValues = directValues(mappings);
+        final ByteArrayTag changedValues = changedValues(result, numberOfChanges);
+        final ByteArrayTag shiftValues = shiftValues(result, key);
+        final byte id;
+        final ByteArrayTag values;
+        if (directValues.length() <= changedValues.length() && directValues.length() <= shiftValues.length()) {
+            LOGGER.debug("{}: Storing directly", key);
+            id = DIRECT_ID;
+            values = directValues;
+        } else if (changedValues.length() <= shiftValues.length()) {
+            LOGGER.debug("{}: Storing as changed and mapped arrays", key);
+            id = CHANGES_ID;
+            values = changedValues;
         } else {
-            tag.putByte("id", DIRECT_ID);
-            tag.put("val", new IntArrayTag(mappings));
-            storageStrategyCounts[DIRECT_ID]++;
+            LOGGER.debug("{}: Storing as shifts", key);
+            id = SHIFTS_ID;
+            values = shiftValues;
         }
+
+        tag.putByte("id", id);
+        tag.putInt("size", mappings.length);
+        tag.put("val", values);
+        runContext.countStorageStrategy(id);
     }
 
     /**
-     * Writes compact int to int mappings as changed values to the given tag.
+     * Packs full mapped ids as zigzag varints of the difference to the previous mapped id.
      *
-     * @param tag             tag to write to
-     * @param result          result with int to int mappings
-     * @param key             key to write to
-     * @param numberOfChanges number of changed mappings
+     * @param mappings the mappings to pack
+     * @return the packed mappings
      */
-    private static void writeChangedFormat(final CompoundTag tag, final MappingsResult result, final String key, final int numberOfChanges) {
-        // Put two intarrays of only changed ids instead of adding an entry for every single identifier
-        LOGGER.debug("{}: Storing as changed and mapped arrays", key);
-        final int[] mappings = result.mappings();
-        tag.putByte("id", CHANGES_ID);
-        tag.putInt("size", mappings.length);
+    static ByteArrayTag directValues(final int[] mappings) {
+        final ByteArrayList out = new ByteArrayList();
+        int prev = 0;
+        for (final int mappedId : mappings) {
+            VarInts.writeZigZag(out, mappedId - prev);
+            prev = mappedId;
+        }
+        return new ByteArrayTag(out.toByteArray());
+    }
 
+    /**
+     * Packs id and value pairs as varints. The id is stored as the difference to the previous id
+     * (ids always have to be ascending), the value as the zigzag difference to the previous value.
+     *
+     * @param at     the ids to pack
+     * @param values the values to pack
+     * @return the packed mappings
+     */
+    static ByteArrayTag atValuePairs(final int[] at, final int[] values) {
+        final ByteArrayList out = new ByteArrayList();
+        int prevAt = -1;
+        int prevValue = 0;
+        for (int i = 0; i < at.length; i++) {
+            VarInts.write(out, at[i] - prevAt - 1);
+            VarInts.writeZigZag(out, values[i] - prevValue);
+            prevAt = at[i];
+            prevValue = values[i];
+        }
+        return new ByteArrayTag(out.toByteArray());
+    }
+
+    /**
+     * Packs only the changed ids and their mapped values instead of an entry for every single identifier.
+     *
+     * @param result          result with int to int mappings
+     * @param numberOfChanges number of changed mappings
+     * @return the packed changed mappings
+     */
+    static ByteArrayTag changedValues(final MappingsResult result, final int numberOfChanges) {
+        final int[] mappings = result.mappings();
         final int[] unmapped = new int[numberOfChanges];
         final int[] mapped = new int[numberOfChanges];
         int index = 0;
@@ -744,23 +769,18 @@ public final class MappingsOptimizer {
             throw new IllegalStateException("Index " + index + " does not equal number of changes " + numberOfChanges);
         }
 
-        tag.put("at", new IntArrayTag(unmapped));
-        tag.put("val", new IntArrayTag(mapped));
+        return atValuePairs(unmapped, mapped);
     }
 
     /**
-     * Writes compact int to int mappings as shifted values to the given tag.
+     * Packs the ids at which the mapped ids no longer shift by 1 from the previous mapped id.
      *
-     * @param tag    tag to write to
      * @param result result with int to int mappings
      * @param key    key to write to
+     * @return the packed shifted mappings
      */
-    private static void writeShiftFormat(final CompoundTag tag, final MappingsResult result, final String key) {
-        LOGGER.debug("{}: Storing as shifts", key);
+    static ByteArrayTag shiftValues(final MappingsResult result, final String key) {
         final int[] mappings = result.mappings();
-        tag.putByte("id", SHIFTS_ID);
-        tag.putInt("size", mappings.length);
-
         final int[] shiftsAt = new int[result.shiftChanges()];
         final int[] shiftsTo = new int[result.shiftChanges()];
 
@@ -785,26 +805,11 @@ public final class MappingsOptimizer {
             throw new IllegalStateException("Index " + index + " does not equal number of changes " + result.shiftChanges() + " for " + key);
         }
 
-        tag.put("at", new IntArrayTag(shiftsAt));
-        tag.put("to", new IntArrayTag(shiftsTo));
-    }
-
-    public static void printStats() {
-        LOGGER.info("Storage format counts: direct={}, shifts={}, changes={}, identity={}", storageStrategyCounts[DIRECT_ID], storageStrategyCounts[SHIFTS_ID], storageStrategyCounts[CHANGES_ID], storageStrategyCounts[IDENTITY_ID]);
+        return atValuePairs(shiftsAt, shiftsTo);
     }
 
     public static void write(final CompoundTag tag, final Path path) throws IOException {
         TAG_WRITER.write(path, tag, false);
-    }
-
-    private static int approximateChangedFormatSize(final MappingsResult result) {
-        // Length of two arrays + more approximate length for extra tags
-        return (result.mappings().length - result.identityMappings()) * 2 + 10;
-    }
-
-    private static int approximateShiftFormatSize(final MappingsResult result) {
-        // One entry in two arrays each time the id is not shifted by 1 from the last id + more approximate length for extra tags
-        return result.shiftChanges() * 2 + 10;
     }
 
     public void setErrorStrategy(final ErrorStrategy errorStrategy) {

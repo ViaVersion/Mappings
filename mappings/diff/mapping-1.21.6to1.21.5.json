@@ -23,27 +23,6 @@
     "happy_ghast_spawn_egg": "ghast_spawn_egg",
     "music_disc_tears": "music_disc_precipice"
   },
-  "itemnames": {
-    "dried_ghast": "1.21.6 Dried Ghast",
-    "white_harness": "1.21.6 White Harness",
-    "orange_harness": "1.21.6 Orange Harness",
-    "magenta_harness": "1.21.6 Magenta Harness",
-    "light_blue_harness": "1.21.6 Light Blue Harness",
-    "yellow_harness": "1.21.6 Yellow Harness",
-    "lime_harness": "1.21.6 Lime Harness",
-    "pink_harness": "1.21.6 Pink Harness",
-    "gray_harness": "1.21.6 Gray Harness",
-    "light_gray_harness": "1.21.6 Light Gray Harness",
-    "cyan_harness": "1.21.6 Cyan Harness",
-    "purple_harness": "1.21.6 Purple Harness",
-    "blue_harness": "1.21.6 Blue Harness",
-    "brown_harness": "1.21.6 Brown Harness",
-    "green_harness": "1.21.6 Green Harness",
-    "red_harness": "1.21.6 Red Harness",
-    "black_harness": "1.21.6 Black Harness",
-    "happy_ghast_spawn_egg": "1.21.6 Happy Ghast Spawn Egg",
-    "music_disc_tears": "1.21.6 Music Disc (Tears)"
-  },
   "sounds": {
     "block.dried_ghast.break": "block.crop.break",
     "block.dried_ghast.step": "block.resin.step",
@@ -83,12 +62,30 @@
   "entities": {
     "happy_ghast": "ghast"
   },
-  "entitynames": {
-    "happy_ghast": "Happy Ghast"
-  },
   "attributes": {
     "camera_distance": "",
     "waypoint_transmit_range": "",
     "waypoint_receive_range": ""
+  },
+  "custom_model_data": {
+    "dried_ghast": 724,
+    "white_harness": 725,
+    "orange_harness": 726,
+    "magenta_harness": 727,
+    "light_blue_harness": 728,
+    "yellow_harness": 729,
+    "lime_harness": 730,
+    "pink_harness": 731,
+    "gray_harness": 732,
+    "light_gray_harness": 733,
+    "cyan_harness": 734,
+    "purple_harness": 735,
+    "blue_harness": 736,
+    "brown_harness": 737,
+    "green_harness": 738,
+    "red_harness": 739,
+    "black_harness": 740,
+    "happy_ghast_spawn_egg": 741,
+    "music_disc_tears": 742
   }
 }
