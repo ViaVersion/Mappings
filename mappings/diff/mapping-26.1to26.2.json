@@ -7,6 +7,10 @@
   },
   "tags": {
     "block": {
+      "speleothems": [
+        "pointed_dripstone",
+        "sulfur_spike"
+      ],
       "shears_minor_breaking_speed": [
         "glow_lichen",
         "vine"

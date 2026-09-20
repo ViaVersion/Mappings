@@ -24,6 +24,33 @@
     "entity.wolf.howl": "entity.wolf_angry.ambient"
   },
   "tags": {
+    "block": {
+      "sword_instantly_mines": [
+        "bamboo",
+        "bamboo_sapling"
+      ],
+      "plays_ambient_desert_block_sounds": [
+        "terracotta",
+        "white_terracotta",
+        "orange_terracotta",
+        "magenta_terracotta",
+        "light_blue_terracotta",
+        "yellow_terracotta",
+        "lime_terracotta",
+        "pink_terracotta",
+        "gray_terracotta",
+        "light_gray_terracotta",
+        "cyan_terracotta",
+        "purple_terracotta",
+        "blue_terracotta",
+        "brown_terracotta",
+        "green_terracotta",
+        "red_terracotta",
+        "black_terracotta",
+        "sand",
+        "red_sand"
+      ]
+    },
     "entity_type": {
       "can_equip_saddle": [
         "horse",

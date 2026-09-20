@@ -4,7 +4,30 @@
     "map_color": ""
   },
   "tags": {
+    "fluid": {
+      "entity_floatable": [
+        1,
+        2
+      ]
+    },
+    "item": {
+      "douses_campfires": [
+        "diamond_shovel",
+        "stone_shovel",
+        "golden_shovel",
+        "netherite_shovel",
+        "wooden_shovel",
+        "iron_shovel",
+        "copper_shovel"
+      ],
+      "extendable_maps": [
+        "filled_map"
+      ]
+    },
     "block": {
+      "nether_portal_frame": [
+        "obsidian"
+      ],
       "turns_into_farmland": [
         "grass_block",
         "dirt_path",

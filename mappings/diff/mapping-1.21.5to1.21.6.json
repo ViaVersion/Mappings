@@ -4,5 +4,13 @@
     "entity.puffer_fish.ambient": "",
     "entity.leash_knot.break": "item.lead.break",
     "entity.leash_knot.place": "item.lead.tied"
+  },
+  "tags": {
+    "block": {
+      "triggers_ambient_desert_sand_block_sounds": [
+        "sand",
+        "red_sand"
+      ]
+    }
   }
 }

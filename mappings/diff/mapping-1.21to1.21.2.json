@@ -46,5 +46,68 @@
   "entities": {
     "boat": "oak_boat",
     "chest_boat": "oak_chest_boat"
+  },
+  "tags": {
+    "item": {
+      "brewing_fuel": [
+        "blaze_powder"
+      ],
+      "duplicates_allays": [
+        "amethyst_shard"
+      ],
+      "furnace_minecart_fuel": [
+        "coal",
+        "charcoal"
+      ],
+      "wooden_tool_materials": [
+        "oak_planks",
+        "spruce_planks",
+        "birch_planks",
+        "jungle_planks",
+        "acacia_planks",
+        "dark_oak_planks",
+        "crimson_planks",
+        "warped_planks",
+        "mangrove_planks",
+        "bamboo_planks",
+        "cherry_planks"
+      ],
+      "iron_tool_materials": [
+        "iron_ingot"
+      ],
+      "gold_tool_materials": [
+        "gold_ingot"
+      ],
+      "diamond_tool_materials": [
+        "diamond"
+      ],
+      "netherite_tool_materials": [
+        "netherite_ingot"
+      ],
+      "repairs_leather_armor": [
+        "leather"
+      ],
+      "repairs_chain_armor": [
+        "iron_ingot"
+      ],
+      "repairs_iron_armor": [
+        "iron_ingot"
+      ],
+      "repairs_gold_armor": [
+        "gold_ingot"
+      ],
+      "repairs_diamond_armor": [
+        "diamond"
+      ],
+      "repairs_netherite_armor": [
+        "netherite_ingot"
+      ],
+      "repairs_turtle_helmet": [
+        "turtle_scute"
+      ],
+      "repairs_wolf_armor": [
+        "armadillo_scute"
+      ]
+    }
   }
 }

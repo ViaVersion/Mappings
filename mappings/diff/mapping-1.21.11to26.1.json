@@ -9,6 +9,12 @@
       "supports_sugar_cane_adjacently": [
         1,
         2
+      ],
+      "supports_lily_pad": [
+        2
+      ],
+      "supports_frogspawn": [
+        2
       ]
     },
     "block": {
