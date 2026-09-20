@@ -23,6 +23,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.viaversion.mappingsgenerator.MappingsLoader.MappingsResult;
+import com.viaversion.mappingsgenerator.util.IdRanges;
 import com.viaversion.mappingsgenerator.util.JsonConverter;
 import com.viaversion.mappingsgenerator.util.VarInts;
 import com.viaversion.mappingsgenerator.util.Version;
@@ -37,6 +38,8 @@ import com.viaversion.nbt.tag.StringTag;
 import com.viaversion.nbt.tag.Tag;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -551,14 +554,18 @@ public final class MappingsOptimizer {
             Object2IntMap<String> typeMap = null;
 
             for (final Map.Entry<String, JsonElement> tagEntry : object.entrySet()) {
-                final JsonArray elements = tagEntry.getValue().getAsJsonArray();
-                final int[] tagIds = new int[elements.size()];
+                // Either a plain array of elements or an object with "values" and an optional "ordered" boolean
+                final JsonElement tagValue = tagEntry.getValue();
+                final boolean ordered = tagValue.isJsonObject() && tagValue.getAsJsonObject().has("ordered")
+                    && tagValue.getAsJsonObject().get("ordered").getAsBoolean();
+                final JsonArray elements = tagValue.isJsonObject() ? tagValue.getAsJsonObject().getAsJsonArray("values") : tagValue.getAsJsonArray();
+                final IntSet tagIds = new IntLinkedOpenHashSet(elements.size());
                 final String tagName = tagEntry.getKey();
                 for (int i = 0; i < elements.size(); i++) {
                     final JsonElement rawElement = elements.get(i);
                     if (rawElement.isJsonPrimitive() && rawElement.getAsJsonPrimitive().isNumber()) {
                         // Allow passing raw ids (for simple, hardcoded registries that don't need to be present in mapping data)
-                        tagIds[i] = rawElement.getAsInt();
+                        tagIds.add(rawElement.getAsInt());
                         continue;
                     }
 
@@ -573,10 +580,16 @@ public final class MappingsOptimizer {
                         continue;
                     }
 
-                    tagIds[i] = mappedId;
+                    tagIds.add(mappedId);
                 }
 
-                tag.put(tagName, new IntArrayTag(tagIds));
+                if (ordered) {
+                    // Keep the given order
+                    tag.put(tagName, new IntArrayTag(tagIds.toIntArray()));
+                } else {
+                    // Store as sorted ranges
+                    tag.put(tagName, IdRanges.encode(new IntArrayList(tagIds)));
+                }
             }
         }
 

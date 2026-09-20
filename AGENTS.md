@@ -23,3 +23,5 @@
 - Sections like `items`, `entities`, `sounds`, and names map source identifier/name keys to target values.
 - Keep existing section names and JSON object structure unchanged.
 - Do not invent target identifiers; verify them in the target `mapping-<to>.json`.
+- `tags` entries are `"<registry>": {"<tag>": ["id", ...]}` with target identifiers (or raw numeric ids); they are stored as sorted id ranges.
+  If the order of a tag matters, use `{"ordered": true, "values": ["id", ...]}` instead of the plain array.
