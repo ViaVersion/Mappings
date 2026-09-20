@@ -7,9 +7,9 @@ import java.io.IOException;
 
 public final class StringByIdPrinter {
 
-    private static final String VERSION = "26.2";
-    private static final String DATA_TYPE = "blockstates";
-    private static final int LOOKING_FOR_ID = 1525;
+    private static final String VERSION = "26.3";
+    private static final String DATA_TYPE = "items";
+    private static final int LOOKING_FOR_ID = 1038;
 
     public static void main(final String[] args) throws IOException {
         final JsonObject mappings = MappingsLoader.load("mapping-" + VERSION + ".json");
