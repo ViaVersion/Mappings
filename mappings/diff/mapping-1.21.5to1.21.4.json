@@ -161,18 +161,6 @@
     "splash_potion": "potion",
     "lingering_potion": "potion"
   },
-  "tags": {
-    "item": {
-      "dyeable": [
-        "leather_helmet",
-        "leather_chestplate",
-        "leather_leggings",
-        "leather_boots",
-        "leather_horse_armor",
-        "wolf_armor"
-      ]
-    }
-  },
   "custom_model_data": {
     "wildflowers": 713,
     "leaf_litter": 714,
