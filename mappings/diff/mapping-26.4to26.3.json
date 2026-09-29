@@ -1,0 +1,8 @@
+{
+  "sounds": {
+    "entity.zombie_nautilus.riding": ""
+  },
+  "environment_attribute": {
+    "visual/has_sky_occluder": ""
+  }
+}
