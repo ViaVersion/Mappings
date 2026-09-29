@@ -1079,6 +1079,9 @@
     "entity.goat.screaming.ram_impact": "block.basalt.break",
     "block.sweet_berry_bush.pick_berries": "item.sweet_berries.pick_from_bush"
   },
+  "statistics": {
+    "minecraft.play_time": "minecraft.play_one_minute"
+  },
   "particles": {
     "small_flame": "flame",
     "snowflake": "cloud",

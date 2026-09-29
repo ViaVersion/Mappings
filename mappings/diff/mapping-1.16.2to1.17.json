@@ -5,6 +5,9 @@
   "sounds": {
     "item.sweet_berries.pick_from_bush": "block.sweet_berry_bush.pick_berries"
   },
+  "statistics": {
+    "minecraft.play_one_minute": "minecraft.play_time"
+  },
   "blockstates": {
     "powered_rail[powered=true,shape=north_south]": "powered_rail[powered=true,shape=north_south,waterlogged=false]",
     "powered_rail[powered=true,shape=east_west]": "powered_rail[powered=true,shape=east_west,waterlogged=false]",
