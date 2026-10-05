@@ -10,23 +10,22 @@ you can find them in the `output/` directory.
 
 ## Generating json mapping files for a Minecraft version
 
-Compile the project using `./gradlew build` and put the jar in some directory, ideally the project root.
+Compile the project using `./gradlew build` and copy the jar from `build/libs/` to the project root as `MappingsGenerator.jar`.
 
 Then run the jar with:
 
 ```bash
-java -jar MappingsGenerator.jar <path to server jar> <version>
+java -jar MappingsGenerator.jar <path to server jar> <mc-version>
 ```
 
 The mapping file will then be generated in the `mappings/` directory.
 
 ## Compiling json mapping files into compact nbt files
 
-If you want to generate the compact mapping files with already present json files, you can also trigger the optimizer on
-its own by starting the `MappingsOptimizer` class with the two arguments flipped:
+If you want to generate the compact mapping files with already-present JSON files, you can also trigger the optimizer on its own by running the `MappingsOptimizer` class with the *from* and *to* Minecraft versions:
 
 ```bash
-java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimizer <from version> <to version>
+java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimizer <from mc version> <to mc version> [options]
 ```
 
 ### Optional arguments
@@ -34,89 +33,88 @@ java -cp MappingsGenerator.jar com.viaversion.mappingsgenerator.MappingsOptimize
 Optional arguments must follow the two version arguments.
 
 * `--generateDiffStubs` to generate diff files with empty stubs for missing mappings
-* `--keepUnknownFields` to keep non-standard fields from json mappings in the compact files
+  * When generating backwards mappings, also assigns and increments `custom_model_data` IDs
+* `--keepUnknownFields` to keep non-standard fields from JSON mappings in the compact files
+
+## Using custom mappings in ViaBackwards
+
+To test or override backwards mappings on a server without recompiling ViaBackwards, copy the generated NBT file from `output/backwards/` into the server's `plugins/ViaBackwards/` directory.
 
 ## Updating version files
-On Minecraft updates, the `next_release.txt` and `last_release.txt` files need to be updated manually.
-`last_release.txt` needs the last release **ViaVersion requires mappings for**.
 
-## Json format
+Version-tracking files in the project root:
 
-The json files contain a number of Minecraft registries in form of json arrays, where the index corresponds to the id of
-the entry.
+* `last_release.txt` the last release ViaVersion needs mappings for
+* `next_release.txt` set this to the upcoming release being targeted (e.g., 27.3)
+* `last_snapshot.txt` the latest development build ID updated automatically by `download_server.py` (snapshots, prereleases, RCs, e.g., 27.3-snapshot-5)
+* `last_custom_model_data.txt` a counter tracking the last assigned CustomModelData number for backwards item remaps (incremented automatically by `--generateDiffStubs`)
 
-Diff files for either ViaVersion or ViaBackwards then contain additional entries for changed identifiers, either in form
-of string→string or int→string mappings. These files need to be manually filled. If any such entries are required, the
-optimizer will give a warning with the missing keys.
+## JSON format
 
-Json mapping files are found in the `mapping/` directory and are named `mapping-<version>.json`. Files containing
-diff-mappings for added or removed identifiers between versions must be named `mapping-<from>to<to>.json` and put into
-the `mapping/diff/` directory.
+JSON files in `mappings/mapping-<mc-version>.json` contain Minecraft registry arrays where array indices correspond to numeric protocol IDs.
+
+Diff mappings between versions are in `mappings/diff/mapping-<from>to<to>.json`. These files need to be manually filled out. If required mappings are missing, the optimizer will give a warning noting the missing keys.
+
+* Blockstates
+  * Exact state mapping: `"old_block[prop=a]": "new_block[prop=b]"`
+  * Bare block fallback: `"old_block": "new_block[prop=b]"`
+  * Copy all source properties: `"old_block": "new_block["`
+  * Intentionally unmapped: `""`
+* Registries (`items`, `blocks`, `entities`, `sounds`, `menus`, `attributes`, etc.)
+  * Identifier remaps: `"old_id": "new_id"` (or `""` if unmapped)
+* Custom model data
+  * Generated *item* remaps to *custom model data* IDs: `"item_id": 123`
+* Tags
+  * Sorted ranges: `"<registry>": { "<tag>": ["id", ...] }`
+  * Preserved order: `"<registry>": { "<tag>": { "ordered": true, "values": ["id", ...] } }`
 
 ## Compact format
 
-Compact files are always saved as [NBT](https://minecraft.fandom.com/wiki/NBT_format). ViaVersion uses its
-own [ViaNBT](https://github.com/ViaVersion/ViaNBT) as the NBT reader/writer. Compact files are found in the
-`output/` directory and subdirectories.
+Compact files are always saved as [NBT](https://minecraft.fandom.com/wiki/NBT_format) using ViaVersion's own [ViaNBT](https://github.com/ViaVersion/ViaNBT) library and output to the `output/` or `output/backwards/` directories.
 
 ### Identifier files
 
-Next to a standardized compact format for int id mappings, the full identifiers of some registries are also required.
-For this, we generate a list of *all* identifiers in the registry across all versions, so that their names only need to
-be stored once, as opposed to storing them again in every new version they are still in. Wherever needed, these
-identifiers are then referred to via their index in the global list.
+Full identifiers for registries across all versions are deduplicated into `output/identifier-table.nbt`. Per-version files (`identifiers-<mc-version>.nbt`) store the mapping of each local registry ID to the global list.
 
 ### Mapping files
 
-Each mapping file contains a `v` int tag with the format version, currently being `1`.
+Each mapping file contains a `version` int tag with the format version, currently being `2`.
 
-In each mapping file, a number of extra objects may be contained, such as string→string mappings for sounds. Most other
-parts (including blockstates, blocks, items, blockentities, enchantments, paintings, entities, particles, argumenttypes,
-and statistics) are stored as compound tags, containing:
+> *Note: Format version 1 (which used uncompressed int array tags and a `v` tag) was superseded in ViaVersion 5.x by version 2 to reduce file size. See the README in older git commits for the v1 spec.*
 
-* `id` (byte tag) determining the storage type as defined below
-* `size` (int tag) the number of unmapped entries in the registry
-* `mappedSize` (int tag) the number of mapped entries in the registry
+Mappings for blockstates, blocks, items, menus, sounds, blockentities, enchantments, paintings, entities, particles, argumenttypes, statistics, attributes, recipe_serializers, slot_displays, and data_component_type are stored as compound tags:
 
-The rest of the content depends on the storage type, each resulting in vastly different storage sizes depending on the
-number and distribution of id changes, used to make the mapping files about as small as possible without sacrifing
-deserialization performance or making the formats *too* complex.
+* `id` (byte tag) Storage strategy ID (0–3)
+* `size` (int tag) Total entries in unmapped registry
+* `mappedSize` (int tag, optional) Total entries in mapped registry
+* `val` (byte array tag) Encoded mapping payload (strategies 0–2)
+
+The rest of the content depends on the storage strategy, each resulting in vastly different storage sizes depending on the number and distribution of id changes, used to make the mapping files about as small as possible without sacrificing deserialization performance or making the formats *too* complex. Values are packed into a byte array tag called `val` using VarInts and ZigZag encoding.
 
 ### Direct value storage
 
-The direct storage simply stores an array of ints exactly as they can be used in the protocol.
+The direct storage simply stores the mapped ids in order, packed into `val` as the ZigZag difference to the previous mapped id.
 
 * `id` (byte tag) is `0`
-* `val` (int array tag) contains the mapped ids, where their array index corresponds to the unmapped id
 
 ### Shifted value storage
 
-The shifted value storage stores two int arrays: One containing the unmapped ids that end a sequence of mapped ids. For
-an index `i`, all unmapped ids between `at[i] + sequence` (inclusive) and `at[i + 1]` (exclusive) are mapped
-to `to[i] + sequence`.
+The shifted value storage stores a sequence of boundary pairs (`at`, `to`) packed into `val`. For an index `i`, all unmapped ids between `at[i] + sequence` (inclusive) and `at[i + 1]` (exclusive) are mapped to `to[i] + sequence`.
 
 * `id` (byte tag) is `1`
-* `at` (int array tag) contains the unmapped ids, where their mapped is is *not* simply the last mapped id + 1
-* `to` (int array tag) contains the mapped ids, indexed by the same index as the unmapped id in `at`
 
 ### Changed value storage
 
-The changed value storage stores two int arrays: One containing the changed unmapped ids, and one their corresponding
-mapped ids in a simple int→int mapping over the two arrays.
+The changed value storage stores pairs of changed unmapped ids and their corresponding mapped ids (`at`, `val`) packed into `val`. All ids between the ones found in `at` are mapped to their identity.
 
 * `id` (byte tag) is `2`
-* `at` (int array tag) contains the unmapped ids that have been changed
-* `val` (int array tag) contains the mapped ids, indexed by the same index as the unmapped id in `at`
-* Optional: `nofill` (byte tag): Unless present, all ids between the ones found in `at` are mapped to their identity
 
 ### Identity storage
 
-The identity storage signifies that every id between `0` and `size` is mapped to itself. This is sometimes used over
-simply leaving out the entry to make sure ids stay in bounds.
+The identity storage signifies that every id between `0` and `size` is mapped to itself. This is sometimes used over simply leaving out the entry to make sure ids stay in bounds.
 
 * `id` (byte tag) is `3`
 
 ## License
 
-The Java and Python code is licensed under the GNU GPL v3 license. The files under `mappings/` are free to copy, use,
-and expand upon in whatever way you like.
+The Java and Python code is licensed under the GNU GPL v3 license. The files under `mappings/` are free to copy, use, and expand upon in whatever way you like.
