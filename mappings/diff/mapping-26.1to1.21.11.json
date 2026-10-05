@@ -300,5 +300,17 @@
   },
   "custom_model_data": {
     "golden_dandelion": 833
+  },
+  "tags": {
+    "item": {
+      "dyeable": [
+        "leather_helmet",
+        "leather_chestplate",
+        "leather_leggings",
+        "leather_boots",
+        "leather_horse_armor",
+        "wolf_armor"
+      ]
+    }
   }
 }

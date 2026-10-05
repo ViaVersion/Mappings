@@ -6107,6 +6107,7 @@
     "block.straw_bed.hit",
     "block.straw_bed.fall",
     "block.red_shrub.break",
-    "block.red_shrub.place"
+    "block.red_shrub.place",
+    "entity.zombie_nautilus.riding"
   ]
 }
