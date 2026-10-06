@@ -42,12 +42,10 @@ To test or override backwards mappings on a server without recompiling ViaBackwa
 
 ## Updating version files
 
-Version-tracking files in the project root:
+When moving to new Minecraft updates, these files must be updated manually with version numbers, not snapshot strings:
 
-* `last_release.txt` the last release ViaVersion needs mappings for
-* `next_release.txt` set this to the upcoming release being targeted (e.g., 27.3)
-* `last_snapshot.txt` the latest development build ID updated automatically by `download_server.py` (snapshots, prereleases, RCs, e.g., 27.3-snapshot-5)
-* `last_custom_model_data.txt` a counter tracking the last assigned CustomModelData number for backwards item remaps (incremented automatically by `--generateDiffStubs`)
+* `next_release.txt`: the upcoming release being targeted.
+* `last_release.txt`: The last release with existing files in `mappings/` (e.g. `26.1` rather than `26.1.2` if the latest is hotfixes with no registry changes).
 
 ## JSON format
 
@@ -91,25 +89,27 @@ Mappings for blockstates, blocks, items, menus, sounds, blockentities, enchantme
 
 The rest of the content depends on the storage strategy, each resulting in vastly different storage sizes depending on the number and distribution of id changes, used to make the mapping files about as small as possible without sacrificing deserialization performance or making the formats *too* complex. Values are packed into a byte array tag called `val` using VarInts and ZigZag encoding.
 
-### Direct value storage
+#### Direct value storage
 
 The direct storage simply stores the mapped ids in order, packed into `val` as the ZigZag difference to the previous mapped id.
 
 * `id` (byte tag) is `0`
 
-### Shifted value storage
+#### Shifted value storage
 
 The shifted value storage stores a sequence of boundary pairs (`at`, `to`) packed into `val`. For an index `i`, all unmapped ids between `at[i] + sequence` (inclusive) and `at[i + 1]` (exclusive) are mapped to `to[i] + sequence`.
 
 * `id` (byte tag) is `1`
 
-### Changed value storage
+#### Changed value storage
 
-The changed value storage stores pairs of changed unmapped ids and their corresponding mapped ids (`at`, `val`) packed into `val`. All ids between the ones found in `at` are mapped to their identity.
+The changed value storage stores the changed unmapped ids (`at`) and their corresponding mapped ids (`val`) in a simple int→int mapping, packed as varint pairs in `val`.
 
 * `id` (byte tag) is `2`
+* `val` (byte array tag) contains alternating `at` and `val` pairs
+* Optional: `nofill` (byte tag): Unless present, all `id`s between the ones found in `at` are mapped to their identity
 
-### Identity storage
+#### Identity storage
 
 The identity storage signifies that every id between `0` and `size` is mapped to itself. This is sometimes used over simply leaving out the entry to make sure ids stay in bounds.
 
