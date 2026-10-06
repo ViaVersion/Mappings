@@ -1704,7 +1704,11 @@
     "woodland_mansion_map",
     "buried_trial_chambers_map",
     "jungle_pyramid_map",
-    "swamp_hut_map"
+    "swamp_hut_map",
+    "ice_ball",
+    "frostbite_spawn_egg",
+    "ice_crystal",
+    "icicle"
   ],
   "blocks": [
     "air",
@@ -3012,7 +3016,9 @@
     "brown_concrete_slab",
     "green_concrete_slab",
     "red_concrete_slab",
-    "black_concrete_slab"
+    "black_concrete_slab",
+    "ice_crystal",
+    "icicle"
   ],
   "entities": [
     "acacia_boat",
@@ -3195,7 +3201,9 @@
     "sulfur_cube",
     "poplar_boat",
     "poplar_chest_boat",
-    "cushion"
+    "cushion",
+    "frostbite",
+    "ice_ball"
   ],
   "blockentities": [
     "furnace",
@@ -3391,7 +3399,8 @@
     "geyser_plume",
     "red_poplar_leaves",
     "orange_poplar_leaves",
-    "yellow_poplar_leaves"
+    "yellow_poplar_leaves",
+    "freezing"
   ],
   "argumenttypes": [
     "brigadier:bool",
@@ -6108,6 +6117,31 @@
     "block.straw_bed.fall",
     "block.red_shrub.break",
     "block.red_shrub.place",
-    "entity.zombie_nautilus.riding"
+    "entity.zombie_nautilus.riding",
+    "block.ice.break",
+    "block.ice.hit",
+    "block.ice.fall",
+    "block.ice.place",
+    "block.ice.step",
+    "entity.frostbite.ambient",
+    "entity.frostbite.death",
+    "entity.frostbite.hurt",
+    "entity.frostbite.step",
+    "block.ice_crystal.break",
+    "block.ice_crystal.hit",
+    "block.ice_crystal.fall",
+    "block.ice_crystal.place",
+    "block.ice_crystal.step",
+    "block.icicle.break",
+    "block.icicle.hit",
+    "block.icicle.fall",
+    "block.icicle.place",
+    "block.icicle.step",
+    "block.icicle.land",
+    "entity.ice_ball.break",
+    "entity.ice_ball.throw",
+    "entity.zombie.converted_to_frostbite",
+    "entity.frostbite.converted_to_zombie",
+    "event.mob_effect.freezing"
   ]
 }
