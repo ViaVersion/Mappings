@@ -42,10 +42,10 @@ To test or override backwards mappings on a server without recompiling ViaBackwa
 
 ## Updating version files
 
-When moving to new Minecraft updates, these files must be updated manually with version numbers, not snapshot strings:
+When moving to new Minecraft updates, update these files manually with release version numbers, not snapshot strings:
 
 * `next_release.txt`: the upcoming release being targeted.
-* `last_release.txt`: The last release with existing files in `mappings/` (e.g. `26.1` rather than `26.1.2` if the latest is hotfixes with no registry changes).
+* `last_release.txt`: the last release with existing files in `mappings/` (e.g. `26.1` rather than `26.1.2` if the latest is hotfixes with no registry changes).
 
 ## JSON format
 
@@ -91,29 +91,21 @@ The rest of the content depends on the storage strategy, each resulting in vastl
 
 #### Direct value storage
 
-The direct storage simply stores the mapped ids in order, packed into `val` as the ZigZag difference to the previous mapped id.
-
-* `id` (byte tag) is `0`
+The direct storage (`id` is `0`) simply stores the mapped ids in order, packed into `val` as the ZigZag difference to the previous mapped id.
 
 #### Shifted value storage
 
-The shifted value storage stores a sequence of boundary pairs (`at`, `to`) packed into `val`. For an index `i`, all unmapped ids between `at[i] + sequence` (inclusive) and `at[i + 1]` (exclusive) are mapped to `to[i] + sequence`.
-
-* `id` (byte tag) is `1`
+The shifted value storage (`id` is `1`) stores a sequence of boundary pairs (`at`, `to`) packed into `val`. For an index `i`, all unmapped ids between `at[i] + sequence` (inclusive) and `at[i + 1]` (exclusive) are mapped to `to[i] + sequence`.
 
 #### Changed value storage
 
-The changed value storage stores the changed unmapped ids (`at`) and their corresponding mapped ids (`val`) in a simple int→int mapping, packed as varint pairs in `val`.
+The changed value storage (`id` is `2`) stores the changed unmapped ids (`at`) and their corresponding mapped ids (`val`) in a simple int→int mapping, packed into `val` as alternating varint pairs.
 
-* `id` (byte tag) is `2`
-* `val` (byte array tag) contains alternating `at` and `val` pairs
 * Optional: `nofill` (byte tag): Unless present, all `id`s between the ones found in `at` are mapped to their identity
 
 #### Identity storage
 
-The identity storage signifies that every id between `0` and `size` is mapped to itself. This is sometimes used over simply leaving out the entry to make sure ids stay in bounds.
-
-* `id` (byte tag) is `3`
+The identity storage (`id` is `3`) signifies that every id between `0` and `size` is mapped to itself. This is sometimes used over simply leaving out the entry to make sure ids stay in bounds.
 
 ## License
 
