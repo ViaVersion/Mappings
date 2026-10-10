@@ -82,8 +82,19 @@ public final class MappingsLoader {
      * @return mappings result with int to int array mappings
      */
     public static MappingsResult map(final JsonArray unmappedIdentifiers, final JsonArray mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final ErrorStrategy errorStrategy) {
+        return map(unmappedIdentifiers, new DiffMapper(MappingsLoader.arrayToMap(mappedIdentifiers), diffIdentifiers), errorStrategy);
+    }
+
+    /**
+     * Returns a mappings result with int to int array mappings.
+     *
+     * @param unmappedIdentifiers array of unmapped identifiers
+     * @param mapper              mapper for the target identifiers
+     * @param errorStrategy       whether to warn on missing mappings
+     * @return mappings result with int to int array mappings
+     */
+    static MappingsResult map(final JsonArray unmappedIdentifiers, final DiffMapper mapper, final ErrorStrategy errorStrategy) {
         final int[] output = new int[unmappedIdentifiers.size()];
-        final DiffMapper mapper = new DiffMapper(MappingsLoader.arrayToMap(mappedIdentifiers), diffIdentifiers);
         int emptyMappings = 0;
         int identityMappings = 0;
         int shiftChanges = 0;
@@ -111,7 +122,10 @@ public final class MappingsLoader {
         for (final String key : mapper.redundantEntries()) {
             LOGGER.warn("Diff mapping doesn't change anything: {}", key);
         }
-        return new MappingsResult(output, mappedIdentifiers.size(), emptyMappings, identityMappings, shiftChanges);
+        for (final Map.Entry<String, String> entry : mapper.swappableEmptyEntries().entrySet()) {
+            LOGGER.warn("Empty diff mapping could be resolved by a material swap: {} → {}", entry.getKey(), entry.getValue());
+        }
+        return new MappingsResult(output, mapper.mappedSize(), emptyMappings, identityMappings, shiftChanges);
     }
 
     /**
@@ -151,6 +165,7 @@ public final class MappingsLoader {
         final Set<String> toIgnore
     ) {
         final JsonObject diffObject = new JsonObject();
+        final MaterialSwaps materialSwaps = MaterialSwaps.of(existingDiffObject);
         for (final Map.Entry<String, JsonElement> entry : unmappedObject.entrySet()) {
             final String key = entry.getKey();
             if (!entry.getValue().isJsonArray() || !mappedObject.has(key) || toIgnore.contains(key)) {
@@ -161,7 +176,7 @@ public final class MappingsLoader {
             final JsonArray mappedIdentifiers = mappedObject.getAsJsonArray(key);
             final JsonObject diffIdentifiers = new JsonObject();
             final JsonObject existingDiffIdentifiers = existingDiffObject != null && existingDiffObject.has(key) ? existingDiffObject.getAsJsonObject(key) : null;
-            final DiffMapper mapper = new DiffMapper(MappingsLoader.arrayToMap(mappedIdentifiers), existingDiffIdentifiers);
+            final DiffMapper mapper = new DiffMapper(MappingsLoader.arrayToMap(mappedIdentifiers), existingDiffIdentifiers, materialSwaps);
             for (int id = 0; id < unmappedIdentifiers.size(); id++) {
                 final String unmappedIdentifier = unmappedIdentifiers.get(id).getAsString();
                 final int mappedId = mapper.map(id, unmappedIdentifier, ErrorStrategy.IGNORE);

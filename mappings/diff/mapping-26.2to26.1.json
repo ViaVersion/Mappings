@@ -1,10 +1,10 @@
 {
-  "blockstates": {
+  "materials": {
     "sulfur": "sandstone",
+    "cinnabar": "granite"
+  },
+  "blockstates": {
     "potent_sulfur": "end_stone",
-    "sulfur_slab": "sandstone_slab[",
-    "sulfur_stairs": "sandstone_stairs[",
-    "sulfur_wall": "sandstone_wall[",
     "polished_sulfur": "smooth_sandstone",
     "polished_sulfur_slab": "sandstone_slab[",
     "polished_sulfur_stairs": "sandstone_stairs[",
@@ -13,12 +13,6 @@
     "sulfur_brick_slab": "end_stone_brick_slab[",
     "sulfur_brick_stairs": "end_stone_brick_stairs[",
     "sulfur_brick_wall": "end_stone_brick_wall[",
-    "chiseled_sulfur": "chiseled_sandstone",
-    "cinnabar": "granite",
-    "cinnabar_slab": "granite_slab[",
-    "cinnabar_stairs": "granite_stairs[",
-    "cinnabar_wall": "granite_wall[",
-    "polished_cinnabar": "polished_granite",
     "polished_cinnabar_slab": "granite_slab[",
     "polished_cinnabar_stairs": "granite_stairs[",
     "polished_cinnabar_wall": "granite_wall[",
@@ -30,11 +24,7 @@
     "sulfur_spike": "pointed_dripstone["
   },
   "items": {
-    "sulfur": "sandstone",
     "potent_sulfur": "end_stone",
-    "sulfur_slab": "sandstone_slab",
-    "sulfur_stairs": "sandstone_stairs",
-    "sulfur_wall": "sandstone_wall",
     "polished_sulfur": "smooth_sandstone",
     "polished_sulfur_slab": "sandstone_slab",
     "polished_sulfur_stairs": "sandstone_stairs",
@@ -43,12 +33,6 @@
     "sulfur_brick_slab": "end_stone_brick_slab",
     "sulfur_brick_stairs": "end_stone_brick_stairs",
     "sulfur_brick_wall": "end_stone_brick_wall",
-    "chiseled_sulfur": "chiseled_sandstone",
-    "cinnabar": "granite",
-    "cinnabar_slab": "granite_slab",
-    "cinnabar_stairs": "granite_stairs",
-    "cinnabar_wall": "granite_wall",
-    "polished_cinnabar": "polished_granite",
     "polished_cinnabar_slab": "granite_slab",
     "polished_cinnabar_stairs": "granite_stairs",
     "polished_cinnabar_wall": "granite_wall",

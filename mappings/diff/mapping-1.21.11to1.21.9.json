@@ -1,19 +1,12 @@
 {
+  "materials": {
+    "spear": "sword",
+    "nautilus_armor": "horse_armor"
+  },
   "items": {
     "nautilus_spawn_egg": "squid_spawn_egg",
     "zombie_nautilus_spawn_egg": "glow_squid_spawn_egg",
-    "wooden_spear": "wooden_sword",
-    "stone_spear": "stone_sword",
-    "copper_spear": "copper_sword",
-    "iron_spear": "iron_sword",
-    "golden_spear": "golden_sword",
-    "diamond_spear": "diamond_sword",
-    "netherite_spear": "netherite_sword",
-    "iron_nautilus_armor": "iron_horse_armor",
-    "golden_nautilus_armor": "golden_horse_armor",
-    "diamond_nautilus_armor": "diamond_horse_armor",
     "netherite_nautilus_armor": "leather_horse_armor",
-    "copper_nautilus_armor": "copper_horse_armor",
     "camel_husk_spawn_egg": "camel_spawn_egg",
     "parched_spawn_egg": "skeleton_spawn_egg",
     "netherite_horse_armor": "leather_horse_armor"

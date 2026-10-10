@@ -64,6 +64,11 @@ Diff mappings between versions are in `mappings/diff/mapping-<from>to<to>.json`.
   * Intentionally unmapped: `""`
 * Registries (`items`, `blocks`, `entities`, `sounds`, `menus`, `attributes`, etc.)
   * Identifier remaps: `"old_id": "new_id"` (or `""` if unmapped)
+* Material swaps
+  * Top-level `materials` object replacing whole words of identifiers that have neither a direct mapping nor a diff entry, across all registries that require mappings: `"materials": { "poplar": "birch" }` maps `stripped_poplar_log` to `stripped_birch_log`
+  * Additional words to replace in matching identifiers: `"crimson": { "to": "acacia", "words": { "stem": "log", "hyphae": "wood" } }`
+  * Swaps only apply if the result exists, the material with the most words wins; explicit entries handle exceptions
+  * The optimizer logs swap counts per registry (every swapped identifier on debug level) and warns about unused swaps and empty entries a swap could resolve
 * Custom model data
   * Generated *item* remaps to *custom model data* IDs: `"item_id": 123`
 * Tags
@@ -110,6 +115,10 @@ The changed value storage (`id` is `2`) stores the changed unmapped ids (`at`) a
 #### Identity storage
 
 The identity storage (`id` is `3`) signifies that every id between `0` and `size` is mapped to itself. This is sometimes used over simply leaving out the entry to make sure ids stay in bounds.
+
+#### Id ranges
+
+Sets of ids and unordered tags are stored as byte array tags of sorted ranges. Each range is a varint pair of its start (relative to the previous range's exclusive end) and its length minus one.
 
 ## License
 

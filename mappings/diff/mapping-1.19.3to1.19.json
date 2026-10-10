@@ -1,4 +1,13 @@
 {
+  "materials": {
+    "bamboo": {
+      "to": "birch",
+      "words": {
+        "block": "wood",
+        "raft": "boat"
+      }
+    }
+  },
   "blockstates": {
     "note_block[instrument=zombie]": "note_block[instrument=harp]",
     "note_block[instrument=skeleton]": "note_block[instrument=harp]",
@@ -9,11 +18,8 @@
     "note_block[instrument=custom_head]": "note_block[instrument=harp]",
     "piglin_head": "zombie_head[",
     "piglin_wall_head": "zombie_wall_head[",
-    "bamboo_planks": "birch_planks",
     "bamboo_mosaic": "birch_planks",
     "chiseled_bookshelf": "bookshelf",
-    "bamboo_sign": "birch_sign[",
-    "bamboo_wall_sign": "birch_wall_sign[",
     "oak_hanging_sign": "oak_sign[",
     "spruce_hanging_sign": "spruce_sign[",
     "birch_hanging_sign": "birch_sign[",
@@ -34,18 +40,8 @@
     "crimson_wall_hanging_sign": "crimson_wall_sign[",
     "warped_wall_hanging_sign": "warped_wall_sign[",
     "bamboo_wall_hanging_sign": "birch_wall_sign[",
-    "bamboo_pressure_plate": "birch_pressure_plate[",
-    "bamboo_trapdoor": "birch_trapdoor[",
-    "bamboo_button": "birch_button[",
-    "bamboo_stairs": "birch_stairs[",
     "bamboo_mosaic_stairs": "birch_stairs[",
-    "bamboo_slab": "birch_slab[",
-    "bamboo_mosaic_slab": "birch_slab[",
-    "bamboo_fence": "birch_fence[",
-    "bamboo_fence_gate": "birch_fence_gate[",
-    "bamboo_door": "birch_door[",
-    "bamboo_block": "birch_wood[",
-    "stripped_bamboo_block": "stripped_birch_wood["
+    "bamboo_mosaic_slab": "birch_slab["
   },
   "argumenttypes": {
     "resource_key": "resource_or_tag",
@@ -57,22 +53,10 @@
     "chiseled_bookshelf": ""
   },
   "items": {
-    "bamboo_planks": "birch_planks",
     "bamboo_mosaic": "birch_planks",
-    "bamboo_slab": "birch_slab",
     "bamboo_mosaic_slab": "birch_slab",
     "chiseled_bookshelf": "bookshelf",
-    "bamboo_fence": "birch_fence",
-    "bamboo_stairs": "birch_stairs",
     "bamboo_mosaic_stairs": "birch_stairs",
-    "bamboo_button": "birch_button",
-    "bamboo_pressure_plate": "birch_pressure_plate",
-    "bamboo_door": "birch_door",
-    "bamboo_trapdoor": "birch_trapdoor",
-    "bamboo_fence_gate": "birch_fence_gate",
-    "bamboo_raft": "birch_boat",
-    "bamboo_chest_raft": "birch_chest_boat",
-    "bamboo_sign": "birch_sign",
     "oak_hanging_sign": "oak_sign",
     "spruce_hanging_sign": "spruce_sign",
     "birch_hanging_sign": "birch_sign",
@@ -88,8 +72,6 @@
     "iron_golem_spawn_egg": "polar_bear_spawn_egg",
     "snow_golem_spawn_egg": "polar_bear_spawn_egg",
     "wither_spawn_egg": "squid_spawn_egg",
-    "bamboo_block": "birch_wood",
-    "stripped_bamboo_block": "stripped_birch_wood",
     "piglin_head": "zombie_head"
   },
   "sounds": {

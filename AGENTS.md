@@ -29,6 +29,15 @@
   `"old_block": {"to": "new_block", "rename": {"facing": "axis"}, "remap": {"facing": {"up": "y"}}}`.
 - Use `""` only when the source intentionally has no target mapping.
 
+## Material swaps
+
+- The top-level `materials` object maps whole words of identifiers, e.g. a new wood type to an existing one:
+  `"materials": {"poplar": "birch", "crimson": {"to": "acacia", "words": {"stem": "log", "hyphae": "wood"}}}`.
+- Swaps apply to all registries that require mappings (not `blocks`/`statistics`), but only to identifiers without a direct
+  mapping or diff entry, and only if the swapped identifier exists in the target. Blockstate properties are merged as above.
+- Prefer a swap over many identical per-identifier entries; keep explicit entries only for exceptions,
+  and don't leave `""` entries for identifiers a swap should handle.
+
 ## Other sections
 
 - Sections like `items`, `entities`, `sounds`, and names map source identifier/name keys to target values.

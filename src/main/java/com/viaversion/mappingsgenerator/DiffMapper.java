@@ -45,19 +45,29 @@ import org.jetbrains.annotations.Nullable;
  * {"to": "new_block[prop=a]", "remap": {"source_prop": {"old_value": "new_value"}}, "rename": {"source_prop": "target_prop"}}
  * }</pre>
  * Both {@code remap} and {@code rename} use source property names, values missing from a remap table are kept.
+ * <p>
+ * Entries without a direct mapping or diff entry fall back to {@link MaterialSwaps}.
  */
 final class DiffMapper {
 
     private final Object2IntMap<String> mappedIdentifiers;
     private final @Nullable JsonObject diffIdentifiers;
+    private final @Nullable MaterialSwaps materialSwaps;
     private @Nullable Map<String, List<String>> blockProperties;
     private @Nullable Map<String, List<PartialKey>> partialKeys;
     private final Map<JsonObject, Rule> rules = new IdentityHashMap<>();
     private final Map<String, Boolean> usedEntries = new HashMap<>(); // Whether the entry resulted in anything other than the direct mapping
+    private final Map<String, MaterialSwaps.Swap> swappedEntries = new LinkedHashMap<>();
+    private final Map<String, String> swappableEmptyEntries = new LinkedHashMap<>();
 
     DiffMapper(final Object2IntMap<String> mappedIdentifiers, @Nullable final JsonObject diffIdentifiers) {
+        this(mappedIdentifiers, diffIdentifiers, null);
+    }
+
+    DiffMapper(final Object2IntMap<String> mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, @Nullable final MaterialSwaps materialSwaps) {
         this.mappedIdentifiers = mappedIdentifiers;
         this.diffIdentifiers = diffIdentifiers;
+        this.materialSwaps = materialSwaps;
     }
 
     /**
@@ -95,6 +105,12 @@ final class DiffMapper {
                 mappedName = rule != null ? rule.to() : diffElement.getAsString();
                 if (mappedName.isEmpty()) {
                     usedEntries.put(diffKey, true);
+                    if (directMappedId == -1) {
+                        final String swappedName = swap(value);
+                        if (swappedName != null) {
+                            swappableEmptyEntries.put(diffKey, swappedName);
+                        }
+                    }
                     return -1; // "empty" remaps without warnings
                 }
 
@@ -110,16 +126,63 @@ final class DiffMapper {
             }
         }
 
+        if (mappedId == -1 && mappedName == null && materialSwaps != null) {
+            final MaterialSwaps.Swap swap = materialSwaps.swap(value);
+            if (swap != null) {
+                mappedName = resolveTarget(value, null, swap.target());
+                mappedId = mappedIdentifiers.getInt(mappedName);
+                if (mappedId != -1) {
+                    materialSwaps.markUsed(swap.material());
+                    swappedEntries.put(swap.base(value), swap);
+                }
+            }
+        }
+
         if (mappedId == -1) {
-            if (diffIdentifiers == null) {
-                errorStrategy.apply("No direct mapping or diff file for " + value + " :( ");
-            } else if (mappedName != null) {
+            if (mappedName != null) {
                 errorStrategy.apply("No mapping for " + value + " (resolved to " + mappedName + ") :( ");
+            } else if (diffIdentifiers == null && materialSwaps == null) {
+                errorStrategy.apply("No direct mapping or diff file for " + value + " :( ");
             } else {
                 errorStrategy.apply("No mapping for " + value + " :( ");
             }
         }
         return mappedId;
+    }
+
+    /**
+     * Returns the target the material swaps resolve the given identifier to, or null if they don't.
+     */
+    private @Nullable String swap(final String value) {
+        final MaterialSwaps.Swap swap = materialSwaps != null ? materialSwaps.swap(value) : null;
+        if (swap == null) {
+            return null;
+        }
+
+        final String swappedName = resolveTarget(value, null, swap.target());
+        return mappedIdentifiers.containsKey(swappedName) ? swappedName : null;
+    }
+
+    int mappedSize() {
+        return mappedIdentifiers.size();
+    }
+
+    /**
+     * Returns identifiers (without blockstate properties) mapped through material swaps.
+     *
+     * @return swapped identifiers with their swap
+     */
+    Map<String, MaterialSwaps.Swap> swappedEntries() {
+        return swappedEntries;
+    }
+
+    /**
+     * Returns empty diff entries that material swaps could resolve instead.
+     *
+     * @return diff keys with what they could be swapped to
+     */
+    Map<String, String> swappableEmptyEntries() {
+        return swappableEmptyEntries;
     }
 
     /**

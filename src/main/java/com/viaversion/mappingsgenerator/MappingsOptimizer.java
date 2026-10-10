@@ -49,6 +49,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -106,6 +107,8 @@ public final class MappingsOptimizer {
     private final boolean backwards;
     private ErrorStrategy errorStrategy = ErrorStrategy.WARN;
     private JsonObject diffObject;
+    private MaterialSwaps materialSwaps;
+    private final Set<String> swappedBlocks = new HashSet<>();
     private boolean keepUnknownFields;
 
     public static void main(final String[] args) throws IOException {
@@ -183,6 +186,7 @@ public final class MappingsOptimizer {
      */
     public void optimizeAndWrite() throws IOException {
         LOGGER.info("=== Compacting json mapping files for versions {} → {}...", fromVersion, toVersion);
+        materialSwaps = MaterialSwaps.of(diffObject);
 
         if (keepUnknownFields) {
             handleUnknownFields();
@@ -212,11 +216,17 @@ public final class MappingsOptimizer {
             if (diffObject.has("tags")) {
                 tags();
             }
-            if (diffObject.has("blockstates")) {
+            if (diffObject.has("blockstates") || !swappedBlocks.isEmpty()) {
                 changedBlockStateProperties();
             }
             if (diffObject.has("environment_attribute")) {
                 changedEnvironmentAttributes();
+            }
+        }
+
+        if (materialSwaps != null) {
+            for (final String material : materialSwaps.unusedMaterials()) {
+                LOGGER.warn("Unused material swap: {}", material);
             }
         }
 
@@ -400,8 +410,28 @@ public final class MappingsOptimizer {
 
         LOGGER.debug("Mapping {}: {} → {}", key, unmappedIdentifiers.size(), mappedIdentifiers.size());
         final JsonObject diffIdentifiers = diffObject != null ? diffObject.getAsJsonObject(key) : null;
-        final MappingsResult result = MappingsLoader.map(unmappedIdentifiers, mappedIdentifiers, diffIdentifiers, shouldWarn(key));
+        // Registries allowed to have missing mappings stay unmapped
+        final MaterialSwaps swaps = ignoreMissing.contains(key) ? null : materialSwaps;
+        final DiffMapper mapper = new DiffMapper(MappingsLoader.arrayToMap(mappedIdentifiers), diffIdentifiers, swaps);
+        final MappingsResult result = MappingsLoader.map(unmappedIdentifiers, mapper, shouldWarn(key));
         serialize(result, output, key, alwaysWriteIdentity);
+        logMaterialSwaps(key, mapper.swappedEntries());
+        if (key.equals("blockstates")) {
+            swappedBlocks.addAll(mapper.swappedEntries().keySet());
+        }
+    }
+
+    private void logMaterialSwaps(final String key, final Map<String, MaterialSwaps.Swap> swappedEntries) {
+        if (swappedEntries.isEmpty()) {
+            return;
+        }
+
+        final Map<String, Integer> counts = new LinkedHashMap<>();
+        for (final Map.Entry<String, MaterialSwaps.Swap> entry : swappedEntries.entrySet()) {
+            counts.merge(entry.getValue().material(), 1, Integer::sum);
+            LOGGER.debug("{}: {} → {}", key, entry.getKey(), entry.getValue().target());
+        }
+        LOGGER.info("{}: material swaps {}", key, counts);
     }
 
     private ErrorStrategy shouldWarn(final String key) {
@@ -512,7 +542,8 @@ public final class MappingsOptimizer {
 
         final Object2IntMap<String> blockIds = MappingsLoader.arrayToMap(unmappedObject.getAsJsonArray("blocks"));
         final IntSet changedProperties = new IntOpenHashSet();
-        for (final Map.Entry<String, JsonElement> entry : diffObject.getAsJsonObject("blockstates").entrySet()) {
+        final JsonObject blockstates = diffObject.has("blockstates") ? diffObject.getAsJsonObject("blockstates") : new JsonObject();
+        for (final Map.Entry<String, JsonElement> entry : blockstates.entrySet()) {
             final String block = entry.getKey().split("\\[", 2)[0];
             final int id = blockIds.getInt(block);
             if (id == -1) {
@@ -521,9 +552,15 @@ public final class MappingsOptimizer {
 
             changedProperties.add(id);
         }
+        for (final String block : swappedBlocks) {
+            changedProperties.add(blockIds.getInt(block));
+        }
 
         if (!changedProperties.isEmpty()) {
-            output.put("changed_blocks", new IntArrayTag(changedProperties.toIntArray()));
+            // Sorted for output independent of the diff entry order
+            final int[] changedBlocks = changedProperties.toIntArray();
+            Arrays.sort(changedBlocks);
+            output.put("changed_blocks", new IntArrayTag(changedBlocks));
         }
     }
 
