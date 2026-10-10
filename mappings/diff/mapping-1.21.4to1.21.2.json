@@ -37,7 +37,6 @@
     "block.eyeblossom.idle": "",
     "block.resin.break": "block.frogspawn.break",
     "block.resin.fall": "block.nether_gold_ore.fall",
-    "block.resin.hit": "block.slime_block.hit",
     "block.resin.place": "block.moss.place",
     "block.resin.step": "block.slime_block.step",
     "block.resin_bricks.break": "block.tuff_bricks.break",

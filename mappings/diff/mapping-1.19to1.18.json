@@ -140,15 +140,12 @@
     "block.packed_mud.place": "block.stone.place",
     "block.packed_mud.step": "block.stone.step",
     "entity.tadpole.death": "entity.salmon.death",
-    "entity.tadpole.eat": "entity.salmon.flop",
     "entity.tadpole.flop": "entity.salmon.flop",
     "entity.tadpole.grow_up": "entity.villager.ambient",
     "entity.tadpole.hurt": "entity.salmon.hurt",
-    "entity.tadpole.step": "entity.salmon.flop",
     "entity.allay.ambient_with_item": "block.amethyst_block.chime",
     "entity.allay.ambient_without_item": "block.amethyst_block.chime",
     "entity.allay.death": "entity.vex.death",
-    "entity.allay.flap": "block.amethyst_block.chime",
     "entity.allay.hurt": "entity.vex.hurt",
     "entity.allay.item_given": "entity.item.pickup",
     "entity.allay.item_taken": "entity.item.pickup",
@@ -230,7 +227,6 @@
     "sculk_charge": "",
     "sculk_charge_pop": "bubble_pop",
     "shriek": "",
-    "allay_dust": "wax_off",
     "sonic_boom": "enchanted_hit"
   },
   "blockentities": {

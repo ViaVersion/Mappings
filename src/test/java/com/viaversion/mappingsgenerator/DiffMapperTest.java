@@ -3,6 +3,7 @@ package com.viaversion.mappingsgenerator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -70,6 +71,27 @@ final class DiffMapperTest {
         // Invalid rules
         Assertions.assertThrows(IllegalArgumentException.class, () -> assertMapped("{\"wall\": {\"target\": \"wall\"}}", "wall[east=true,up=true]", null));
         Assertions.assertThrows(IllegalArgumentException.class, () -> assertMapped("{\"wall\": {\"remap\": {}}}", "wall[east=true,up=true]", null));
+    }
+
+    @Test
+    void testIneffectiveEntries() {
+        final JsonObject diff = JsonParser.parseString("""
+            {
+              "sensor": "slab[type=bottom]",
+              "sensor[power=1]": "slab[type=top]",
+              "sensor[power=1,waterlogged=true]": "stone",
+              "sensor[power=9]": "stone",
+              "removed": "stone",
+              "stone": "stone",
+              "unmapped": ""
+            }""").getAsJsonObject();
+        final DiffMapper mapper = new DiffMapper(MappingsLoader.arrayToMap(TARGET_STATES), diff);
+        for (final String state : new String[]{"sensor[power=1,waterlogged=true]", "sensor[power=0,waterlogged=true]", "stone", "unmapped"}) {
+            mapper.map(0, state, ErrorStrategy.IGNORE);
+        }
+        // "sensor[power=1]" is shadowed by the more specific key
+        Assertions.assertEquals(List.of("sensor[power=1]", "sensor[power=9]", "removed"), mapper.unusedEntries());
+        Assertions.assertEquals(List.of("stone"), mapper.redundantEntries());
     }
 
     private static void assertMapped(final String diff, final String source, final String expectedTarget) {

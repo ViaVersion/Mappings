@@ -27,7 +27,6 @@
     "block.dried_ghast.break": "block.crop.break",
     "block.dried_ghast.step": "block.resin.step",
     "block.dried_ghast.fall": "block.resin.step",
-    "block.dried_ghast.hit": "",
     "block.dried_ghast.ambient": "",
     "block.dried_ghast.ambient_water": "",
     "block.dried_ghast.place": "block.crop.break",

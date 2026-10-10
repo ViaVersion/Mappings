@@ -29,7 +29,6 @@
     "entity.armadillo.roll": "entity.player.attack.nodamage",
     "entity.armadillo.land": "entity.player.small_fall",
     "entity.armadillo.scute_drop": "entity.chicken.egg",
-    "entity.armadillo.unroll": "block.wood.hit",
     "entity.armadillo.brush": "entity.chicken.egg",
     "item.armor.equip_wolf": "item.armor.equip_leather",
     "item.armor.unequip_wolf": "entity.sheep.shear",

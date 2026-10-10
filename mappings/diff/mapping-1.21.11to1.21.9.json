@@ -51,7 +51,6 @@
     "entity.zombie_nautilus.hurt": "entity.drowned.hurt",
     "entity.zombie_nautilus.swim": "entity.generic.swim",
     "entity.nautilus.riding": "",
-    "item.underwater_saddle.equip": "entity.horse.saddle",
     "entity.camel_husk.ambient": "entity.camel.ambient",
     "entity.camel_husk.dash": "entity.camel.dash",
     "entity.camel_husk.dash_ready": "entity.camel.dash_ready",

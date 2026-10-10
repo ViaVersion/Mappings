@@ -104,6 +104,13 @@ public final class MappingsLoader {
                 shiftChanges++;
             }
         }
+
+        for (final String key : mapper.unusedEntries()) {
+            LOGGER.warn("Unused diff mapping: {}", key);
+        }
+        for (final String key : mapper.redundantEntries()) {
+            LOGGER.warn("Diff mapping doesn't change anything: {}", key);
+        }
         return new MappingsResult(output, mappedIdentifiers.size(), emptyMappings, identityMappings, shiftChanges);
     }
 

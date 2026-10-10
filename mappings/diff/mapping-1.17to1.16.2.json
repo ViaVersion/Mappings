@@ -545,7 +545,6 @@
     "entity.goat.screaming.death": "entity.sheep.death",
     "entity.goat.screaming.hurt": "entity.sheep.hurt",
     "entity.goat.screaming.milk": "entity.cow.milk",
-    "entity.goat.screaming.ram": "",
     "entity.goat.step": "entity.sheep.step",
     "item.bone_meal.use": "block.wet_grass.step",
     "entity.goat.eat": "entity.fox.eat",

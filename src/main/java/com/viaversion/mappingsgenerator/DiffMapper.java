@@ -53,6 +53,7 @@ final class DiffMapper {
     private @Nullable Map<String, List<String>> blockProperties;
     private @Nullable Map<String, List<PartialKey>> partialKeys;
     private final Map<JsonObject, Rule> rules = new IdentityHashMap<>();
+    private final Map<String, Boolean> usedEntries = new HashMap<>(); // Whether the entry resulted in anything other than the direct mapping
 
     DiffMapper(final Object2IntMap<String> mappedIdentifiers, @Nullable final JsonObject diffIdentifiers) {
         this.mappedIdentifiers = mappedIdentifiers;
@@ -68,20 +69,24 @@ final class DiffMapper {
      * @return mapped id, or -1 if it was not found
      */
     int map(final int id, final String value, final ErrorStrategy errorStrategy) {
-        int mappedId = mappedIdentifiers.getInt(value);
+        final int directMappedId = mappedIdentifiers.getInt(value);
+        int mappedId = directMappedId;
         String mappedName = null;
         if (diffIdentifiers != null) {
             // Always check diff mappings to allow overrides for already existing entries
-            JsonElement diffElement = diffIdentifiers.get(value);
+            String diffKey = value;
+            JsonElement diffElement = diffIdentifiers.get(diffKey);
             final PartialKey partialKey;
-            if (diffElement != null || (diffElement = diffIdentifiers.get(Integer.toString(id))) != null) {
+            if (diffElement != null || (diffElement = diffIdentifiers.get(diffKey = Integer.toString(id))) != null) {
                 // Direct match by id or value
                 if (diffElement.isJsonPrimitive() && diffElement.getAsString().startsWith("id:")) {
                     // Special case for cursed mappings
+                    usedEntries.put(diffKey, true);
                     return Integer.parseInt(diffElement.getAsString().substring("id:".length()));
                 }
             } else if (value.indexOf('[') != -1 && (partialKey = matchPartialKey(value, errorStrategy)) != null) {
                 // Mapping for all states of the block with the given properties
+                diffKey = partialKey.key();
                 diffElement = partialKey.value();
             }
 
@@ -89,16 +94,19 @@ final class DiffMapper {
                 final Rule rule = diffElement.isJsonObject() ? rules.computeIfAbsent(diffElement.getAsJsonObject(), Rule::parse) : null;
                 mappedName = rule != null ? rule.to() : diffElement.getAsString();
                 if (mappedName.isEmpty()) {
+                    usedEntries.put(diffKey, true);
                     return -1; // "empty" remaps without warnings
                 }
 
                 try {
                     mappedName = resolveTarget(value, rule, mappedName);
                 } catch (final IllegalArgumentException e) {
+                    usedEntries.put(diffKey, true);
                     errorStrategy.apply("Invalid mapping for " + value + ": " + e.getMessage());
                     return -1;
                 }
                 mappedId = mappedIdentifiers.getInt(mappedName);
+                usedEntries.merge(diffKey, mappedId == -1 || mappedId != directMappedId, Boolean::logicalOr);
             }
         }
 
@@ -112,6 +120,24 @@ final class DiffMapper {
             }
         }
         return mappedId;
+    }
+
+    /**
+     * Returns diff entries that never applied to any entry, e.g. because they don't match or are shadowed by more specific ones.
+     *
+     * @return unused diff keys
+     */
+    List<String> unusedEntries() {
+        return diffIdentifiers == null ? List.of() : diffIdentifiers.keySet().stream().filter(key -> !usedEntries.containsKey(key)).toList();
+    }
+
+    /**
+     * Returns diff entries that only ever resulted in the same mapping as without them.
+     *
+     * @return redundant diff keys
+     */
+    List<String> redundantEntries() {
+        return usedEntries.entrySet().stream().filter(entry -> !entry.getValue()).map(Map.Entry::getKey).toList();
     }
 
     /**

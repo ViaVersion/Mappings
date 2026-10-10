@@ -711,7 +711,6 @@
     "entity.zoglin.attack": "entity.ravager.attack",
     "entity.zoglin.death": "entity.ravager.death",
     "entity.zoglin.hurt": "entity.ravager.hurt",
-    "entity.zoglin.retreat": "entity.ravager.hurt",
     "entity.zoglin.step": "entity.ravager.step",
     "entity.zombified_piglin.ambient": "entity.zombie_pigman.ambient",
     "entity.zombified_piglin.angry": "entity.zombie_pigman.angry",
