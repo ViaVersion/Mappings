@@ -59,6 +59,8 @@ Diff mappings between versions are in `mappings/diff/mapping-<from>to<to>.json`.
   * Partial state keys, the matching key with the most properties wins: `"old_block[prop=a]": "new_block[prop=b]"`
   * Copy all source properties: `"old_block": "new_block["`
   * Partial targets: properties left out of the target are copied from the source state by name, source properties the target doesn't have are dropped: `"old_block": "new_block[prop=b]"`
+  * Rules to also change property values or names (both keyed by source property names, values missing from `remap` are kept):
+    `"old_block": { "to": "new_block[prop=b]", "remap": { "facing": { "up": "y" } }, "rename": { "facing": "axis" } }`
   * Intentionally unmapped: `""`
 * Registries (`items`, `blocks`, `entities`, `sounds`, `menus`, `attributes`, etc.)
   * Identifier remaps: `"old_id": "new_id"` (or `""` if unmapped)

@@ -23,6 +23,7 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,12 @@ import org.jetbrains.annotations.Nullable;
  * Blockstate keys may leave out properties as well, matching every source state with the given property values.
  * Exact keys take precedence, then the matching key with the most properties, down to the bare block key.
  * Multiple matching keys with the same number of properties and different values are ambiguous and leave the state unmapped.
+ * <p>
+ * Instead of a string, values can be objects to also change property values or names before filling in the target:
+ * <pre>{@code
+ * {"to": "new_block[prop=a]", "remap": {"source_prop": {"old_value": "new_value"}}, "rename": {"source_prop": "target_prop"}}
+ * }</pre>
+ * Both {@code remap} and {@code rename} use source property names, values missing from a remap table are kept.
  */
 final class DiffMapper {
 
@@ -45,6 +52,7 @@ final class DiffMapper {
     private final @Nullable JsonObject diffIdentifiers;
     private @Nullable Map<String, List<String>> blockProperties;
     private @Nullable Map<String, List<PartialKey>> partialKeys;
+    private final Map<JsonObject, Rule> rules = new IdentityHashMap<>();
 
     DiffMapper(final Object2IntMap<String> mappedIdentifiers, @Nullable final JsonObject diffIdentifiers) {
         this.mappedIdentifiers = mappedIdentifiers;
@@ -68,22 +76,28 @@ final class DiffMapper {
             final PartialKey partialKey;
             if (diffElement != null || (diffElement = diffIdentifiers.get(Integer.toString(id))) != null) {
                 // Direct match by id or value
-                mappedName = diffElement.getAsString();
-                if (mappedName.startsWith("id:")) {
+                if (diffElement.isJsonPrimitive() && diffElement.getAsString().startsWith("id:")) {
                     // Special case for cursed mappings
-                    return Integer.parseInt(mappedName.substring("id:".length()));
+                    return Integer.parseInt(diffElement.getAsString().substring("id:".length()));
                 }
             } else if (value.indexOf('[') != -1 && (partialKey = matchPartialKey(value, errorStrategy)) != null) {
                 // Mapping for all states of the block with the given properties
-                mappedName = partialKey.value().getAsString();
+                diffElement = partialKey.value();
             }
 
-            if (mappedName != null) {
+            if (diffElement != null) {
+                final Rule rule = diffElement.isJsonObject() ? rules.computeIfAbsent(diffElement.getAsJsonObject(), Rule::parse) : null;
+                mappedName = rule != null ? rule.to() : diffElement.getAsString();
                 if (mappedName.isEmpty()) {
                     return -1; // "empty" remaps without warnings
                 }
 
-                mappedName = resolveTarget(value, mappedName);
+                try {
+                    mappedName = resolveTarget(value, rule, mappedName);
+                } catch (final IllegalArgumentException e) {
+                    errorStrategy.apply("Invalid mapping for " + value + ": " + e.getMessage());
+                    return -1;
+                }
                 mappedId = mappedIdentifiers.getInt(mappedName);
             }
         }
@@ -156,10 +170,11 @@ final class DiffMapper {
      * Properties that can't be filled are set to {@code ?}, so the result won't resolve.
      *
      * @param source source identifier
+     * @param rule   rule to apply to the source properties, if any
      * @param target mapped value
      * @return full target identifier
      */
-    private String resolveTarget(final String source, final String target) {
+    private String resolveTarget(final String source, @Nullable final Rule rule, final String target) {
         if (mappedIdentifiers.containsKey(target)) {
             return target;
         }
@@ -179,7 +194,7 @@ final class DiffMapper {
             return target;
         }
 
-        final Map<String, String> properties = properties(source);
+        final Map<String, String> properties = rule != null ? rule.apply(properties(source)) : properties(source);
         properties.putAll(targetProperties);
 
         final StringBuilder builder = new StringBuilder(block).append('[');
@@ -241,6 +256,64 @@ final class DiffMapper {
             properties.put(property.substring(0, separator), property.substring(separator + 1));
         }
         return properties;
+    }
+
+    private record Rule(String to, Map<String, Map<String, String>> remap, Map<String, String> rename) {
+
+        static Rule parse(final JsonObject object) {
+            String to = null;
+            final Map<String, Map<String, String>> remap = new HashMap<>();
+            final Map<String, String> rename = new HashMap<>();
+            for (final Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                switch (entry.getKey()) {
+                    case "to" -> to = entry.getValue().getAsString();
+                    case "remap" -> {
+                        for (final Map.Entry<String, JsonElement> property : entry.getValue().getAsJsonObject().entrySet()) {
+                            final Map<String, String> values = new HashMap<>();
+                            for (final Map.Entry<String, JsonElement> value : property.getValue().getAsJsonObject().entrySet()) {
+                                values.put(value.getKey(), value.getValue().getAsString());
+                            }
+                            remap.put(property.getKey(), values);
+                        }
+                    }
+                    case "rename" -> {
+                        for (final Map.Entry<String, JsonElement> property : entry.getValue().getAsJsonObject().entrySet()) {
+                            rename.put(property.getKey(), property.getValue().getAsString());
+                        }
+                    }
+                    default -> throw new IllegalArgumentException("Unknown field " + entry.getKey() + " in diff mapping " + object);
+                }
+            }
+
+            if (to == null) {
+                throw new IllegalArgumentException("Missing target in diff mapping " + object);
+            }
+            return new Rule(to, remap, rename);
+        }
+
+        Map<String, String> apply(final Map<String, String> properties) {
+            for (final String name : remap.keySet()) {
+                if (!properties.containsKey(name)) {
+                    throw new IllegalArgumentException("Unknown remapped property " + name);
+                }
+            }
+            for (final String name : rename.keySet()) {
+                if (!properties.containsKey(name)) {
+                    throw new IllegalArgumentException("Unknown renamed property " + name);
+                }
+            }
+
+            final Map<String, String> result = new HashMap<>();
+            for (final Map.Entry<String, String> entry : properties.entrySet()) {
+                final Map<String, String> values = remap.get(entry.getKey());
+                final String value = values != null ? values.getOrDefault(entry.getValue(), entry.getValue()) : entry.getValue();
+                final String name = rename.getOrDefault(entry.getKey(), entry.getKey());
+                if (result.put(name, value) != null) {
+                    throw new IllegalArgumentException("Duplicate property " + name + " after renaming");
+                }
+            }
+            return result;
+        }
     }
 
     private record PartialKey(String key, Map<String, String> properties, JsonElement value) {

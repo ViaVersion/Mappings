@@ -23,6 +23,10 @@
 - Target values may be partial: target properties left out are copied from the source state by name,
   source properties the target block doesn't have are dropped, e.g. `"old_block": "new_block[prop=b]"`.
   Every target property must end up with a valid value, otherwise the state stays unmapped.
+- Values can be rule objects when property values or names change; `remap` and `rename` use source property
+  names, values missing from a `remap` table are kept, explicit properties in `to` win:
+  `"old_wall": {"to": "new_wall", "remap": {"east": {"none": "false", "low": "true", "tall": "true"}}}`,
+  `"old_block": {"to": "new_block", "rename": {"facing": "axis"}, "remap": {"facing": {"up": "y"}}}`.
 - Use `""` only when the source intentionally has no target mapping.
 
 ## Other sections

@@ -386,10 +386,10 @@ public final class MappingUi {
             final String key = entry.getKey();
             final String value = entry.getValue().getAsString();
             collectBareFallbackConflict(blockstates, key, overwrite, conflicts);
-            if (blockstates.has(key) && blockstates.get(key).getAsString().equals(value) && !isCompact(key, value)) {
+            if (blockstates.has(key) && diffValue(blockstates.get(key)).equals(value) && !isCompact(key, value)) {
                 continue;
             }
-            if (!overwrite && blockstates.has(key) && !blockstates.get(key).getAsString().isEmpty()) {
+            if (!overwrite && blockstates.has(key) && !diffValue(blockstates.get(key)).isEmpty()) {
                 conflicts.add(key);
             }
             collectCompactConflicts(blockstates, key, value, overwrite, conflicts);
@@ -412,7 +412,7 @@ public final class MappingUi {
                 skipped++;
                 continue;
             }
-            if (blockstates.has(key) && blockstates.get(key).getAsString().equals(value)) {
+            if (blockstates.has(key) && diffValue(blockstates.get(key)).equals(value)) {
                 removed += removeEntriesCoveredByCompact(blockstates, key, value, overwrite);
                 skipped++;
                 continue;
@@ -441,7 +441,7 @@ public final class MappingUi {
         for (final Map.Entry<String, JsonElement> entry : entries.entrySet()) {
             final String key = entry.getKey();
             final String value = entry.getValue().getAsString();
-            if (!overwrite && sectionObject.has(key) && !sectionObject.get(key).getAsString().equals(value)) {
+            if (!overwrite && sectionObject.has(key) && !diffValue(sectionObject.get(key)).equals(value)) {
                 conflicts.add(key);
             }
         }
@@ -457,7 +457,7 @@ public final class MappingUi {
         for (final Map.Entry<String, JsonElement> entry : entries.entrySet()) {
             final String key = entry.getKey();
             final String value = entry.getValue().getAsString();
-            if (sectionObject.has(key) && sectionObject.get(key).getAsString().equals(value)) {
+            if (sectionObject.has(key) && diffValue(sectionObject.get(key)).equals(value)) {
                 skipped++;
                 continue;
             }
@@ -501,7 +501,7 @@ public final class MappingUi {
 
         for (final Map.Entry<String, JsonElement> entry : blockstates.entrySet()) {
             final JsonObject object = parseState(entry.getKey());
-            object.addProperty("value", entry.getValue().getAsString());
+            object.addProperty("value", diffValue(entry.getValue()));
             entries.add(object);
         }
         return entries;
@@ -564,7 +564,7 @@ public final class MappingUi {
         for (final Map.Entry<String, JsonElement> entry : object.entrySet()) {
             final JsonObject item = new JsonObject();
             item.addProperty("key", entry.getKey());
-            item.addProperty("value", entry.getValue().getAsString());
+            item.addProperty("value", diffValue(entry.getValue()));
             entries.add(item);
         }
         return entries;
@@ -705,7 +705,7 @@ public final class MappingUi {
                 continue;
             }
 
-            final String existingValue = entry.getValue().getAsString();
+            final String existingValue = diffValue(entry.getValue());
             if (existingValue.isEmpty() || existingValue.equals(compactValue(value, existingKey))) {
                 continue;
             }
@@ -731,7 +731,7 @@ public final class MappingUi {
         }
 
         final JsonElement bareElement = blockstates.get(bareKey);
-        if (bareElement != null && !bareElement.getAsString().isEmpty()) {
+        if (bareElement != null && !diffValue(bareElement).isEmpty()) {
             conflicts.add(bareKey);
         }
     }
@@ -742,7 +742,7 @@ public final class MappingUi {
             return 0;
         }
 
-        final String bareValue = blockstates.get(bareKey).getAsString();
+        final String bareValue = diffValue(blockstates.get(bareKey));
         if (!overwrite && !bareValue.isEmpty()) {
             return 0;
         }
@@ -768,7 +768,7 @@ public final class MappingUi {
                 continue;
             }
 
-            final String existingValue = blockstates.get(existingKey).getAsString();
+            final String existingValue = diffValue(blockstates.get(existingKey));
             if (overwrite || existingValue.isEmpty() || existingValue.equals(compactValue(value, existingKey))) {
                 blockstates.remove(existingKey);
                 removed++;
@@ -789,7 +789,7 @@ public final class MappingUi {
             return false;
         }
 
-        final String compactValue = compactElement.getAsString();
+        final String compactValue = diffValue(compactElement);
         return isCompact(compactKey, compactValue) && compactValue(compactValue, key).equals(value);
     }
 
@@ -799,6 +799,13 @@ public final class MappingUi {
 
     private static String compactValue(final String compactValue, final String fullKey) {
         return compactValue + fullKey.substring(fullKey.indexOf('[') + 1);
+    }
+
+    /**
+     * Returns the diff value as a string, or the json text of rule objects.
+     */
+    private static String diffValue(final JsonElement element) {
+        return element.isJsonPrimitive() ? element.getAsString() : element.toString();
     }
 
     private static String bareKey(final String key) {

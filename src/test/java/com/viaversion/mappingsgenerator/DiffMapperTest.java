@@ -17,7 +17,13 @@ final class DiffMapperTest {
         "slab[type=bottom,waterlogged=false]",
         "slab[type=bottom,waterlogged=true]",
         "slab[type=top,waterlogged=false]",
-        "slab[type=top,waterlogged=true]"
+        "slab[type=top,waterlogged=true]",
+        "wall[east=false,up=false]",
+        "wall[east=false,up=true]",
+        "wall[east=true,up=false]",
+        "wall[east=true,up=true]",
+        "log[axis=x]",
+        "log[axis=y]"
     );
 
     @Test
@@ -48,6 +54,22 @@ final class DiffMapperTest {
         assertMapped(ambiguousDiff, "sensor[power=1,waterlogged=true]", null);
         Assertions.assertThrows(RuntimeException.class, () -> MappingsLoader.map(states("sensor[power=1,waterlogged=true]"), TARGET_STATES,
             JsonParser.parseString(ambiguousDiff).getAsJsonObject(), ErrorStrategy.ERROR));
+    }
+
+    @Test
+    void testRules() {
+        // Explicit target properties win over remapped ones
+        assertMapped("{\"wall\": {\"to\": \"wall[east=false]\", \"remap\": {\"east\": {\"low\": \"true\"}}}}", "wall[east=low,up=true]", "wall[east=false,up=true]");
+        // Remap and rename both use source property names
+        assertMapped("{\"pillar\": {\"to\": \"log\", \"rename\": {\"facing\": \"axis\"}, \"remap\": {\"facing\": {\"east\": \"x\", \"up\": \"y\"}}}}", "pillar[facing=up]", "log[axis=y]");
+
+        // Unknown or conflicting properties
+        assertMapped("{\"wall\": {\"to\": \"wall\", \"remap\": {\"north\": {\"none\": \"false\"}}}}", "wall[east=true,up=true]", null);
+        assertMapped("{\"wall\": {\"to\": \"wall\", \"rename\": {\"north\": \"east\"}}}", "wall[east=true,up=true]", null);
+        assertMapped("{\"wall\": {\"to\": \"wall\", \"rename\": {\"up\": \"east\"}}}", "wall[east=true,up=true]", null);
+        // Invalid rules
+        Assertions.assertThrows(IllegalArgumentException.class, () -> assertMapped("{\"wall\": {\"target\": \"wall\"}}", "wall[east=true,up=true]", null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> assertMapped("{\"wall\": {\"remap\": {}}}", "wall[east=true,up=true]", null));
     }
 
     private static void assertMapped(final String diff, final String source, final String expectedTarget) {
