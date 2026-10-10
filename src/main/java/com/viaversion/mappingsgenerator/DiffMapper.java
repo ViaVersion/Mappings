@@ -34,12 +34,17 @@ import org.jetbrains.annotations.Nullable;
  * Blockstate targets may leave out properties: target properties missing from the mapped value are copied from the
  * source state, and source properties unknown to the target block are dropped. A value ending with {@code [}
  * is a target without any explicit properties.
+ * <p>
+ * Blockstate keys may leave out properties as well, matching every source state with the given property values.
+ * Exact keys take precedence, then the matching key with the most properties, down to the bare block key.
+ * Multiple matching keys with the same number of properties and different values are ambiguous and leave the state unmapped.
  */
 final class DiffMapper {
 
     private final Object2IntMap<String> mappedIdentifiers;
     private final @Nullable JsonObject diffIdentifiers;
     private @Nullable Map<String, List<String>> blockProperties;
+    private @Nullable Map<String, List<PartialKey>> partialKeys;
 
     DiffMapper(final Object2IntMap<String> mappedIdentifiers, @Nullable final JsonObject diffIdentifiers) {
         this.mappedIdentifiers = mappedIdentifiers;
@@ -60,7 +65,7 @@ final class DiffMapper {
         if (diffIdentifiers != null) {
             // Always check diff mappings to allow overrides for already existing entries
             JsonElement diffElement = diffIdentifiers.get(value);
-            final int dataIndex;
+            final PartialKey partialKey;
             if (diffElement != null || (diffElement = diffIdentifiers.get(Integer.toString(id))) != null) {
                 // Direct match by id or value
                 mappedName = diffElement.getAsString();
@@ -68,9 +73,9 @@ final class DiffMapper {
                     // Special case for cursed mappings
                     return Integer.parseInt(mappedName.substring("id:".length()));
                 }
-            } else if ((dataIndex = value.indexOf('[')) != -1 && (diffElement = diffIdentifiers.getAsJsonPrimitive(value.substring(0, dataIndex))) != null) {
-                // Mapping for all states of the block
-                mappedName = diffElement.getAsString();
+            } else if (value.indexOf('[') != -1 && (partialKey = matchPartialKey(value, errorStrategy)) != null) {
+                // Mapping for all states of the block with the given properties
+                mappedName = partialKey.value().getAsString();
             }
 
             if (mappedName != null) {
@@ -93,6 +98,57 @@ final class DiffMapper {
             }
         }
         return mappedId;
+    }
+
+    /**
+     * Returns the most specific partial key matching the given state, or null if there is none or the match is ambiguous.
+     *
+     * @param state         source state
+     * @param errorStrategy strategy for ambiguous matches
+     * @return most specific matching partial key, or null
+     */
+    private @Nullable PartialKey matchPartialKey(final String state, final ErrorStrategy errorStrategy) {
+        final List<PartialKey> candidates = partialKeys().get(state.substring(0, state.indexOf('[')));
+        if (candidates == null) {
+            return null;
+        }
+
+        final Map<String, String> properties = properties(state);
+        PartialKey match = null;
+        PartialKey ambiguousMatch = null;
+        for (final PartialKey candidate : candidates) {
+            if (!candidate.matches(properties)) {
+                continue;
+            }
+
+            if (match == null || candidate.properties().size() > match.properties().size()) {
+                match = candidate;
+                ambiguousMatch = null;
+            } else if (candidate.properties().size() == match.properties().size() && !candidate.value().equals(match.value())) {
+                ambiguousMatch = candidate;
+            }
+        }
+
+        if (ambiguousMatch != null) {
+            errorStrategy.apply("Ambiguous mappings for " + state + ": " + match.key() + " and " + ambiguousMatch.key());
+            return null;
+        }
+        return match;
+    }
+
+    private Map<String, List<PartialKey>> partialKeys() {
+        if (partialKeys != null) {
+            return partialKeys;
+        }
+
+        partialKeys = new HashMap<>();
+        for (final Map.Entry<String, JsonElement> entry : diffIdentifiers.entrySet()) {
+            final String key = entry.getKey();
+            final int dataIndex = key.indexOf('[');
+            final String block = dataIndex == -1 ? key : key.substring(0, dataIndex);
+            partialKeys.computeIfAbsent(block, $ -> new ArrayList<>()).add(new PartialKey(key, properties(key), entry.getValue()));
+        }
+        return partialKeys;
     }
 
     /**
@@ -185,5 +241,17 @@ final class DiffMapper {
             properties.put(property.substring(0, separator), property.substring(separator + 1));
         }
         return properties;
+    }
+
+    private record PartialKey(String key, Map<String, String> properties, JsonElement value) {
+
+        boolean matches(final Map<String, String> stateProperties) {
+            for (final Map.Entry<String, String> entry : properties.entrySet()) {
+                if (!entry.getValue().equals(stateProperties.get(entry.getKey()))) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

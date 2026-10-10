@@ -14,6 +14,10 @@
   `"old_block[prop=a]": "new_block[prop=b]"`.
 - If no exact source-state key is found, the optimizer also checks the bare block key:
   `"old_block": "new_block[prop=b]"`.
+- Keys may also list only some properties to match all source states with those values:
+  `"note_block[instrument=trumpet]": "note_block[instrument=didgeridoo]"`.
+  Exact keys win, then the matching key with the most properties, then the bare block key.
+  Equally specific matching keys with different values are an error.
 - A value ending with `[` copies the original properties:
   `"old_block": "new_block["`.
 - Target values may be partial: target properties left out are copied from the source state by name,
