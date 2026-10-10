@@ -123,18 +123,7 @@
   "blockstates": {
     "vault": "spawner",
     "heavy_core": "wither_skeleton_skull[powered=false,rotation=0]",
-    "trial_spawner[ominous=true,trial_spawner_state=inactive]": "trial_spawner[trial_spawner_state=inactive]",
-    "trial_spawner[ominous=true,trial_spawner_state=waiting_for_players]": "trial_spawner[trial_spawner_state=waiting_for_players]",
-    "trial_spawner[ominous=true,trial_spawner_state=active]": "trial_spawner[trial_spawner_state=active]",
-    "trial_spawner[ominous=true,trial_spawner_state=waiting_for_reward_ejection]": "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]",
-    "trial_spawner[ominous=true,trial_spawner_state=ejecting_reward]": "trial_spawner[trial_spawner_state=ejecting_reward]",
-    "trial_spawner[ominous=true,trial_spawner_state=cooldown]": "trial_spawner[trial_spawner_state=cooldown]",
-    "trial_spawner[ominous=false,trial_spawner_state=inactive]": "trial_spawner[trial_spawner_state=inactive]",
-    "trial_spawner[ominous=false,trial_spawner_state=waiting_for_players]": "trial_spawner[trial_spawner_state=waiting_for_players]",
-    "trial_spawner[ominous=false,trial_spawner_state=active]": "trial_spawner[trial_spawner_state=active]",
-    "trial_spawner[ominous=false,trial_spawner_state=waiting_for_reward_ejection]": "trial_spawner[trial_spawner_state=waiting_for_reward_ejection]",
-    "trial_spawner[ominous=false,trial_spawner_state=ejecting_reward]": "trial_spawner[trial_spawner_state=ejecting_reward]",
-    "trial_spawner[ominous=false,trial_spawner_state=cooldown]": "trial_spawner[trial_spawner_state=cooldown]"
+    "trial_spawner": "trial_spawner["
   },
   "particles": {
     "vault_connection": "enchant",

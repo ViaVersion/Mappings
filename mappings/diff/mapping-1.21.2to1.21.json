@@ -154,15 +154,7 @@
     "stripped_pale_oak_log": "stripped_birch_log[",
     "stripped_pale_oak_wood": "stripped_birch_wood[",
     "pale_oak_leaves": "birch_leaves[",
-    "creaking_heart[axis=x,creaking=disabled]": "oak_wood[axis=x]",
-    "creaking_heart[axis=x,creaking=dormant]": "oak_wood[axis=x]",
-    "creaking_heart[axis=x,creaking=active]": "oak_wood[axis=x]",
-    "creaking_heart[axis=y,creaking=disabled]": "oak_wood[axis=y]",
-    "creaking_heart[axis=y,creaking=dormant]": "oak_wood[axis=y]",
-    "creaking_heart[axis=y,creaking=active]": "oak_wood[axis=y]",
-    "creaking_heart[axis=z,creaking=disabled]": "oak_wood[axis=z]",
-    "creaking_heart[axis=z,creaking=dormant]": "oak_wood[axis=z]",
-    "creaking_heart[axis=z,creaking=active]": "oak_wood[axis=z]",
+    "creaking_heart": "oak_wood[",
     "pale_oak_sign": "birch_sign[",
     "pale_oak_wall_sign": "birch_wall_sign[",
     "pale_oak_hanging_sign": "birch_hanging_sign[",
@@ -339,8 +331,7 @@
     "pale_moss_carpet[bottom=false,east=tall,north=tall,south=tall,west=none]": "air",
     "pale_moss_carpet[bottom=false,east=tall,north=tall,south=tall,west=low]": "air",
     "pale_moss_carpet[bottom=false,east=tall,north=tall,south=tall,west=tall]": "air",
-    "pale_hanging_moss[tip=true]": "hanging_roots[waterlogged=false]",
-    "pale_hanging_moss[tip=false]": "hanging_roots[waterlogged=false]"
+    "pale_hanging_moss": "hanging_roots[waterlogged=false]"
   },
   "particles": {
     "trail": "entity_effect",

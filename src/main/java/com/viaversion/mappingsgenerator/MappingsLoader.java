@@ -83,13 +83,13 @@ public final class MappingsLoader {
      */
     public static MappingsResult map(final JsonArray unmappedIdentifiers, final JsonArray mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final ErrorStrategy errorStrategy) {
         final int[] output = new int[unmappedIdentifiers.size()];
-        final Object2IntMap<String> mappedIdentifierMap = MappingsLoader.arrayToMap(mappedIdentifiers);
+        final DiffMapper mapper = new DiffMapper(MappingsLoader.arrayToMap(mappedIdentifiers), diffIdentifiers);
         int emptyMappings = 0;
         int identityMappings = 0;
         int shiftChanges = 0;
         for (int id = 0; id < unmappedIdentifiers.size(); id++) {
             final JsonElement unmappedIdentifier = unmappedIdentifiers.get(id);
-            final int mappedId = mapEntry(id, unmappedIdentifier.getAsString(), mappedIdentifierMap, diffIdentifiers, errorStrategy);
+            final int mappedId = mapper.map(id, unmappedIdentifier.getAsString(), errorStrategy);
             output[id] = mappedId;
 
             if (mappedId == -1) {
@@ -119,64 +119,13 @@ public final class MappingsLoader {
     public static Int2IntMap map(final JsonObject unmappedIdentifiers, final JsonObject mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final ErrorStrategy errorStrategy) {
         final Int2IntMap output = new Int2IntLinkedOpenHashMap();
         output.defaultReturnValue(-1);
-        final Object2IntMap<String> mappedIdentifierMap = MappingsLoader.indexedObjectToMap(mappedIdentifiers);
+        final DiffMapper mapper = new DiffMapper(MappingsLoader.indexedObjectToMap(mappedIdentifiers), diffIdentifiers);
         for (final Map.Entry<String, JsonElement> entry : unmappedIdentifiers.entrySet()) {
             final int id = Integer.parseInt(entry.getKey());
-            final int mappedId = mapEntry(id, entry.getValue().getAsString(), mappedIdentifierMap, diffIdentifiers, errorStrategy);
+            final int mappedId = mapper.map(id, entry.getValue().getAsString(), errorStrategy);
             output.put(id, mappedId);
         }
         return output;
-    }
-
-    /**
-     * Returns the mapped id of the given entry, or -1 if not found.
-     *
-     * @param id                id of the entry
-     * @param value             value of the entry
-     * @param mappedIdentifiers mapped identifiers
-     * @param diffIdentifiers   diff identifiers
-     * @param errorStrategy     whether to warn on missing mappings
-     * @return mapped id, or -1 if it was not found
-     */
-    private static int mapEntry(final int id, final String value, final Object2IntMap<String> mappedIdentifiers, @Nullable final JsonObject diffIdentifiers, final ErrorStrategy errorStrategy) {
-        int mappedId = mappedIdentifiers.getInt(value);
-        if (diffIdentifiers != null) {
-            // Always check diff mappings to allow overrides for already existing entries
-            JsonElement diffElement = diffIdentifiers.get(value);
-            final int dataIndex;
-            if (diffElement != null || (diffElement = diffIdentifiers.get(Integer.toString(id))) != null) {
-                // Direct match by id or value
-                final String mappedName = diffElement.getAsString();
-                if (mappedName.isEmpty()) {
-                    return -1; // "empty" remaps without warnings
-                }
-                if (mappedName.startsWith("id:")) {
-                    // Special case for cursed mappings
-                    return Integer.parseInt(mappedName.substring("id:".length()));
-                }
-
-
-                mappedId = mappedIdentifiers.getInt(mappedName);
-            } else if ((dataIndex = value.indexOf('[')) != -1 && (diffElement = diffIdentifiers.getAsJsonPrimitive(value.substring(0, dataIndex))) != null) {
-                // Check for wildcard mappings
-                String mappedName = diffElement.getAsString();
-                if (mappedName.isEmpty()) {
-                    return -1;
-                }
-
-                // Keep original properties if value ends with [
-                if (mappedName.endsWith("[")) {
-                    mappedName += value.substring(dataIndex + 1);
-                }
-
-                mappedId = mappedIdentifiers.getInt(mappedName);
-            }
-        }
-
-        if (mappedId == -1) {
-            errorStrategy.apply(diffIdentifiers == null ? "No direct mapping or diff file for " + value + " :( " : "No mapping for " + value + " :( ");
-        }
-        return mappedId;
     }
 
     /**
@@ -203,12 +152,12 @@ public final class MappingsLoader {
 
             final JsonArray unmappedIdentifiers = entry.getValue().getAsJsonArray();
             final JsonArray mappedIdentifiers = mappedObject.getAsJsonArray(key);
-            final Object2IntMap<String> mappedIdentifierMap = MappingsLoader.arrayToMap(mappedIdentifiers);
             final JsonObject diffIdentifiers = new JsonObject();
             final JsonObject existingDiffIdentifiers = existingDiffObject != null && existingDiffObject.has(key) ? existingDiffObject.getAsJsonObject(key) : null;
+            final DiffMapper mapper = new DiffMapper(MappingsLoader.arrayToMap(mappedIdentifiers), existingDiffIdentifiers);
             for (int id = 0; id < unmappedIdentifiers.size(); id++) {
                 final String unmappedIdentifier = unmappedIdentifiers.get(id).getAsString();
-                final int mappedId = mapEntry(id, unmappedIdentifier, mappedIdentifierMap, existingDiffIdentifiers, ErrorStrategy.IGNORE);
+                final int mappedId = mapper.map(id, unmappedIdentifier, ErrorStrategy.IGNORE);
                 if (mappedId != -1) {
                     continue;
                 }

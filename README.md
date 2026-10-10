@@ -57,6 +57,7 @@ Diff mappings between versions are in `mappings/diff/mapping-<from>to<to>.json`.
   * Exact state mapping: `"old_block[prop=a]": "new_block[prop=b]"`
   * Bare block fallback: `"old_block": "new_block[prop=b]"`
   * Copy all source properties: `"old_block": "new_block["`
+  * Partial targets: properties left out of the target are copied from the source state by name, source properties the target doesn't have are dropped: `"old_block": "new_block[prop=b]"`
   * Intentionally unmapped: `""`
 * Registries (`items`, `blocks`, `entities`, `sounds`, `menus`, `attributes`, etc.)
   * Identifier remaps: `"old_id": "new_id"` (or `""` if unmapped)

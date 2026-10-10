@@ -1,13 +1,6 @@
 {
   "blockstates": {
-    "decorated_pot[facing=north,waterlogged=true]": "decorated_pot[cracked=false,facing=north,waterlogged=true]",
-    "decorated_pot[facing=north,waterlogged=false]": "decorated_pot[cracked=false,facing=north,waterlogged=false]",
-    "decorated_pot[facing=south,waterlogged=true]": "decorated_pot[cracked=false,facing=south,waterlogged=true]",
-    "decorated_pot[facing=south,waterlogged=false]": "decorated_pot[cracked=false,facing=south,waterlogged=false]",
-    "decorated_pot[facing=west,waterlogged=true]": "decorated_pot[cracked=false,facing=west,waterlogged=true]",
-    "decorated_pot[facing=west,waterlogged=false]": "decorated_pot[cracked=false,facing=west,waterlogged=false]",
-    "decorated_pot[facing=east,waterlogged=true]": "decorated_pot[cracked=false,facing=east,waterlogged=true]",
-    "decorated_pot[facing=east,waterlogged=false]": "decorated_pot[cracked=false,facing=east,waterlogged=false]",
+    "decorated_pot": "decorated_pot[cracked=false]",
     "torchflower_crop[age=2]": "torchflower_crop[age=1]"
   },
   "items": {

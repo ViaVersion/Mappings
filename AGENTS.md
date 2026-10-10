@@ -16,6 +16,9 @@
   `"old_block": "new_block[prop=b]"`.
 - A value ending with `[` copies the original properties:
   `"old_block": "new_block["`.
+- Target values may be partial: target properties left out are copied from the source state by name,
+  source properties the target block doesn't have are dropped, e.g. `"old_block": "new_block[prop=b]"`.
+  Every target property must end up with a valid value, otherwise the state stays unmapped.
 - Use `""` only when the source intentionally has no target mapping.
 
 ## Other sections

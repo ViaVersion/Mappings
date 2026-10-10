@@ -1,7 +1,6 @@
 {
   "blockstates": {
-    "tnt[unstable=false]": "tnt",
-    "tnt[unstable=true]": "tnt",
+    "tnt": "tnt[",
     "oak_sign": "sign[",
     "oak_wall_sign": "wall_sign[",
     "smooth_stone_slab": "stone_slab[",
