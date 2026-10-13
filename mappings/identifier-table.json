@@ -1708,7 +1708,8 @@
     "ice_ball",
     "frostbite_spawn_egg",
     "ice_crystal",
-    "icicle"
+    "icicle",
+    "brittle_ice"
   ],
   "blocks": [
     "air",
@@ -3018,7 +3019,8 @@
     "red_concrete_slab",
     "black_concrete_slab",
     "ice_crystal",
-    "icicle"
+    "icicle",
+    "brittle_ice"
   ],
   "entities": [
     "acacia_boat",
@@ -6142,6 +6144,29 @@
     "entity.ice_ball.throw",
     "entity.zombie.converted_to_frostbite",
     "entity.frostbite.converted_to_zombie",
-    "event.mob_effect.freezing"
+    "event.mob_effect.freezing",
+    "entity.chicken_picky.step",
+    "entity.drowned.converted_to_zombie",
+    "block.brittle_ice.crack",
+    "block.blue_ice.break",
+    "block.blue_ice.step",
+    "block.blue_ice.place",
+    "block.blue_ice.hit",
+    "block.blue_ice.fall",
+    "block.brittle_ice.break",
+    "block.brittle_ice.step",
+    "block.brittle_ice.place",
+    "block.brittle_ice.hit",
+    "block.brittle_ice.fall",
+    "block.frosted_ice.break",
+    "block.frosted_ice.step",
+    "block.frosted_ice.place",
+    "block.frosted_ice.hit",
+    "block.frosted_ice.fall",
+    "block.packed_ice.break",
+    "block.packed_ice.step",
+    "block.packed_ice.place",
+    "block.packed_ice.hit",
+    "block.packed_ice.fall"
   ]
 }

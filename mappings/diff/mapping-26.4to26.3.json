@@ -25,20 +25,52 @@
     "entity.ice_ball.throw": "",
     "entity.zombie.converted_to_frostbite": "",
     "entity.frostbite.converted_to_zombie": "",
-    "event.mob_effect.freezing": ""
+    "event.mob_effect.freezing": "",
+    "entity.chicken_picky.step": "",
+    "entity.drowned.converted_to_zombie": "",
+    "block.brittle_ice.crack": "",
+    "block.blue_ice.break": "",
+    "block.blue_ice.step": "",
+    "block.blue_ice.place": "",
+    "block.blue_ice.hit": "",
+    "block.blue_ice.fall": "",
+    "block.brittle_ice.break": "",
+    "block.brittle_ice.step": "",
+    "block.brittle_ice.place": "",
+    "block.brittle_ice.hit": "",
+    "block.brittle_ice.fall": "",
+    "block.frosted_ice.break": "",
+    "block.frosted_ice.step": "",
+    "block.frosted_ice.place": "",
+    "block.frosted_ice.hit": "",
+    "block.frosted_ice.fall": "",
+    "block.packed_ice.break": "",
+    "block.packed_ice.step": "",
+    "block.packed_ice.place": "",
+    "block.packed_ice.hit": "",
+    "block.packed_ice.fall": ""
   },
   "environment_attribute": {
     "visual/has_sky_occluder": ""
   },
   "blockstates": {
     "ice_crystal": "amethyst_cluster[",
-    "icicle": "pointed_dripstone["
+    "icicle": "pointed_dripstone[",
+    "jukebox[has_record=true,playlist_mode=true]": "",
+    "jukebox[has_record=true,playlist_mode=false]": "",
+    "jukebox[has_record=false,playlist_mode=true]": "",
+    "jukebox[has_record=false,playlist_mode=false]": "",
+    "brittle_ice[age=0]": "",
+    "brittle_ice[age=1]": "",
+    "brittle_ice[age=2]": "",
+    "brittle_ice[age=3]": ""
   },
   "items": {
     "ice_ball": "snowball",
     "frostbite_spawn_egg": "zombie_spawn_egg",
     "ice_crystal": "amethyst_cluster",
-    "icicle": "pointed_dripstone"
+    "icicle": "pointed_dripstone",
+    "brittle_ice": ""
   },
   "particles": {
     "freezing": "snowflake"
@@ -51,6 +83,10 @@
     "ice_ball": 994,
     "frostbite_spawn_egg": 995,
     "ice_crystal": 996,
-    "icicle": 997
+    "icicle": 997,
+    "brittle_ice": 998
+  },
+  "menus": {
+    "jukebox": ""
   }
 }
