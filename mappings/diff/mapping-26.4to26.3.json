@@ -56,21 +56,15 @@
   "blockstates": {
     "ice_crystal": "amethyst_cluster[",
     "icicle": "pointed_dripstone[",
-    "jukebox[has_record=true,playlist_mode=true]": "",
-    "jukebox[has_record=true,playlist_mode=false]": "",
-    "jukebox[has_record=false,playlist_mode=true]": "",
-    "jukebox[has_record=false,playlist_mode=false]": "",
-    "brittle_ice[age=0]": "",
-    "brittle_ice[age=1]": "",
-    "brittle_ice[age=2]": "",
-    "brittle_ice[age=3]": ""
+    "jukebox": "jukebox[",
+    "brittle_ice": "frosted_ice["
   },
   "items": {
     "ice_ball": "snowball",
     "frostbite_spawn_egg": "zombie_spawn_egg",
     "ice_crystal": "amethyst_cluster",
     "icicle": "pointed_dripstone",
-    "brittle_ice": ""
+    "brittle_ice": "ice"
   },
   "particles": {
     "freezing": "snowflake"

@@ -3,8 +3,7 @@
     "item_snowball": "snowflake"
   },
   "blockstates": {
-    "jukebox[has_record=true]": "",
-    "jukebox[has_record=false]": ""
+    "jukebox": "jukebox[playlist_mode=false]"
   },
   "sounds": {
     "intentionally_empty": ""
