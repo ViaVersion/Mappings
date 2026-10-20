@@ -1709,7 +1709,12 @@
     "frostbite_spawn_egg",
     "ice_crystal",
     "icicle",
-    "brittle_ice"
+    "brittle_ice",
+    "packed_ice_bricks",
+    "packed_ice_brick_slab",
+    "packed_ice_brick_stairs",
+    "packed_ice_brick_wall",
+    "chiseled_packed_ice"
   ],
   "blocks": [
     "air",
@@ -3020,7 +3025,12 @@
     "black_concrete_slab",
     "ice_crystal",
     "icicle",
-    "brittle_ice"
+    "brittle_ice",
+    "packed_ice_bricks",
+    "packed_ice_brick_slab",
+    "packed_ice_brick_stairs",
+    "packed_ice_brick_wall",
+    "chiseled_packed_ice"
   ],
   "entities": [
     "acacia_boat",
@@ -6167,6 +6177,7 @@
     "block.packed_ice.step",
     "block.packed_ice.place",
     "block.packed_ice.hit",
-    "block.packed_ice.fall"
+    "block.packed_ice.fall",
+    "block.ice.ambient"
   ]
 }
