@@ -1714,7 +1714,11 @@
     "packed_ice_brick_slab",
     "packed_ice_brick_stairs",
     "packed_ice_brick_wall",
-    "chiseled_packed_ice"
+    "chiseled_packed_ice",
+    "snow_bricks",
+    "snow_brick_stairs",
+    "snow_brick_slab",
+    "snow_brick_wall"
   ],
   "blocks": [
     "air",
@@ -3030,7 +3034,11 @@
     "packed_ice_brick_slab",
     "packed_ice_brick_stairs",
     "packed_ice_brick_wall",
-    "chiseled_packed_ice"
+    "chiseled_packed_ice",
+    "snow_bricks",
+    "snow_brick_slab",
+    "snow_brick_stairs",
+    "snow_brick_wall"
   ],
   "entities": [
     "acacia_boat",
@@ -6178,6 +6186,7 @@
     "block.packed_ice.place",
     "block.packed_ice.hit",
     "block.packed_ice.fall",
-    "block.ice.ambient"
+    "block.ice.ambient",
+    "block.ice_crystal.ambient"
   ]
 }
