@@ -1718,7 +1718,21 @@
     "snow_bricks",
     "snow_brick_stairs",
     "snow_brick_slab",
-    "snow_brick_wall"
+    "snow_brick_wall",
+    "calcite_pillar",
+    "calcite_slab",
+    "calcite_stairs",
+    "calcite_wall",
+    "polished_calcite",
+    "polished_calcite_slab",
+    "polished_calcite_stairs",
+    "polished_calcite_wall",
+    "polished_calcite_bricks",
+    "polished_calcite_brick_slab",
+    "polished_calcite_brick_stairs",
+    "polished_calcite_brick_wall",
+    "chiseled_soulshale",
+    "music_disc_flurry"
   ],
   "blocks": [
     "air",
@@ -3038,7 +3052,20 @@
     "snow_bricks",
     "snow_brick_slab",
     "snow_brick_stairs",
-    "snow_brick_wall"
+    "snow_brick_wall",
+    "calcite_pillar",
+    "calcite_slab",
+    "calcite_stairs",
+    "calcite_wall",
+    "polished_calcite",
+    "polished_calcite_slab",
+    "polished_calcite_stairs",
+    "polished_calcite_wall",
+    "polished_calcite_bricks",
+    "polished_calcite_brick_slab",
+    "polished_calcite_brick_stairs",
+    "polished_calcite_brick_wall",
+    "chiseled_soulshale"
   ],
   "entities": [
     "acacia_boat",
@@ -6187,6 +6214,13 @@
     "block.packed_ice.hit",
     "block.packed_ice.fall",
     "block.ice.ambient",
-    "block.ice_crystal.ambient"
+    "block.ice_crystal.ambient",
+    "music_disc.flurry",
+    "entity.parrot.imitate.frostbite",
+    "block.chiseled_soulshale.break",
+    "block.chiseled_soulshale.step",
+    "block.chiseled_soulshale.place",
+    "block.chiseled_soulshale.hit",
+    "block.chiseled_soulshale.fall"
   ]
 }
