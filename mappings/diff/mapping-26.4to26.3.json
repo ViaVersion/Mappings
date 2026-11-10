@@ -143,12 +143,12 @@
     "jukebox": ""
   },
   "argumenttypes": {
-    "bool": "",
-    "double": "",
-    "float": "",
-    "integer": "",
-    "long": "",
-    "pattern": "",
-    "string": ""
+    "bool": "brigadier:bool",
+    "double": "brigadier:double",
+    "float": "brigadier:float",
+    "integer": "brigadier:integer",
+    "long": "brigadier:long",
+    "pattern": "brigadier:string",
+    "string": "brigadier:string"
   }
 }
