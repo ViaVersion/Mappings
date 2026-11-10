@@ -62,7 +62,8 @@
     "block.chiseled_soulshale.step": "block.soul_soil.step",
     "block.chiseled_soulshale.place": "block.soul_soil.place",
     "block.chiseled_soulshale.hit": "block.soul_soil.hit",
-    "block.chiseled_soulshale.fall": "block.soul_soil.fall"
+    "block.chiseled_soulshale.fall": "block.soul_soil.fall",
+    "entity.frostbite.throw": ""
   },
   "environment_attribute": {
     "visual/has_sky_occluder": ""
@@ -140,5 +141,14 @@
   },
   "menus": {
     "jukebox": ""
+  },
+  "argumenttypes": {
+    "bool": "",
+    "double": "",
+    "float": "",
+    "integer": "",
+    "long": "",
+    "pattern": "",
+    "string": ""
   }
 }

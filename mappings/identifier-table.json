@@ -3515,7 +3515,14 @@
     "feature",
     "swing_animation",
     "context_float_provider",
-    "context_int_provider"
+    "context_int_provider",
+    "bool",
+    "double",
+    "float",
+    "integer",
+    "long",
+    "pattern",
+    "string"
   ],
   "attributes": [
     "armor",
@@ -6221,6 +6228,7 @@
     "block.chiseled_soulshale.step",
     "block.chiseled_soulshale.place",
     "block.chiseled_soulshale.hit",
-    "block.chiseled_soulshale.fall"
+    "block.chiseled_soulshale.fall",
+    "entity.frostbite.throw"
   ]
 }

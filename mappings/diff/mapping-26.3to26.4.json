@@ -7,5 +7,15 @@
   },
   "sounds": {
     "intentionally_empty": ""
+  },
+  "argumenttypes": {
+    "brigadier:bool": "",
+    "brigadier:float": "",
+    "brigadier:double": "",
+    "brigadier:integer": "",
+    "brigadier:long": "",
+    "brigadier:string": "",
+    "resource_or_tag_key": "",
+    "resource_key": ""
   }
 }
