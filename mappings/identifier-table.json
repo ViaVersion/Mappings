@@ -3522,7 +3522,10 @@
     "integer",
     "long",
     "pattern",
-    "string"
+    "string",
+    "greedy_string",
+    "quoted_string",
+    "word"
   ],
   "attributes": [
     "armor",
@@ -3769,7 +3772,8 @@
     "waxed",
     "cushion/color",
     "attack_animation",
-    "interact_animation"
+    "interact_animation",
+    "dispense_behavior"
   ],
   "slot_displays": [
     "empty",
