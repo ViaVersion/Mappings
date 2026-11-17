@@ -149,10 +149,11 @@
     "integer": "brigadier:integer",
     "long": "brigadier:long",
     "pattern": "brigadier:string",
-    "string": "brigadier:string",
-    "greedy_string": "",
-    "quoted_string": "",
-    "word": ""
+    "greedy_string": "brigadier:string",
+    "quoted_string": "brigadier:string",
+    "word": "brigadier:string",
+    "resource": "resource_key",
+    "resource_or_tag": "resource_or_tag_key"
   },
   "data_component_type": {
     "dispense_behavior": ""

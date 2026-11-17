@@ -14,7 +14,7 @@
     "brigadier:double": "double",
     "brigadier:integer": "integer",
     "brigadier:long": "long",
-    "brigadier:string": "string",
+    "brigadier:string": "quoted_string",
     "resource_or_tag_key": "resource_or_tag",
     "resource_key": "resource"
   }
